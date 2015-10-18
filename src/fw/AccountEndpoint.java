@@ -7,6 +7,8 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.datanucleus.query.JDOCursorHelper;
 
 import java.util.HashMap;
@@ -125,6 +127,8 @@ public class AccountEndpoint {
       if(!containsAccount(account)) {
         throw new EntityNotFoundException("Object does not exist");
       }
+      // bug in GAE - NullPointer when namespace=null
+      account.setId(KeyFactory.createKey(Account.class.getSimpleName(), account.getId().getId()));
       mgr.makePersistent(account);
     } finally {
       mgr.close();
@@ -153,7 +157,7 @@ public class AccountEndpoint {
     PersistenceManager mgr = getPersistenceManager();
     boolean contains = true;
     try {
-      mgr.getObjectById(Account.class, account.getId());
+      mgr.getObjectById(Account.class, account.getId().getId());
     } catch (javax.jdo.JDOObjectNotFoundException ex) {
       contains = false;
     } finally {

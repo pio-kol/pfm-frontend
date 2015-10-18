@@ -21,22 +21,31 @@
 	
 }
 </style>
+<meta charset="UTF-8">
 </head>
 <body ng-app="myApp" ng-controller="accountController">
 
 	<div class="container">
 
-		<button class="btn btn-info pull-right" ng-click="refreshAccounts()">
-			<span class="glyphicon glyphicon-refresh"></span>  Odswiez
+		<div id="alerts"></div>
+		
+		<button id="refreshButton" class="btn btn-info pull-right" ng-click="refreshAccounts()">
+			<span class="glyphicon glyphicon-refresh"></span>Â Â OdÅ›wieÅ¼
 		</button>
 
+		<button class="btn btn-info pull-right" ng-click="addNewAccount()">
+			<span class="glyphicon glyphicon-plus"></span>Â Â Nowe konto
+		</button>
+
+		
 		<table id="accountsTable" class="table table-striped">
 			<thead>
 				<tr id="accountHeader">
 					<th>Nazwa</th>
 					<th>Kwota</th>
 					<th>Edytuj</th>
-					<th class="editable">Usun</th>
+					<th class="editable">Anuluj</th>
+					<th class="editable">UsuÅ„</th>
 					<th class="readOnly"></th>
 				</tr>
 			</thead>
@@ -48,8 +57,13 @@
 					<td class="editable"><input type="text" class="form-control"
 						ng-model="account.value" /></td>
 					<td class="editable">
-						<button class="btn btn-success" ng-click="saveAccount(account.id)">
-							<span class="glyphicon glyphicon-ok"></span>  Zapisz
+						<button class="btn btn-success" ng-click="saveAccount(account.id, account.name, account.value)">
+							<span class="glyphicon glyphicon-ok"></span>Â Â Zapisz
+						</button>
+					</td>
+					<td class="editable">
+						<button class="btn btn-warning" ng-click="cancelEditAccount(account.id)">
+							<span class="glyphicon glyphicon-remove"></span>Â Â Anuluj
 						</button>
 					</td>
 
@@ -57,14 +71,14 @@
 					<td class="readOnly">{{ account.value }}</td>
 					<td class="readOnly">
 						<button class="btn" ng-click="editAccount(account.id)">
-							<span class="glyphicon glyphicon-pencil"></span>  Edytuj
+							<span class="glyphicon glyphicon-pencil"></span>Â Â Edytuj
 						</button>
 					</td>
 
 					<td class="editable">
 						<button class="btn btn-danger"
 							ng-click="removeAccount(account.id, account.name)">
-							<span class="glyphicon glyphicon-remove"></span>  Usun
+							<span class="glyphicon glyphicon-trash"></span>Â Â Usun
 						</button>
 					</td>
 					<td class="readOnly" />
