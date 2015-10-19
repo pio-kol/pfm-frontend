@@ -141,7 +141,8 @@ angular
 							"id" : {
 								"id" : id
 							},
-							"name" : name
+							"name" : name,
+							"state" : value
 						}
 
 						$
