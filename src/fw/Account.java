@@ -1,5 +1,7 @@
 package fw;
 
+import java.math.BigDecimal;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -13,10 +15,13 @@ public class Account {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key id;
-	
+
 	@Persistent
-	private String name; 
-	
+	private String name;
+
+	@Persistent
+	private BigDecimal state;
+
 	public Key getId() {
 		return id;
 	}
@@ -33,12 +38,21 @@ public class Account {
 		this.name = name;
 	}
 
+	public BigDecimal getState() {
+		return state;
+	}
+
+	public void setState(BigDecimal state) {
+		this.state = state;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		return result;
 	}
 
@@ -61,14 +75,17 @@ public class Account {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
+		if (state == null) {
+			if (other.state != null)
+				return false;
+		} else if (!state.equals(other.state))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Account [id=" + id + ", name=" + name + "]";
+		return "Account [id=" + id + ", name=" + name + ", state=" + state + "]";
 	}
 
-
-	
 }

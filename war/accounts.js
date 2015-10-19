@@ -4,7 +4,8 @@ function cancelAddNewAccount() {
 
 function saveNewAccount() {
 	var account = {
-		"name" : $("#newAccountName").val()
+		"name" : $("#newAccountName").val(),
+		"state" : $("#newAccountValue").val(),
 	}
 
 	$
@@ -65,7 +66,7 @@ angular
 											$scope.accounts.push({
 												id : data.items[i].id.id,
 												name : data.items[i].name,
-												value : "1.00"
+												value : data.items[i].state
 											});
 										}
 
