@@ -51,7 +51,7 @@ public class CategoryEndpoint {
 			if (limit != null) {
 				query.setRange(0, limit);
 			}
-
+			
 			execute = (List<Category>) query.execute();
 			cursor = JDOCursorHelper.getCursor(execute);
 			if (cursor != null)
@@ -61,6 +61,7 @@ public class CategoryEndpoint {
 			// accomodate
 			// for lazy fetch.
 			for (Category obj : execute)
+				System.out.println(obj); // ugly trick to fetch parent id
 				;
 		} finally {
 			mgr.close();
@@ -138,7 +139,12 @@ public class CategoryEndpoint {
 			}
 			// bug in GAE - NullPointer when namespace=null
 			category.setId(KeyFactory.createKey(Category.class.getSimpleName(), category.getId().getId()));
-			mgr.makePersistent(category);
+			if (category.getParentCategory() != null && category.getParentCategory().getId() != null) {
+				category.getParentCategory().setId(KeyFactory.createKey(Category.class.getSimpleName(), category.getParentCategory().getId().getId()));
+				//Category parentCategory = mgr.getObjectById(Category.class, category.getParentCategory().getId().getId());
+				//category.setParentCategory(parentCategory);
+			}
+			mgr.makePersistent(category); 
 		} finally {
 			mgr.close();
 		}

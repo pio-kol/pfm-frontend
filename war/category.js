@@ -25,6 +25,13 @@ function saveNewCategory() {
 
 };
 
+$(window).load(function() {
+	$(".chosen-select").chosen({
+		no_results_text : "Nie znaleziono:",
+		width : "80%"
+	});
+});
+
 angular
 		.module('myApp', [])
 		.controller(
@@ -34,7 +41,7 @@ angular
 					$scope.categories = [];
 
 					$(document).ready(function() {
-						$(".alert").alert("close");
+						// $(".alert").alert("close");
 						$scope.refreshCategories();
 					});
 
@@ -66,7 +73,8 @@ angular
 											$scope.categories.push({
 												id : data.items[i].id.id,
 												name : data.items[i].name,
-											// parentName : data.items[i].
+												parentId : data.items[i].parentCategory != null ? data.items[i].parentCategory.id : null,
+												parentName : data.items[i].parentCategory != null ? data.items[i].parentCategory.name : null
 											});
 										}
 
@@ -130,13 +138,18 @@ angular
 										});
 					};
 
-					$scope.saveCategory = function(id, name, value) {
+					$scope.saveCategory = function(id, name) {
 						var category = {
-							"id" : {
-								"id" : id
+							"parentCategory" : {
+								"id" : {
+									"id" : $( "#categoryRow_" + id).find("#parentCategorySelect option:selected").val()
+								},
+								"name" : $( "#categoryRow_" + id).find("#parentCategorySelect option:selected").text() 
 							},
 							"name" : name,
-							"state" : value
+							"id" : {
+								"id" : id
+							}
 						}
 
 						$
