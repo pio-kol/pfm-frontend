@@ -1,21 +1,21 @@
-function cancelAddNewAccount() {
-	$("#accountRow_new").remove();
+function cancelAddNewCategory() {
+	$("#categoryRow_new").remove();
 }
 
-function saveNewAccount() {
-	var account = {
-		"name" : $("#newAccountName").val(),
-		"state" : $("#newAccountValue").val(),
+function saveNewCategory() {
+	var category = {
+		"name" : $("#newCategoryName").val(),
+		"state" : $("#newCategoryParentId").val(),
 	}
 
 	$
 			.ajax({
-				url : "/_ah/api/accountendpoint/v1/account",
+				url : "/_ah/api/categoryendpoint/v1/category",
 				contentType : "application/json",
 				type : 'POST',
-				data : JSON.stringify(account),
+				data : JSON.stringify(category),
 				success : function(data) {
-					$("#accountRow_new").remove();
+					$("#categoryRow_new").remove();
 					$("#refreshButton").click();
 				},
 				error : function(data) {
@@ -28,14 +28,14 @@ function saveNewAccount() {
 angular
 		.module('myApp', [])
 		.controller(
-				'accountController',
+				'categoryController',
 				function($scope) {
 
-					$scope.accounts = [];
+					$scope.categories = [];
 
 					$(document).ready(function() {
 						$(".alert").alert("close");
-						$scope.refreshAccounts();
+						$scope.refreshCategories();
 					});
 
 					function addAlert(message) {
@@ -54,23 +54,23 @@ angular
 
 					}
 
-					$scope.refreshAccounts = function() {
+					$scope.refreshCategories = function() {
 
 						$
 								.ajax({
-									url : "/_ah/api/accountendpoint/v1/account",
+									url : "/_ah/api/categoryendpoint/v1/category",
 									dataType : 'json',
 									success : function(data) {
-										$scope.accounts = [];
+										$scope.categories = [];
 										for (i = 0; i < data.items.length; ++i) {
-											$scope.accounts.push({
+											$scope.categories.push({
 												id : data.items[i].id.id,
 												name : data.items[i].name,
-												value : data.items[i].state
+											// parentName : data.items[i].
 											});
 										}
 
-										$scope.accounts
+										$scope.categories
 												.sort(function(a, b) {
 													return a.name
 															.localeCompare(b.name);
@@ -83,28 +83,22 @@ angular
 								});
 					}
 
-					$scope.addNewAccount = function(id) {
-						$("#accountsTableBody tr:last-child").after(
-								"<tr id='accountRow_new'/>");
-						$("#accountRow_new").load("newAccount.html");
-					}
-
-					$scope.editAccount = function(id) {
-						$("#accountRow_" + id + " > .editable").show();
-						$("#accountRow_" + id + " > .readOnly").hide();
-						$("#accountHeader > .editable").show();
-						$("#accountHeader > .readOnly").hide();
+					$scope.editCategory = function(id) {
+						$("#categoryRow_" + id + " > .editable").show();
+						$("#categoryRow_" + id + " > .readOnly").hide();
+						$("#categoryHeader > .editable").show();
+						$("#categoryHeader > .readOnly").hide();
 					};
 
-					$scope.cancelEditAccount = function(id) {
-						$("#accountRow_" + id + " > .editable").hide();
-						$("#accountRow_" + id + " > .readOnly").show();
-						$("#accountHeader > .editable").hide();
-						$("#accountHeader > .readOnly").show();
-						$scope.refreshAccounts();
+					$scope.cancelEditCategory = function(id) {
+						$("#categoryRow_" + id + " > .editable").hide();
+						$("#categoryRow_" + id + " > .readOnly").show();
+						$("#categoryHeader > .editable").hide();
+						$("#categoryHeader > .readOnly").show();
+						$scope.refreshCategories();
 					};
 
-					$scope.removeAccount = function(id, name) {
+					$scope.removeCategory = function(id, name) {
 						bootbox
 								.confirm(
 										"Konto <b>'"
@@ -114,13 +108,13 @@ angular
 											if (result) {
 												$
 														.ajax({
-															url : "/_ah/api/accountendpoint/v1/account/"
+															url : "/_ah/api/categoryendpoint/v1/category/"
 																	+ id,
 															type : 'DELETE',
 															success : function(
 																	data) {
 																$(
-																		"#accountRow_"
+																		"#categoryRow_"
 																				+ id)
 																		.remove();
 
@@ -136,8 +130,8 @@ angular
 										});
 					};
 
-					$scope.saveAccount = function(id, name, value) {
-						var account = {
+					$scope.saveCategory = function(id, name, value) {
+						var category = {
 							"id" : {
 								"id" : id
 							},
@@ -147,17 +141,17 @@ angular
 
 						$
 								.ajax({
-									url : "/_ah/api/accountendpoint/v1/account",
+									url : "/_ah/api/categoryendpoint/v1/category",
 									contentType : "application/json",
 									type : 'PUT',
-									data : JSON.stringify(account),
+									data : JSON.stringify(category),
 									success : function(data) {
-										$("#accountRow_" + id + " > .editable")
+										$("#categoryRow_" + id + " > .editable")
 												.hide();
-										$("#accountRow_" + id + " > .readOnly")
+										$("#categoryRow_" + id + " > .readOnly")
 												.show();
-										$("#accountHeader > .editable").hide();
-										$("#accountHeader > .readOnly").show();
+										$("#categoryHeader > .editable").hide();
+										$("#categoryHeader > .readOnly").show();
 									},
 									error : function(data) {
 										addAlert("Nie udało się zmodyfikować konta <b>'"
@@ -167,5 +161,11 @@ angular
 								});
 
 					};
+
+					$scope.addNewCategory = function(id) {
+						$("#categoriesTableBody tr:last-child").after(
+								"<tr id='categoryRow_new'/>");
+						$("#categoryRow_new").load("category_new.html");
+					}
 
 				});

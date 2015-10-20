@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
-encoding//war/accounts.html=UTF-8
-encoding//war/newAccount.html=UTF-8
+encoding//war/account.html=UTF-8
+encoding//war/account_new.html=UTF-8
+encoding//war/category_new.html=UTF-8
 encoding/<project>=UTF-8

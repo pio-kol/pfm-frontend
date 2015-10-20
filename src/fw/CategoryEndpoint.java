@@ -7,6 +7,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.datanucleus.query.JDOCursorHelper;
 
 import java.util.HashMap;
@@ -31,9 +32,7 @@ public class CategoryEndpoint {
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
 	@ApiMethod(name = "listCategory")
-	public CollectionResponse<Category> listCategory(
-			@Nullable @Named("cursor") String cursorString,
-			@Nullable @Named("limit") Integer limit) {
+	public CollectionResponse<Category> listCategory(@Nullable @Named("cursor") String cursorString, @Nullable @Named("limit") Integer limit) {
 
 		PersistenceManager mgr = null;
 		Cursor cursor = null;
@@ -67,8 +66,7 @@ public class CategoryEndpoint {
 			mgr.close();
 		}
 
-		return CollectionResponse.<Category> builder().setItems(execute)
-				.setNextPageToken(cursorString).build();
+		return CollectionResponse.<Category> builder().setItems(execute).setNextPageToken(cursorString).build();
 	}
 
 	/**
@@ -107,15 +105,12 @@ public class CategoryEndpoint {
 			if (category.getId() != null && containsCategory(category)) {
 				throw new EntityExistsException("Object already exists");
 			}
-			if (category.getParentCategory() != null
-					&& category.getParentCategory().getId() != null) {
+			if (category.getParentCategory() != null && category.getParentCategory().getId() != null) {
 				try {
-					Category parentCategory = mgr.getObjectById(Category.class,
-							category.getParentCategory().getId().getId());
+					Category parentCategory = mgr.getObjectById(Category.class, category.getParentCategory().getId().getId());
 					category.setParentCategory(parentCategory);
 				} catch (javax.jdo.JDOObjectNotFoundException ex) {
-					throw new EntityNotFoundException(
-							"Parent category was not found - Please add parent category first");
+					throw new EntityNotFoundException("Parent category was not found - Please add parent category first");
 				}
 			}
 			mgr.makePersistent(category);
@@ -141,6 +136,8 @@ public class CategoryEndpoint {
 			if (!containsCategory(category)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
+			// bug in GAE - NullPointer when namespace=null
+			category.setId(KeyFactory.createKey(Category.class.getSimpleName(), category.getId().getId()));
 			mgr.makePersistent(category);
 		} finally {
 			mgr.close();
@@ -170,7 +167,7 @@ public class CategoryEndpoint {
 		PersistenceManager mgr = getPersistenceManager();
 		boolean contains = true;
 		try {
-			mgr.getObjectById(Category.class, category.getId());
+			mgr.getObjectById(Category.class, category.getId().getId());
 		} catch (javax.jdo.JDOObjectNotFoundException ex) {
 			contains = false;
 		} finally {

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+
+<style>
+.editable {
+	display: none;
+}
+
+.readOnly {
+	
+}
+</style>
+<meta charset="UTF-8">
+</head>
+<body ng-app="myApp" ng-controller="accountController">
+
+	<div class="container">
+
+		<div id="alerts"></div>
+
+		<button id="refreshButton" class="btn btn-info pull-right" ng-click="refreshAccounts()">
+			<span class="glyphicon glyphicon-refresh"></span>  Odśwież
+		</button>
+
+		<button class="btn btn-info pull-right" ng-click="addNewAccount()">
+			<span class="glyphicon glyphicon-plus"></span>  Nowe konto
+		</button>
+
+
+		<table id="accountsTable" class="table table-striped">
+			<thead>
+				<tr id="accountHeader">
+					<th>Nazwa</th>
+					<th>Kwota</th>
+					<th>Edytuj</th>
+					<th class="editable">Anuluj</th>
+					<th class="editable">Usuń</th>
+					<th class="readOnly"></th>
+				</tr>
+			</thead>
+			<tbody id="accountsTableBody">
+				<tr id="accountRow_{{ account.id }}" ng-repeat="account in accounts">
+
+					<td class="editable"><input type="text" class="form-control" ng-model="account.name" /></td>
+					<td class="editable"><input type="text" class="form-control" ng-model="account.value" /></td>
+					<td class="editable">
+						<button class="btn btn-success" ng-click="saveAccount(account.id, account.name, account.value)">
+							<span class="glyphicon glyphicon-ok"></span>  Zapisz
+						</button>
+					</td>
+					<td class="editable">
+						<button class="btn btn-warning" ng-click="cancelEditAccount(account.id)">
+							<span class="glyphicon glyphicon-remove"></span>  Anuluj
+						</button>
+					</td>
+
+					<td class="readOnly">{{ account.name }}</td>
+					<td class="readOnly">{{ account.value }}</td>
+					<td class="readOnly">
+						<button class="btn" ng-click="editAccount(account.id)">
+							<span class="glyphicon glyphicon-pencil"></span>  Edytuj
+						</button>
+					</td>
+
+					<td class="editable">
+						<button class="btn btn-danger" ng-click="removeAccount(account.id, account.name)">
+							<span class="glyphicon glyphicon-trash"></span>  Usun
+						</button>
+					</td>
+					<td class="readOnly" />
+					<!-- to keep number of columns correct -->
+
+				</tr>
+
+			</tbody>
+		</table>
+	</div>
+
+	<script src="account.js"></script>
+
+</body>
+</html>
