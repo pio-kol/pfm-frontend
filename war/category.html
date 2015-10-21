@@ -1,24 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css" />
+<link rel="stylesheet" href="style.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
 <script src="category.js"></script>
 
-<style>
-.editable {
-	display: none;
-}
-
-.readOnly {
-	
-}
-</style>
 <meta charset="UTF-8">
 </head>
 <body ng-app="myApp" ng-controller="categoryController">
@@ -36,51 +28,57 @@
 		</button>
 
 
-		<table id="categoriesTable" class="table table-striped">
+		<table class="table table-striped">
 			<thead>
-				<tr id="categoryHeader">
+				<tr>
 					<th>Nazwa</th>
 					<th>Kategoria nadrzędna</th>
-					<th>Edytuj</th>
-					<th class="editable">Anuluj</th>
-					<th class="editable">Usuń</th>
-					<th class="readOnly"></th>
+					<th>Akcja</th>
 				</tr>
 			</thead>
-			<tbody id="categoriesTableBody">
-				<tr id="categoryRow_{{ category.id }}" ng-repeat="category in categories">
+			<tbody>
+				<tr ng-switch on="category.mode" ng-repeat="category in categories">
 
-					<td class="editable"><input type="text" class="form-control" ng-model="category.name" /></td>
-					<td class="editable"><select id="parentCategorySelect" class="chosen-select" data-placeholder="Wybierz kategorię nadrzędną">
-							<option ng-repeat="optionCategory in categories" value="{{ optionCategory.id }}">{{ optionCategory.name }}</option>
+					<td ng-switch-when="readOnly">{{ category.name }}</td>
+					<td ng-switch-when="readOnly">{{ category.parentName }}</td>
+					<td ng-switch-when="edit"><input type="text" class="form-control" ng-model="category.name" /></td>
+					<td ng-switch-when="edit"><select id="parentCategorySelect" class="chosen-select" ng-model="category.parentId">
+							<option value="">Kategoria główna</option>
+							<option ng-repeat="option in categories" value="{{ option.id }}">{{ option.name }}</option>
 					</select></td>
-					<td class="editable">
-						<button class="btn btn-success" ng-click="saveCategory(category.id, category.name)">
+
+					<td>
+						<button ng-switch-when="edit" class="btn btn-success" ng-click="saveCategory(category)">
 							<span class="glyphicon glyphicon-ok"></span>  Zapisz
 						</button>
-					</td>
-					<td class="editable">
-						<button class="btn btn-warning" ng-click="cancelEditCategory(category.id)">
+						<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditCategory(category.id)">
 							<span class="glyphicon glyphicon-remove"></span>  Anuluj
 						</button>
-					</td>
-
-					<td class="readOnly">{{ category.name }}</td>
-					<td class="readOnly">{{ category.parentName }} </td>
-					<td class="readOnly">
-						<button class="btn btn-primary" ng-click="editCategory(category.id)">
+						<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editCategory(category.id)">
 							<span class="glyphicon glyphicon-pencil"></span>  Edytuj
 						</button>
-					</td>
-
-					<td class="editable">
-						<button class="btn btn-danger" ng-click="removeCategory(category.id, category.name)">
+						<button ng-switch-when="edit" class="btn btn-danger" ng-click="removeCategory(category.id, category.name)">
 							<span class="glyphicon glyphicon-trash"></span>  Usun
 						</button>
 					</td>
-					<td class="readOnly" />
-					<!-- to keep number of columns correct -->
 
+				</tr>
+
+				<tr ng-show="newCategory.visible">
+					<td><input id="newCategoryName" type="text" class="form-control" ng-model="newCategory.name" /></td>
+					<td><select ng-model="newCategory.parentCategoryId" class="chosen-select">
+							<option value="">Kategoria główna</option>
+							<option ng-repeat="option in categories" value="{{ option.id }}">{{ option.name }}</option>
+					</select></td>
+					<td>
+						<button class="btn btn-success" ng-click="saveNewCategory()">
+							<span class="glyphicon glyphicon-ok"></span>  Zapisz
+						</button>
+
+						<button class="btn btn-warning" ng-click="cancelAddNewCategory()">
+							<span class="glyphicon glyphicon-remove"></span>  Anuluj
+						</button>
+					</td>
 				</tr>
 
 			</tbody>

@@ -140,9 +140,9 @@ public class CategoryEndpoint {
 			// bug in GAE - NullPointer when namespace=null
 			category.setId(KeyFactory.createKey(Category.class.getSimpleName(), category.getId().getId()));
 			if (category.getParentCategory() != null && category.getParentCategory().getId() != null) {
-				category.getParentCategory().setId(KeyFactory.createKey(Category.class.getSimpleName(), category.getParentCategory().getId().getId()));
-				//Category parentCategory = mgr.getObjectById(Category.class, category.getParentCategory().getId().getId());
-				//category.setParentCategory(parentCategory);
+				//category.getParentCategory().setId(KeyFactory.createKey(Category.class.getSimpleName(), category.getParentCategory().getId().getId()));
+				Category parentCategory = mgr.getObjectById(Category.class, category.getParentCategory().getId().getId());
+				category.setParentCategory(parentCategory);
 			}
 			mgr.makePersistent(category); 
 		} finally {

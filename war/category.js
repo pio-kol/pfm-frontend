@@ -1,35 +1,39 @@
-function cancelAddNewCategory() {
-	$("#categoryRow_new").remove();
-}
-
-function saveNewCategory() {
-	var category = {
-		"name" : $("#newCategoryName").val(),
-		"state" : $("#newCategoryParentId").val(),
-	}
-
-	$
-			.ajax({
-				url : "/_ah/api/categoryendpoint/v1/category",
-				contentType : "application/json",
-				type : 'POST',
-				data : JSON.stringify(category),
-				success : function(data) {
-					$("#categoryRow_new").remove();
-					$("#refreshButton").click();
-				},
-				error : function(data) {
-					addAlert("Nie udało się dodać nowego konta - spróbuj ponownie póżniej.");
-				}
-			});
-
+var Category = function() {
+	this.name = "";
+	this.parentCategoryId = null;
+	this.parentCategoryName = null;
+	this.visible = false;
 };
 
-$(window).load(function() {
+Category.prototype.clear = function() {
+	this.name = "";
+	this.parentCategoryId = null;
+	this.parentCategoryName = null;
+	this.visible = false;
+};
+
+function addAlert(message) {
+	$('#alerts')
+			.append(
+					'<div id="dataLoadFailedAlert" class="alert alert-danger alert-dismissible" role="alert">'
+							+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+							+ '<span aria-hidden="true">&times;</span>'
+							+ '</button>' + message + '</div>');
+	$("#dataLoadFailedAlert").delay(3000).fadeOut(function() {
+		$(this).remove();
+	});
+
+}
+
+function activateSelects() {
 	$(".chosen-select").chosen({
 		no_results_text : "Nie znaleziono:",
 		width : "80%"
 	});
+}
+
+$(window).load(function() {
+	activateSelects();
 });
 
 angular
@@ -40,26 +44,38 @@ angular
 
 					$scope.categories = [];
 
+					$scope.newCategory = new Category();
+
 					$(document).ready(function() {
-						// $(".alert").alert("close");
 						$scope.refreshCategories();
 					});
 
-					function addAlert(message) {
-						$('#alerts')
-								.append(
-										'<div id="dataLoadFailedAlert" class="alert alert-danger alert-dismissible" role="alert">'
-												+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
-												+ '<span aria-hidden="true">&times;</span>'
-												+ '</button>'
-												+ message
-												+ '</div>');
-						$("#dataLoadFailedAlert").delay(3000).fadeOut(
-								function() {
-									$(this).remove();
-								});
-
+					$scope.addNewCategory = function(id) {
+						$scope.newCategory.visible = true;
 					}
+
+					$scope.cancelAddNewCategory = function() {
+						$scope.newCategory.clear();
+					}
+
+					function getCategory(id) {
+						for (var i = 0; i < $scope.categories.length; ++i) {
+							var category = $scope.categories[i];
+							if (id == category.id) {
+								return category;
+							}
+						}
+					}
+
+					$scope.editCategory = function(id) {
+						getCategory(id).mode = "edit";
+						activateSelects();
+					};
+
+					$scope.cancelEditCategory = function(id) {
+						getCategory(id).mode = "readOnly";
+						$scope.refreshCategories();
+					};
 
 					$scope.refreshCategories = function() {
 
@@ -70,12 +86,16 @@ angular
 									success : function(data) {
 										$scope.categories = [];
 										for (i = 0; i < data.items.length; ++i) {
-											$scope.categories.push({
-												id : data.items[i].id.id,
-												name : data.items[i].name,
-												parentId : data.items[i].parentCategory != null ? data.items[i].parentCategory.id : null,
-												parentName : data.items[i].parentCategory != null ? data.items[i].parentCategory.name : null
-											});
+											$scope.categories
+													.push({
+														id : data.items[i].id.id,
+														name : data.items[i].name,
+														parentId : data.items[i].parentCategory != null ? data.items[i].parentCategory.id
+																: null,
+														parentName : data.items[i].parentCategory != null ? data.items[i].parentCategory.name
+																: null,
+														mode : "readOnly"
+													});
 										}
 
 										$scope.categories
@@ -91,19 +111,32 @@ angular
 								});
 					}
 
-					$scope.editCategory = function(id) {
-						$("#categoryRow_" + id + " > .editable").show();
-						$("#categoryRow_" + id + " > .readOnly").hide();
-						$("#categoryHeader > .editable").show();
-						$("#categoryHeader > .readOnly").hide();
-					};
+					$scope.saveNewCategory = function() {
 
-					$scope.cancelEditCategory = function(id) {
-						$("#categoryRow_" + id + " > .editable").hide();
-						$("#categoryRow_" + id + " > .readOnly").show();
-						$("#categoryHeader > .editable").hide();
-						$("#categoryHeader > .readOnly").show();
-						$scope.refreshCategories();
+						var category = {
+							"parentCategory" : {
+								"id" : {
+									"id" : $scope.newCategory.parentCategoryId
+								}
+							},
+							"name" : $scope.newCategory.name
+						}
+
+						$
+								.ajax({
+									url : "/_ah/api/categoryendpoint/v1/category",
+									contentType : "application/json",
+									type : 'POST',
+									data : JSON.stringify(category),
+									success : function(data) {
+										$scope.newCategory.clear();
+										$scope.$apply();
+									},
+									error : function(data) {
+										addAlert("Nie udało się dodać nowego konta - spróbuj ponownie póżniej.");
+									}
+								});
+
 					};
 
 					$scope.removeCategory = function(id, name) {
@@ -121,11 +154,8 @@ angular
 															type : 'DELETE',
 															success : function(
 																	data) {
-																$(
-																		"#categoryRow_"
-																				+ id)
-																		.remove();
-
+																$scope
+																		.refreshCategories();
 															},
 															error : function(
 																	data) {
@@ -138,17 +168,16 @@ angular
 										});
 					};
 
-					$scope.saveCategory = function(id, name) {
+					$scope.saveCategory = function(category) {
 						var category = {
 							"parentCategory" : {
 								"id" : {
-									"id" : $( "#categoryRow_" + id).find("#parentCategorySelect option:selected").val()
-								},
-								"name" : $( "#categoryRow_" + id).find("#parentCategorySelect option:selected").text() 
+									"id" : category.parentId
+								}
 							},
-							"name" : name,
+							"name" : category.name,
 							"id" : {
-								"id" : id
+								"id" : category.id
 							}
 						}
 
@@ -159,12 +188,8 @@ angular
 									type : 'PUT',
 									data : JSON.stringify(category),
 									success : function(data) {
-										$("#categoryRow_" + id + " > .editable")
-												.hide();
-										$("#categoryRow_" + id + " > .readOnly")
-												.show();
-										$("#categoryHeader > .editable").hide();
-										$("#categoryHeader > .readOnly").show();
+										category.mode = "readOnly";
+										$scope.$apply();
 									},
 									error : function(data) {
 										addAlert("Nie udało się zmodyfikować konta <b>'"
@@ -174,11 +199,5 @@ angular
 								});
 
 					};
-
-					$scope.addNewCategory = function(id) {
-						$("#categoriesTableBody tr:last-child").after(
-								"<tr id='categoryRow_new'/>");
-						$("#categoryRow_new").load("category_new.html");
-					}
 
 				});
