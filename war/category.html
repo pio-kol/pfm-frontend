@@ -2,14 +2,20 @@
 <html>
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.min.css">
+<link rel="image_src" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen-sprite.png">
 <link rel="stylesheet" href="style.css" />
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular.min.js"></script>
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+
 <script src="category.js"></script>
+<script src="angular-chosen.min.js"></script>
 
 <meta charset="UTF-8">
 </head>
@@ -42,20 +48,19 @@
 					<td ng-switch-when="readOnly">{{ category.name }}</td>
 					<td ng-switch-when="readOnly">{{ category.parentName }}</td>
 					<td ng-switch-when="edit"><input type="text" class="form-control" ng-model="category.name" /></td>
-					<td ng-switch-when="edit"><select id="parentCategorySelect" class="chosen-select" ng-model="category.parentId">
+					<td ng-switch-when="edit"><select chosen ng-model="category.parentId" ng-options="category.id as category.name for category in categoriesForSelect(category.id)" >
 							<option value="">Kategoria główna</option>
-							<option ng-repeat="option in categories" value="{{ option.id }}">{{ option.name }}</option>
 					</select></td>
 
 					<td>
+						<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editCategory(category.id)">
+							<span class="glyphicon glyphicon-pencil"></span>  Edytuj
+						</button>
 						<button ng-switch-when="edit" class="btn btn-success" ng-click="saveCategory(category)">
 							<span class="glyphicon glyphicon-ok"></span>  Zapisz
 						</button>
 						<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditCategory(category.id)">
 							<span class="glyphicon glyphicon-remove"></span>  Anuluj
-						</button>
-						<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editCategory(category.id)">
-							<span class="glyphicon glyphicon-pencil"></span>  Edytuj
 						</button>
 						<button ng-switch-when="edit" class="btn btn-danger" ng-click="removeCategory(category.id, category.name)">
 							<span class="glyphicon glyphicon-trash"></span>  Usun
@@ -66,12 +71,11 @@
 
 				<tr ng-show="newCategory.visible">
 					<td><input id="newCategoryName" type="text" class="form-control" ng-model="newCategory.name" /></td>
-					<td><select ng-model="newCategory.parentCategoryId" class="chosen-select">
+					<td><select chosen ng-model="newCategory.parentCategoryId" ng-options="category.id as category.name for category in categories">
 							<option value="">Kategoria główna</option>
-							<option ng-repeat="option in categories" value="{{ option.id }}">{{ option.name }}</option>
 					</select></td>
 					<td>
-						<button class="btn btn-success" ng-click="saveNewCategory()">
+						<button class="btn btn-success" ng-click="saveNewCategory(newCategory)">
 							<span class="glyphicon glyphicon-ok"></span>  Zapisz
 						</button>
 

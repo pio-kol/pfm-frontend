@@ -25,22 +25,13 @@ function addAlert(message) {
 
 }
 
-function activateSelects() {
-	$(".chosen-select").chosen({
-		no_results_text : "Nie znaleziono:",
-		width : "80%"
-	});
-}
-
-$(window).load(function() {
-	activateSelects();
-});
+var URL = "/_ah/api/categoryendpoint/v1/category/";
 
 angular
-		.module('myApp', [])
+		.module('myApp', [ 'angular.chosen' ])
 		.controller(
 				'categoryController',
-				function($scope) {
+				function($scope, $http) {
 
 					$scope.categories = [];
 
@@ -49,6 +40,17 @@ angular
 					$(document).ready(function() {
 						$scope.refreshCategories();
 					});
+					
+					$scope.categoriesForSelect = function(id){
+						var filteredCategories = [];
+						for (var i = 0; i < $scope.categories.length; ++i) {
+							var category = $scope.categories[i];
+							if (id != category.id) {
+								filteredCategories.push(category);
+							}
+						}
+						return filteredCategories;
+					};
 
 					$scope.addNewCategory = function(id) {
 						$scope.newCategory.visible = true;
@@ -69,7 +71,6 @@ angular
 
 					$scope.editCategory = function(id) {
 						getCategory(id).mode = "edit";
-						activateSelects();
 					};
 
 					$scope.cancelEditCategory = function(id) {
@@ -79,65 +80,40 @@ angular
 
 					$scope.refreshCategories = function() {
 
-						$
-								.ajax({
-									url : "/_ah/api/categoryendpoint/v1/category",
-									dataType : 'json',
-									success : function(data) {
-										$scope.categories = [];
-										for (i = 0; i < data.items.length; ++i) {
-											$scope.categories
-													.push({
-														id : data.items[i].id.id,
-														name : data.items[i].name,
-														parentId : data.items[i].parentCategory != null ? data.items[i].parentCategory.id
-																: null,
-														parentName : data.items[i].parentCategory != null ? data.items[i].parentCategory.name
-																: null,
-														mode : "readOnly"
-													});
-										}
-
+						$http
+						.get(URL)
+						.then(
+								function(response) {
+									$scope.categories = [];
+									
+									var data = response.data;
+									for (i = 0; i < data.items.length; ++i) {
 										$scope.categories
-												.sort(function(a, b) {
-													return a.name
-															.localeCompare(b.name);
+												.push({
+													id : data.items[i].id.id,
+													name : data.items[i].name,
+													parentId : data.items[i].parentCategory != null ? data.items[i].parentCategory.id.id
+															: null,
+													parentName : data.items[i].parentCategory != null ? data.items[i].parentCategory.name
+															: null,
+													mode : "readOnly"
 												});
-										$scope.$apply();
-									},
-									error : function(data) {
-										addAlert("Nie udało się pobrać danych - spróbuj ponownie póżniej.");
 									}
+
+									$scope.categories
+											.sort(function(a, b) {
+												return a.name
+														.localeCompare(b.name);
+											});
+								},
+								function(response) {
+									addAlert("Nie udało się pobrać danych - spróbuj ponownie póżniej. /n"
+											+ "Status: "
+											+ response.status
+											+ ", Info: "
+											+ response.data);
 								});
 					}
-
-					$scope.saveNewCategory = function() {
-
-						var category = {
-							"parentCategory" : {
-								"id" : {
-									"id" : $scope.newCategory.parentCategoryId
-								}
-							},
-							"name" : $scope.newCategory.name
-						}
-
-						$
-								.ajax({
-									url : "/_ah/api/categoryendpoint/v1/category",
-									contentType : "application/json",
-									type : 'POST',
-									data : JSON.stringify(category),
-									success : function(data) {
-										$scope.newCategory.clear();
-										$scope.$apply();
-									},
-									error : function(data) {
-										addAlert("Nie udało się dodać nowego konta - spróbuj ponownie póżniej.");
-									}
-								});
-
-					};
 
 					$scope.removeCategory = function(id, name) {
 						bootbox
@@ -146,57 +122,93 @@ angular
 												+ name
 												+ "'</b> zostanie usuniete. Kontynuowac?",
 										function(result) {
-											if (result) {
-												$
-														.ajax({
-															url : "/_ah/api/categoryendpoint/v1/category/"
-																	+ id,
-															type : 'DELETE',
-															success : function(
-																	data) {
-																$scope
-																		.refreshCategories();
-															},
-															error : function(
-																	data) {
-																addAlert("Nie udało się usunąć konta <b>'"
-																		+ name
-																		+ "'</b> - spróbuj ponownie póżniej.");
-															}
-														});
+											if (!result) {
+												return;
 											}
+											$http.delete(URL + id)
+											.then(
+													function(response) {
+														$scope.refreshCategories();
+													},
+													function(response) {
+														addAlert("Nie udało się usunąć kategorii <b>'"
+													+ name
+													+ "'</b> - spróbuj ponownie póżniej. /n"
+																+ "Status: "
+																+ response.status
+																+ ", Info: "
+																+ response.data);
+													});
+
 										});
+
 					};
 
-					$scope.saveCategory = function(category) {
+					$scope.saveNewCategory = function(newCategory) {
+
 						var category = {
-							"parentCategory" : {
+							"name" : newCategory.name
+						}
+
+						if (newCategory.parentCategoryId != null) {
+							category.parentCategory = {
 								"id" : {
-									"id" : category.parentId
+									"id" : newCategory.parentCategoryId
 								}
-							},
-							"name" : category.name,
-							"id" : {
-								"id" : category.id
 							}
 						}
 
-						$
-								.ajax({
-									url : "/_ah/api/categoryendpoint/v1/category",
-									contentType : "application/json",
-									type : 'PUT',
-									data : JSON.stringify(category),
-									success : function(data) {
-										category.mode = "readOnly";
-										$scope.$apply();
-									},
-									error : function(data) {
-										addAlert("Nie udało się zmodyfikować konta <b>'"
-												+ name
-												+ "'</b> - spróbuj ponownie póżniej.");
-									}
-								});
+						$http
+								.post(URL,
+										category)
+								.then(
+										function(response) {
+											newCategory.clear();
+											$scope.refreshCategories();
+										},
+										function(response) {
+											addAlert("Nie udało się dodać nowej kategorii - spróbuj ponownie póżniej. /n"
+													+ "Status: "
+													+ response.status
+													+ ", Info: "
+													+ response.data);
+										});
+
+					};
+
+					$scope.saveCategory = function(editedCategory) {
+						var category = {
+							"name" : editedCategory.name,
+							"id" : {
+								"id" : editedCategory.id
+							}
+						}
+
+						if (editedCategory.parentId != null) {
+							category.parentCategory = {
+								"id" : {
+									"id" : editedCategory.parentId
+								}
+							}
+						}
+
+						$http
+								.put(URL, category)
+								.then(
+										function(response) {
+											category.mode = "readOnly";
+											$scope.refreshCategories();
+										},
+										function(response) {
+
+											addAlert("Nie udało się zmodyfikować kategorii <b>'"
+													+ name
+													+ "'</b> - spróbuj ponownie póżniej. /n"
+													+ "Status: "
+													+ response.status
+													+ ", Info: "
+													+ response.data);
+										});
 
 					};
 
