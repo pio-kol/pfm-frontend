@@ -21,7 +21,7 @@
 
 <meta charset="UTF-8">
 </head>
-<body ng-app="myApp" ng-controller="categoryController">
+<body ng-app="myApp" ng-controller="categoryController" novalidate>
 
 	<div class="container">
 
@@ -47,11 +47,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-switch on="category.mode" ng-repeat="category in categories">
+				<tr ng-switch on="category.mode" ng-repeat="category in categories" ng-form name="editCategoryForm_{{category.id}}">
 
 					<td ng-switch-when="readOnly">{{ category.name }}</td>
 					<td ng-switch-when="readOnly">{{ category.parentName }}</td>
-					<td ng-switch-when="edit"><input type="text" class="form-control" ng-model="category.name" /></td>
+					<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="category.name" /></td>
 					<td ng-switch-when="edit"><select chosen ng-model="category.parentId"
 						ng-options="category.id as category.name for category in categoriesForSelect(category.id)">
 							<option value="" translate="MAIN_CATEGORY" />
@@ -61,7 +61,7 @@
 						<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editCategory(category.id)">
 							<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ "EDIT" | translate }}
 						</button>
-						<button ng-switch-when="edit" class="btn btn-success" ng-click="saveCategory(category)">
+						<button ng-switch-when="edit" class="btn btn-success" ng-disabled="!editCategoryForm_{{category.id}}.$valid" ng-click="saveCategory(category)">
 							<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
 						</button>
 						<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditCategory(category.id)">
@@ -74,13 +74,13 @@
 
 				</tr>
 
-				<tr ng-show="newCategory.visible">
-					<td><input type="text" class="form-control" ng-model="newCategory.name" /></td>
+				<tr ng-show="newCategory.visible" ng-form name="newCategoryForm">
+					<td><input required type="text" class="form-control" ng-model="newCategory.name" /></td>
 					<td><select chosen class="form-control" ng-model="newCategory.parentCategoryId" ng-options="category.id as category.name for category in categories">
 							<option value="" translate="MAIN_CATEGORY" />
 					</select></td>
 					<td>
-						<button class="btn btn-success" ng-click="saveNewCategory(newCategory)">
+						<button class="btn btn-success" ng-disabled="!newCategoryForm.$valid" ng-click="saveNewCategory(newCategory)">
 							<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
 						</button>
 

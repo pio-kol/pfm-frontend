@@ -56,6 +56,7 @@ var URL = "/_ah/api/categoryendpoint/v1/category/";
 
 					$scope.cancelAddNewCategory = function() {
 						$scope.newCategory.clear();
+						$scope.newCategoryForm.$setPristine();
 					}
 
 					function getCategory(id) {
@@ -162,6 +163,7 @@ var URL = "/_ah/api/categoryendpoint/v1/category/";
 								.then(
 										function(response) {
 											newCategory.clear();
+											$scope.newCategoryForm.$setPristine();
 											$scope.refreshCategories();
 										},
 										function(response) {

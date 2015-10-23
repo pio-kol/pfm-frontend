@@ -1,3 +1,4 @@
 CATEGORIES:
 1) display only categories which don't cause cycles 
-3) validacja (nie pusty name)
+2) do not allow to remove category which have children
+2) validacja (nie pusty name)

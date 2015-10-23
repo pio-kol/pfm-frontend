@@ -1,6 +1,11 @@
-td {
+td,th {
     width: 500px;
-},
-th {
-    width: 500px;
+}
+
+.ng-invalid.ng-dirty {
+  border-color: red;
+}
+
+.ng-valid.ng-dirty {
+  border-color: green;
 }
