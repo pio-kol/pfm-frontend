@@ -27,9 +27,7 @@ function addAlert(message) {
 
 var URL = "/_ah/api/categoryendpoint/v1/category/";
 
-angular
-		.module('myApp', [ 'angular.chosen' ])
-		.controller(
+		app.controller(
 				'categoryController',
 				function($scope, $http) {
 
@@ -211,5 +209,9 @@ angular
 										});
 
 					};
+					
+					
+					
+
 
 				});

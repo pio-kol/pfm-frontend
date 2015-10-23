@@ -14,8 +14,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 
+<script src="js/app.js"></script>
 <script src="js/category.js"></script>
-<script src="js/angular-chosen.min.js"></script>
+<script src="js/3rdParty/angular-chosen.min.js"></script>
+<script src="js/3rdParty/angular-translate.min.js"></script>
 
 <meta charset="UTF-8">
 </head>
@@ -27,11 +29,11 @@
 
 		<div class="btn-group pull-right" role="group">
 			<button class="btn btn-info" ng-click="addNewCategory()">
-				<span class="glyphicon glyphicon-plus"></span>  Nowa kategoria
+				<span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;{{ "NEW_CATEGORY" | translate }}
 			</button>
 
 			<button id="refreshButton" class="btn btn-info " ng-click="refreshCategories()">
-				<span class="glyphicon glyphicon-refresh"></span>  Odśwież
+				<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;{{ "REFRESH" | translate }}
 			</button>
 		</div>
 
@@ -39,9 +41,9 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Nazwa</th>
-					<th>Kategoria nadrzędna</th>
-					<th>Akcja</th>
+					<th translate="NAME" />
+					<th translate="PARENT_CATEGORY" />
+					<th />
 				</tr>
 			</thead>
 			<tbody>
@@ -52,38 +54,38 @@
 					<td ng-switch-when="edit"><input type="text" class="form-control" ng-model="category.name" /></td>
 					<td ng-switch-when="edit"><select chosen ng-model="category.parentId"
 						ng-options="category.id as category.name for category in categoriesForSelect(category.id)">
-							<option value="">Kategoria główna</option>
+							<option value="" translate="MAIN_CATEGORY" />
 					</select></td>
 
 					<td>
 						<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editCategory(category.id)">
-							<span class="glyphicon glyphicon-pencil"></span>  Edytuj
+							<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ "EDIT" | translate }}
 						</button>
 						<button ng-switch-when="edit" class="btn btn-success" ng-click="saveCategory(category)">
-							<span class="glyphicon glyphicon-ok"></span>  Zapisz
+							<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
 						</button>
 						<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditCategory(category.id)">
-							<span class="glyphicon glyphicon-remove"></span>  Anuluj
+							<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;{{ "CANCEL" | translate }}
 						</button>
 						<button ng-switch-when="edit" class="btn btn-danger" ng-click="removeCategory(category.id, category.name)">
-							<span class="glyphicon glyphicon-trash"></span>  Usun
+							<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{ "DELETE" | translate }}
 						</button>
 					</td>
 
 				</tr>
 
 				<tr ng-show="newCategory.visible">
-					<td><input id="newCategoryName" type="text" class="form-control" ng-model="newCategory.name" /></td>
-					<td><select chosen ng-model="newCategory.parentCategoryId" ng-options="category.id as category.name for category in categories">
-							<option value="">Kategoria główna</option>
+					<td><input type="text" class="form-control" ng-model="newCategory.name" /></td>
+					<td><select chosen class="form-control" ng-model="newCategory.parentCategoryId" ng-options="category.id as category.name for category in categories">
+							<option value="" translate="MAIN_CATEGORY" />
 					</select></td>
 					<td>
 						<button class="btn btn-success" ng-click="saveNewCategory(newCategory)">
-							<span class="glyphicon glyphicon-ok"></span>  Zapisz
+							<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
 						</button>
 
 						<button class="btn btn-warning" ng-click="cancelAddNewCategory()">
-							<span class="glyphicon glyphicon-remove"></span>  Anuluj
+							<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;{{ "CANCEL" | translate }}
 						</button>
 					</td>
 				</tr>
