@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.min.css">
 <link rel="image_src" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen-sprite.png">
-<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="css/style.css" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
@@ -14,8 +14,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 
-<script src="category.js"></script>
-<script src="angular-chosen.min.js"></script>
+<script src="js/category.js"></script>
+<script src="js/angular-chosen.min.js"></script>
 
 <meta charset="UTF-8">
 </head>
@@ -25,13 +25,15 @@
 
 		<div id="alerts"></div>
 
-		<button id="refreshButton" class="btn btn-info pull-right" ng-click="refreshCategories()">
-			<span class="glyphicon glyphicon-refresh"></span>  Odśwież
-		</button>
+		<div class="btn-group pull-right" role="group">
+			<button class="btn btn-info" ng-click="addNewCategory()">
+				<span class="glyphicon glyphicon-plus"></span>  Nowa kategoria
+			</button>
 
-		<button class="btn btn-info pull-right" ng-click="addNewCategory()">
-			<span class="glyphicon glyphicon-plus"></span>  Nowa kategoria
-		</button>
+			<button id="refreshButton" class="btn btn-info " ng-click="refreshCategories()">
+				<span class="glyphicon glyphicon-refresh"></span>  Odśwież
+			</button>
+		</div>
 
 
 		<table class="table table-striped">
@@ -48,7 +50,8 @@
 					<td ng-switch-when="readOnly">{{ category.name }}</td>
 					<td ng-switch-when="readOnly">{{ category.parentName }}</td>
 					<td ng-switch-when="edit"><input type="text" class="form-control" ng-model="category.name" /></td>
-					<td ng-switch-when="edit"><select chosen ng-model="category.parentId" ng-options="category.id as category.name for category in categoriesForSelect(category.id)" >
+					<td ng-switch-when="edit"><select chosen ng-model="category.parentId"
+						ng-options="category.id as category.name for category in categoriesForSelect(category.id)">
 							<option value="">Kategoria główna</option>
 					</select></td>
 

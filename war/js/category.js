@@ -118,7 +118,7 @@ angular
 					$scope.removeCategory = function(id, name) {
 						bootbox
 								.confirm(
-										"Konto <b>'"
+										"Kategoria <b>'"
 												+ name
 												+ "'</b> zostanie usuniete. Kontynuowac?",
 										function(result) {

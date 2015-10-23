@@ -1,3 +1,4 @@
 CATEGORIES:
 1) display only categories which don't cause cycles 
 2) internationalization
+3) validacja (nie pusty name)
