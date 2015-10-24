@@ -1,59 +1,55 @@
 //angular.module('navigationBar',['ngSanitize'])
 
 app
-		.controller(
-				'navigationBarController',
-				function($scope) {
+		.controller('navigationBarController', function($scope) {
 
-					$scope.affixed = 'top';
-					$scope.search = {
-						show : false,
-						terms : ''
-					};
-					$scope.brand = "<span class='glyphicon glyphicon-list-alt'></span> Formularz wydatków";
-					$scope.inverse = true;
-					$scope.menus = [ {
-						title : "Historia transakcji",
-						action : "historyOfTransactions"
-					}, {
-						title : "Zarządzanie kategoriami",
-						action : "categories"
-					}, {
-						title : "Zarządzanie kontami",
-						action : "accounts"
-					} ]; // end menus
+			$scope.affixed = 'top';
+			$scope.search = {
+				show : false,
+				terms : ''
+			};
+			$scope.inverse = true;
+			$scope.menus = [ {
+				title : "MENU_TRANSACTION_HISTORY",
+				action : "historyOfTransactions"
+			}, {
+				title : "MENU_CATEGORIES",
+				action : "categories"
+			}, {
+				title : "MENU_ACCOUNTS",
+				action : "accounts"
+			} ]; // end menus
 
+			$scope.item = 'history.html';
+			$scope.styling = 'Inverse';
+			$scope.searchDisplay = 'Visible';
+
+			$scope.toggleLanguage = function() {
+				alert('Toggle language');
+			};
+
+			$scope.searchfn = function() {
+				alert('Attempting search on: "' + $scope.search.terms + '"');
+			}; // searchfn
+
+			$scope.navfn = function(action) {
+				switch (action) {
+				case 'historyOfTransactions':
 					$scope.item = 'history.html';
-					$scope.styling = 'Inverse';
-					$scope.searchDisplay = 'Visible';
-
-					$scope.toggleLanguage = function() {
-						alert('Toggle language');
-					};
-
-					$scope.searchfn = function() {
-						alert('Attempting search on: "' + $scope.search.terms
-								+ '"');
-					}; // searchfn
-
-					$scope.navfn = function(action) {
-						switch (action) {
-						case 'historyOfTransactions':
-							$scope.item = 'history.html';
-							break;
-						case 'categories':
-							$scope.item = 'category.html';
-							break;
-						case 'accounts':
-							$scope.item = 'account.html';
-							break;
-						default:
-							$scope.item = 'history.html';
-							break;
-						}
-						; // end switch
-					}; // end navfn
-				})
+					break;
+				case 'categories':
+					$scope.item = 'category.html';
+					break;
+				case 'accounts':
+					$scope.item = 'account.html';
+					break;
+				default:
+					$scope.item = 'history.html';
+					break;
+				}
+				; // end switch
+			}; // end navfn
+		})
 		// end navbarDirectiveTestCtrl
 
 		/**
@@ -69,7 +65,6 @@ app
 					return {
 						restrict : 'AE',
 						scope : {
-							brand : '=',
 							menus : '=',
 							affixed : '=',
 							search : '=',
@@ -78,15 +73,16 @@ app
 							inverse : '='
 						},
 						templateUrl : 'tmpls/nav/navbar.html',
-						controller : function($scope, $element, $attrs, $translate) {
+						controller : function($scope, $element, $attrs,
+								$translate) {
 							// === Scope/Attributes Defaults ===//
 
 							$scope.toggleLanguage = function() {
-								$translate.use($translate.use() === "en" ? "pl" : "en");  
+								$translate.use($translate.use() === "en" ? "pl"
+										: "en");
 							};
-							
+
 							$scope.defaults = {
-								brand : '<span class="glyphicon glyphicon-certificate"></span>',
 								menus : [],
 								search : {
 									show : false
@@ -168,17 +164,6 @@ app
 							}; // end navAction
 
 							/**
-							 * Have Branding Checks to see if the "brand"
-							 * attribute was passed, if not use the default
-							 * 
-							 * @result string
-							 */
-							$scope.haveBranding = function() {
-								return (angular.isDefined($attrs.brand)) ? $scope.brand
-										: $scope.defaults.brand;
-							};
-
-							/**
 							 * Has Menus Checks to see if there were menus
 							 * passed in for the navbar.
 							 * 
@@ -223,5 +208,5 @@ app
 					$templateCache
 							.put(
 									'tmpls/nav/navbar.html',
-									'<nav class="navbar" ng-class="{\'navbar-inverse\': inverse,\'navbar-default\': !inverse,\'navbar-fixed-top\': affixed == \'top\',\'navbar-fixed-bottom\': affixed == \'bottom\'}" role="navigation"><div class="container-fluid"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu"><span class="sr-only">Toggle Navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" ng-click="noop()" ng-bind-html="haveBranding()"></a></div><div class="collapse navbar-collapse" id="navbar-menu"><ul class="nav navbar-nav" ng-if="hasMenus()"><li ng-repeat="menu in menus" ng-class="{true: \'dropdown\'}[hasDropdownMenu(menu)]"><a ng-if="!hasDropdownMenu(menu)" ng-click="navAction(menu.action)">{{menu.title}}</a><a ng-if="hasDropdownMenu(menu)" class="dropdown-toggle" data-toggle="dropdown">{{menu.title}} <b class="caret"></b></a><ul ng-if="hasDropdownMenu(menu)" class="dropdown-menu"><li ng-repeat="item in menu.menu" ng-class="{true: \'divider\'}[isDivider(item)]"><a ng-if="!isDivider(item)" ng-click="navAction(item.action)">{{item.title}}</a></li></ul></li></ul><form ng-if="search.show" class="navbar-form navbar-right" role="search"><div class="form-group"><input type="text" class="form-control" placeholder="Search" ng-model="search.terms"><button class="btn btn-default" type="button" ng-click="searchfn()"><span class="glyphicon glyphicon-search"></span></button></div></form><ul class="nav navbar-nav navbar-right"><li><a href="#"><span class="glyphicon glyphicon-user"></span> {{"SIGN_UP"|translate}}</a></li><li><a href="#"><span class="glyphicon glyphicon-log-in"></span> {{"LOGIN"|translate}}</a></li><li><a ng-click="toggleLanguage()"><span class="glyphicon glyphicon-flag"></span> {{"LANGUAGE"|translate}}</a></li></ul></div></div></nav>');
+									'<nav class="navbar" ng-class="{\'navbar-inverse\': inverse,\'navbar-default\': !inverse,\'navbar-fixed-top\': affixed == \'top\',\'navbar-fixed-bottom\': affixed == \'bottom\'}" role="navigation"><div class="container-fluid"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu"><span class="sr-only">Toggle Navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" ng-click="noop()"><span class="glyphicon glyphicon-list-alt"></span> {{"PAGE_TITLE" | translate}}</a></div><div class="collapse navbar-collapse" id="navbar-menu"><ul class="nav navbar-nav" ng-if="hasMenus()"><li ng-repeat="menu in menus" ng-class="{true: \'dropdown\'}[hasDropdownMenu(menu)]"><a ng-if="!hasDropdownMenu(menu)" ng-click="navAction(menu.action)">{{menu.title | translate}}</a><a ng-if="hasDropdownMenu(menu)" class="dropdown-toggle" data-toggle="dropdown">{{menu.title}} <b class="caret"></b></a><ul ng-if="hasDropdownMenu(menu)" class="dropdown-menu"><li ng-repeat="item in menu.menu" ng-class="{true: \'divider\'}[isDivider(item)]"><a ng-if="!isDivider(item)" ng-click="navAction(item.action)">{{item.title}}</a></li></ul></li></ul><form ng-if="search.show" class="navbar-form navbar-right" role="search"><div class="form-group"><input type="text" class="form-control" placeholder="Search" ng-model="search.terms"><button class="btn btn-default" type="button" ng-click="searchfn()"><span class="glyphicon glyphicon-search"></span></button></div></form><ul class="nav navbar-nav navbar-right"><li><a href="#"><span class="glyphicon glyphicon-user"></span> {{"SIGN_UP"|translate}}</a></li><li><a href="#"><span class="glyphicon glyphicon-log-in"></span> {{"LOGIN"|translate}}</a></li><li><a ng-click="toggleLanguage()"><span class="glyphicon glyphicon-flag"></span> {{"LANGUAGE"|translate}}</a></li></ul></div></div></nav>');
 				});

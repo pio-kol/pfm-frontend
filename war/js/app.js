@@ -17,7 +17,11 @@ app.config([ '$translateProvider', function($translateProvider) {
 		ACCOUNT_STATE : 'Stan konta',
 		LANGUAGE : 'PL',
 		LOGIN : 'Zaloguj się',
-		SIGN_UP : 'Utwórz konto'
+		SIGN_UP : 'Utwórz konto',
+		PAGE_TITLE : "Formularz wydatkow",
+		MENU_TRANSACTION_HISTORY : "Historia transakcji",
+		MENU_ACCOUNTS : "Zarządzanie kontami",
+		MENU_CATEGORIES : "Zarządzanie kategoriami"
 	};
 
 	var translations_en = {
@@ -35,7 +39,11 @@ app.config([ '$translateProvider', function($translateProvider) {
 		ACCOUNT_STATE : 'Account state',
 		LANGUAGE : 'EN',
 		LOGIN : 'Login',
-		SIGN_UP : 'Sign up'
+		SIGN_UP : 'Sign up',
+		PAGE_TITLE : "Personal Finance Manager",
+		MENU_TRANSACTION_HISTORY : "Transaction history",
+		MENU_ACCOUNTS : "Accounts",
+		MENU_CATEGORIES : "Categories"
 	};
 
 	$translateProvider //

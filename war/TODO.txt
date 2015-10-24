@@ -1,13 +1,6 @@
 CATEGORIES:
 1) display only categories which don't cause cycles 
 2) do not allow to remove category which have children
-2) validacja (nie pusty name)
 
-Translate:
-- page title
-- navigation bar
-
-- add switch for languages
-
-validate account statie is a number
-format it as number
+ACCOUNTS:
+format account state as currency

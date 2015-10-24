@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html ng-app='myApp'>
 <head>
 <meta charset="UTF-8">
-<title>Formularz wydatkow</title>
+<title translate="PAGE_TITLE"></title>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.min.css">
@@ -29,9 +29,9 @@
 
 </head>
 
-<body ng-app='myApp' ng-controller='navigationBarController'>
+<body ng-controller='navigationBarController'>
 
-	<angled-navbar affixed='affixed' brand='brand' inverse='inverse' menus='menus' navfn='navfn(action)' search='search' searchfn='searchfn()'></angled-navbar>
+	<angled-navbar affixed='affixed' inverse='inverse' menus='menus' navfn='navfn(action)'></angled-navbar>
 
 	<div class='container' ng-include="item"></div>
 </body>
