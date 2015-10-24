@@ -15,7 +15,7 @@ Account.prototype.clear = function() {
 app
 		.controller(
 				'accountController',
-				function($scope, $http) {
+				function($scope, $http, $translate) {
 					var URL = "/_ah/api/accountendpoint/v1/account/";
 
 					$scope.accounts = [];
@@ -72,20 +72,16 @@ app
 											});
 								},
 								function(response) {
-									addAlert("Nie udało się pobrać danych - spróbuj ponownie póżniej. /n"
-											+ "Status: "
-											+ response.status
-											+ ", Info: "
-											+ response.data);
+									$translate('ERROR_DATA_RETRIVE').then(function (message) {
+									    addAlert(message, response);
+									  });
 								});
 					}
 
-					$scope.removeAccount = function(id, name) {
+					$scope.removeAccount = function(id, accountName) {
+						$translate('CONFIRM_REMOVE_ACCOUNT', {name : accountName}).then(function (message) {
 						bootbox
-								.confirm(
-										"Konto <b>'"
-												+ name
-												+ "'</b> zostanie usuniete. Kontynuowac?",
+								.confirm(message,
 										function(result) {
 											if (!result) {
 												return;
@@ -96,15 +92,12 @@ app
 														$scope.refreshAccounts();
 													},
 													function(response) {
-														addAlert("Nie udało się usunąć konta <b>'"
-													+ name
-													+ "'</b> - spróbuj ponownie póżniej. /n"
-																+ "Status: "
-																+ response.status
-																+ ", Info: "
-																+ response.data);
+														$translate('ERROR_ACCOUNT_REMOVE', {name : accountName}).then(function (message) {
+														    addAlert(message, response);
+														  });
 													});
 										});
+						});
 					};
 
 					$scope.saveAccount = function(editedAccount) {
@@ -124,14 +117,9 @@ app
 											$scope.refreshAccounts();
 										},
 										function(response) {
-
-											addAlert("Nie udało się zmodyfikować konta <b>'"
-													+ editedAccount.name
-													+ "'</b> - spróbuj ponownie póżniej. /n"
-													+ "Status: "
-													+ response.status
-													+ ", Info: "
-													+ response.data);
+											$translate('ERROR_ACCOUNT_MODIFY', {name : editedAccount.name}).then(function (message) {
+											    addAlert(message, response);
+											  });
 										});
 					};
 
@@ -151,11 +139,9 @@ app
 											$scope.refreshAccounts();
 										},
 										function(response) {
-											addAlert("Nie udało się dodać nowego konta - spróbuj ponownie póżniej. /n"
-													+ "Status: "
-													+ response.status
-													+ ", Info: "
-													+ response.data);
+											$translate('ERROR_ACCOUNT_ADD', {name : newAccount.name}).then(function (message) {
+											    addAlert(message, response);
+											  });
 										});
 
 					};

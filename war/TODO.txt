@@ -1,8 +1,17 @@
 CATEGORIES:
 1) display only categories which don't cause cycles 
 2) do not allow to remove category which have children
+3) Focus input after clicking edit
+4) No categories available in newCategory dropdown
 
 ACCOUNTS:
 format account state as currency
 
 deep linking with operation (new account / edit account etc.)
+
+massages on error (Object object)
+
+use div's instead of tables
+
+cache when changing views
+

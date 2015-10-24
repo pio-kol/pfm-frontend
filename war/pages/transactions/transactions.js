@@ -15,8 +15,8 @@ Category.prototype.clear = function() {
 };
 
 		app.controller(
-				'categoryController',
-				function($scope, $http) {
+				'categoryController', 
+				function($scope, $http, $translate) {
 					var URL = "/_ah/api/categoryendpoint/v1/category/";
 
 					$scope.categories = [];
@@ -85,20 +85,16 @@ Category.prototype.clear = function() {
 											});
 								},
 								function(response) {
-									addAlert("Nie udało się pobrać danych - spróbuj ponownie póżniej. /n"
-											+ "Status: "
-											+ response.status
-											+ ", Info: "
-											+ response.data);
+									$translate('ERROR_DATA_RETRIVE').then(function (message) {
+									    addAlert(message, response);
+									  });
 								});
 					}
 
-					$scope.removeCategory = function(id, name) {
-						bootbox
-								.confirm(
-										"Kategoria <b>'"
-												+ name
-												+ "'</b> zostanie usuniete. Kontynuowac?",
+					$scope.removeCategory = function(id, categoryName) {
+						$translate('CONFIRM_REMOVE_CATEGORY', {name : categoryName}).then(function (message) {
+						bootbox 
+								.confirm(message,
 										function(result) {
 											if (!result) {
 												return;
@@ -109,16 +105,13 @@ Category.prototype.clear = function() {
 														$scope.refreshCategories();
 													},
 													function(response) {
-														addAlert("Nie udało się usunąć kategorii <b>'"
-													+ name
-													+ "'</b> - spróbuj ponownie póżniej. /n"
-																+ "Status: "
-																+ response.status
-																+ ", Info: "
-																+ response.data);
+														$translate('ERROR_CATEGORY_REMOVE', {name : categoryName}).then(function (message) {
+														    addAlert(message, response);
+														  });
 													});
 
 										});
+						});
 
 					};
 
@@ -146,11 +139,9 @@ Category.prototype.clear = function() {
 											$scope.refreshCategories();
 										},
 										function(response) {
-											addAlert("Nie udało się dodać nowej kategorii - spróbuj ponownie póżniej. /n"
-													+ "Status: "
-													+ response.status
-													+ ", Info: "
-													+ response.data);
+											$translate('ERROR_CATEGORY_ADD', {name : newCategory.name}).then(function (message) {
+											    addAlert(message, response);
+											  });
 										});
 
 					};
@@ -179,14 +170,9 @@ Category.prototype.clear = function() {
 											$scope.refreshCategories();
 										},
 										function(response) {
-
-											addAlert("Nie udało się zmodyfikować kategorii <b>'"
-													+ editedCategory.name
-													+ "'</b> - spróbuj ponownie póżniej. /n"
-													+ "Status: "
-													+ response.status
-													+ ", Info: "
-													+ response.data);
+											$translate('ERROR_CATEGORY_MODIFY', {name : editedCategory.name}).then(function (message) {
+											    addAlert(message, response);
+											  });
 										});
 
 					};

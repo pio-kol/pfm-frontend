@@ -50,7 +50,7 @@
 
 			<tr ng-show="newCategory.visible" ng-form name="newCategoryForm">
 				<td><input required type="text" class="form-control" ng-model="newCategory.name" /></td>
-				<td><select chosen class="form-control" ng-model="newCategory.parentCategoryId" ng-options="category.id as category.name for category in categories">
+				<td><select chosen class="form-control" ng-model="newCategory.parentCategoryId" ng-options="category.id as category.name for category in categoriesForSelect(newCategory.id)">
 						<option value="" translate="MAIN_CATEGORY" />
 				</select></td>
 				<td>
