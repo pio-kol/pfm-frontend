@@ -8,3 +8,6 @@ Translate:
 - navigation bar
 
 - add switch for languages
+
+validate account statie is a number
+format it as number
