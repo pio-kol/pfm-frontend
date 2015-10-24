@@ -25,18 +25,12 @@ function saveNewAccount() {
 
 };
 
-angular
-		.module('myApp', [])
+app
 		.controller(
 				'accountController',
 				function($scope) {
 
 					$scope.accounts = [];
-
-					$(document).ready(function() {
-						$(".alert").alert("close");
-						$scope.refreshAccounts();
-					});
 
 					function addAlert(message) {
 						$('#alerts')
@@ -167,5 +161,10 @@ angular
 								});
 
 					};
+					
+					$(document).ready(function() {
+						//$(".alert").alert("close");
+						$scope.refreshAccounts();
+					});
 
 				});

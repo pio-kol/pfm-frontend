@@ -1,5 +1,5 @@
 var app = angular.module('myApp',
-		[ 'angular.chosen', 'pascalprecht.translate' ]);
+		[ 'angular.chosen', 'pascalprecht.translate', 'ngSanitize' ]);
 
 app.config([ '$translateProvider', function($translateProvider) {
 	var translations_pl = {

@@ -35,10 +35,6 @@ var URL = "/_ah/api/categoryendpoint/v1/category/";
 
 					$scope.newCategory = new Category();
 
-					$(document).ready(function() {
-						$scope.refreshCategories();
-					});
-					
 					$scope.categoriesForSelect = function(id){
 						var filteredCategories = [];
 						for (var i = 0; i < $scope.categories.length; ++i) {
@@ -212,7 +208,9 @@ var URL = "/_ah/api/categoryendpoint/v1/category/";
 
 					};
 					
-					
+					$(document).ready(function() {
+						$scope.refreshCategories();
+					});
 					
 
 
