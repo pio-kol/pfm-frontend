@@ -4,3 +4,5 @@ CATEGORIES:
 
 ACCOUNTS:
 format account state as currency
+
+deep linking with operation (new account / edit account etc.)

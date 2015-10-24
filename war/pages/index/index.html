@@ -20,10 +20,11 @@
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
 
 <script src="js/app.js"></script>
-<script src="js/category.js"></script>
-<script src="js/account.js"></script>
+<script src="pages/category/category.js"></script>
+<script src="pages/account/account.js"></script>
 <script src="js/3rdParty/angular-chosen.min.js"></script>
 <script src="js/navigationBar.js"></script>
 
@@ -33,7 +34,8 @@
 
 	<angled-navbar affixed='affixed' inverse='inverse' menus='menus' navfn='navfn(action)'></angled-navbar>
 
-	<div class='container' ng-include="item"></div>
+	<div class='container' ui-view></div>
+	
 </body>
 
 
