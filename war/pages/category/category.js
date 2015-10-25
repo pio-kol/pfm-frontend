@@ -70,7 +70,7 @@ Category.prototype.clear = function() {
 									
 									var data = response.data;
 									for (i = 0; i < data.items.length; ++i) {
-										var newCategory = new Category;
+										var newCategory = new Category();
 										newCategory.id = data.items[i].id.id;
 										newCategory.name = data.items[i].name;
 										newCategory.parentId = data.items[i].parentCategory != null ? data.items[i].parentCategory.id.id : null;

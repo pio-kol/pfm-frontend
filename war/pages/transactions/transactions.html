@@ -1,13 +1,13 @@
-<div class="container" ng-controller="categoryController" novalidate>
+<div class="container" ng-controller="transactionsController" novalidate>
 
 	<div id="alerts"></div>
 
 	<div class="btn-group pull-right" role="group">
-		<button class="btn btn-info" ng-click="addNewCategory()">
-			<span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;{{ "NEW_CATEGORY" | translate }}
+		<button class="btn btn-info" ng-click="addNewTransaction()">
+			<span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;{{ "NEW_TRANSACTION" | translate }}
 		</button>
 
-		<button id="refreshButton" class="btn btn-info " ng-click="refreshCategories()">
+		<button id="refreshButton" class="btn btn-info " ng-click="refreshTransactions()">
 			<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;{{ "REFRESH" | translate }}
 		</button>
 	</div>
@@ -15,50 +15,72 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th translate="CATEGORY_NAME" />
-				<th translate="PARENT_CATEGORY" />
+				<th translate="TRANSACTION_DATE" />
+				<th translate="TRANSACTION_DESCRIPTION" />
+				<th translate="TRANSACTION_CATEGORY" />
+				<th translate="TRANSACTION_ACCOUNT" />
+				<th translate="TRANSACTION_PRICE" />
+				<th translate="TRANSACTION_COMMENT" />
 				<th />
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-switch on="category.mode" ng-repeat="category in categories" ng-form name="editCategoryForm_{{category.id}}">
+			<tr ng-switch on="transaction.mode" ng-repeat="transaction in transactions" ng-form name="editTransactionForm_{{transaction.id}}">
 
-				<td ng-switch-when="readOnly">{{ category.name }}</td>
-				<td ng-switch-when="readOnly">{{ category.parentName }}</td>
-				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="category.name" /></td>
+				<td ng-switch-when="readOnly">{{ transaction.date }}</td>
+				<td ng-switch-when="readOnly">{{ transaction.description }}</td>
+				<td ng-switch-when="readOnly">{{ transaction.categoryName }}</td>
+				<td ng-switch-when="readOnly">{{ transaction.accountName }}</td>
+				<td ng-switch-when="readOnly">{{ transaction.price }}</td>
+				<td ng-switch-when="readOnly">{{ transaction.comment }}</td>
+				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.date" /></td>
+				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.description" /></td>
+				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.categoryName" /></td>
+				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.accountName" /></td>
+				<td ng-switch-when="edit"><input required type="number" class="form-control" ng-model="transaction.price" /></td>
+				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.comment" /></td>
+				<!-- 
 				<td ng-switch-when="edit"><select chosen ng-model="category.parentId"
 					ng-options="category.id as category.name for category in categoriesForSelect(category.id)">
 						<option value="" translate="MAIN_CATEGORY" />
 				</select></td>
-
+ 				-->
 				<td>
-					<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editCategory(category.id)">
+					<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editTransaction(transaction.id)">
 						<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ "EDIT" | translate }}
 					</button>
-					<button ng-switch-when="edit" class="btn btn-success" ng-disabled="!editCategoryForm_{{category.id}}.$valid" ng-click="saveCategory(category)">
+					<button ng-switch-when="edit" class="btn btn-success" ng-disabled="!editTransactionForm_{{transaction.id}}.$valid" ng-click="saveTransaction(transaction)">
 						<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
 					</button>
-					<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditCategory(category.id)">
+					<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditTransaction(transaction.id)">
 						<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;{{ "CANCEL" | translate }}
 					</button>
-					<button ng-switch-when="edit" class="btn btn-danger" ng-click="removeCategory(category.id, category.name)">
+					<button ng-switch-when="edit" class="btn btn-danger" ng-click="removeTransaction(transaction.id, transaction.description)">
 						<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{ "DELETE" | translate }}
 					</button>
 				</td>
 
 			</tr>
 
-			<tr ng-show="newCategory.visible" ng-form name="newCategoryForm">
-				<td><input required type="text" class="form-control" ng-model="newCategory.name" /></td>
-				<td><select chosen class="form-control" ng-model="newCategory.parentCategoryId" ng-options="category.id as category.name for category in categories">
+			<tr ng-show="newTransaction.visible" ng-form name="newTransactionForm">
+				<td><input required type="text" class="form-control" ng-model="newTransaction.date" /></td>
+				<td><input required type="text" class="form-control" ng-model="newTransaction.description" /></td>
+				<td><input required type="text" class="form-control" ng-model="newTransaction.categoryName" /></td>
+				<td><input required type="text" class="form-control" ng-model="newTransaction.accountName" /></td>
+				<td><input required type="number" class="form-control" ng-model="newTransaction.price" /></td>
+				<td><input required type="text" class="form-control" ng-model="newTransaction.comment" /></td>
+
+
+				<!-- 				<td><select chosen class="form-control" ng-model="newCategory.parentCategoryId" ng-options="category.id as category.name for category in categories">
 						<option value="" translate="MAIN_CATEGORY" />
 				</select></td>
+-->
 				<td>
-					<button class="btn btn-success" ng-disabled="!newCategoryForm.$valid" ng-click="saveNewCategory(newCategory)">
+					<button class="btn btn-success" ng-disabled="!newTransactionForm.$valid" ng-click="saveNewTransaction(newTransaction)">
 						<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
 					</button>
 
-					<button class="btn btn-warning" ng-click="cancelAddNewCategory()">
+					<button class="btn btn-warning" ng-click="cancelAddNewTransaction()">
 						<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;{{ "CANCEL" | translate }}
 					</button>
 				</td>

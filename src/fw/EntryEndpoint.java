@@ -7,6 +7,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.datanucleus.query.JDOCursorHelper;
 
 import java.util.HashMap;
@@ -62,7 +63,7 @@ public class EntryEndpoint {
 			// accomodate
 			// for lazy fetch.
 			for (Entry obj : execute)
-				;
+				System.out.println(obj);
 		} finally {
 			mgr.close();
 		}
@@ -153,6 +154,8 @@ public class EntryEndpoint {
 			if (!containsEntry(entry)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
+			// bug in GAE - NullPointer when namespace=null
+			entry.setId(KeyFactory.createKey(Entry.class.getSimpleName(), entry.getId().getId()));
 			mgr.makePersistent(entry);
 		} finally {
 			mgr.close();
@@ -182,7 +185,7 @@ public class EntryEndpoint {
 		PersistenceManager mgr = getPersistenceManager();
 		boolean contains = true;
 		try {
-			mgr.getObjectById(Entry.class, entry.getId());
+			mgr.getObjectById(Entry.class, entry.getId().getId());
 		} catch (javax.jdo.JDOObjectNotFoundException ex) {
 			contains = false;
 		} finally {

@@ -1,88 +1,94 @@
-var Category = function() {
-	this.name = "";
-	this.parentCategoryId = null;
-	this.parentCategoryName = null;
+var Transaction = function() {
+	this.id = "";
+	this.date = "";
+	this.description = "";
+	this.comment = "";
+	this.categoryName = "";
+	this.categoryId = "";
+	this.accountId = "";
+	this.accountName = "";
+	this.price = 0.00;
 	this.visible = false;
 	this.mode = 'readOnly';
 };
 
-Category.prototype.clear = function() {
-	this.name = "";
-	this.parentCategoryId = null;
-	this.parentCategoryName = null;
+Transaction.prototype.clear = function() {
+	this.id = "";
+	this.date = "";
+	this.description = "";
+	this.categoryName = "";
+	this.categoryId = "";
+	this.accountId = "";
+	this.accountName = "";
+	this.price = "";
+	this.comment = "";
 	this.visible = false;
 	this.mode = 'readOnly';
 };
 
 		app.controller(
-				'categoryController', 
+				'transactionsController', 
 				function($scope, $http, $translate) {
-					var URL = "/_ah/api/categoryendpoint/v1/category/";
+					var URL = "_ah/api/entryendpoint/v1/entry/";
 
-					$scope.categories = [];
-					$scope.newCategory = new Category();
-
-					$scope.categoriesForSelect = function(id){
-						var filteredCategories = [];
-						for (var i = 0; i < $scope.categories.length; ++i) {
-							var category = $scope.categories[i];
-							if (id != category.id) {
-								filteredCategories.push(category);
-							}
-						}
-						return filteredCategories;
-					};
-
-					$scope.addNewCategory = function(id) {
-						$scope.newCategory.visible = true;
+					$scope.transactions = [];
+					$scope.newTransaction = new Transaction();
+					
+					$scope.addNewTransaction = function(id) {
+						$scope.newTransaction.visible = true;
 					}
 
-					$scope.cancelAddNewCategory = function() {
-						$scope.newCategory.clear();
-						$scope.newCategoryForm.$setPristine();
+					$scope.cancelAddNewTransaction = function() {
+						$scope.newTransaction.clear();
+						$scope.newTransactionForm.$setPristine();
 					}
 
-					function getCategory(id) {
-						for (var i = 0; i < $scope.categories.length; ++i) {
-							var category = $scope.categories[i];
-							if (id == category.id) {
-								return category;
+					function getTransaction(id) {
+						for (var i = 0; i < $scope.transactions.length; ++i) {
+							var transaction = $scope.transactions[i];
+							if (id == transaction.id) {
+								return transaction;
 							}
 						}
 					}
 
-					$scope.editCategory = function(id) {
-						getCategory(id).mode = "edit";
+					$scope.editTransaction = function(id) {
+						getTransaction(id).mode = "edit";
 					};
 
-					$scope.cancelEditCategory = function(id) {
-						getCategory(id).mode = "readOnly";
-						$scope.refreshCategories();
+					$scope.cancelEditTransaction = function(id) {
+						getTransaction(id).mode = "readOnly";
+						$scope.refreshTransactions();
 					};
 
-					$scope.refreshCategories = function() {
+					$scope.refreshTransactions = function() {
 
 						$http
 						.get(URL)
 						.then(
 								function(response) {
-									$scope.categories = [];
+									$scope.transactions = [];
 									
 									var data = response.data;
 									for (i = 0; i < data.items.length; ++i) {
-										var newCategory = new Category;
-										newCategory.id = data.items[i].id.id;
-										newCategory.name = data.items[i].name;
-										newCategory.parentId = data.items[i].parentCategory != null ? data.items[i].parentCategory.id.id : null;
-										newCategory.parentName = data.items[i].parentCategory != null ? data.items[i].parentCategory.name : null;
-													
-										$scope.categories.push(newCategory);
+										var newTransaction = new Transaction();
+										newTransaction.id = data.items[i].id.id;
+										newTransaction.date = data.items[i].date;
+										newTransaction.description = data.items[i].description;
+										newTransaction.comment = data.items[i].comment;
+										newTransaction.categoryId = data.items[i].category != null ? data.items[i].category.id.id : null;
+										newTransaction.categoryName = data.items[i].category != null ? data.items[i].category.name : null;
+										newTransaction.accountId = data.items[i].account != null ? data.items[i].account.id.id : null;
+										newTransaction.accountName = data.items[i].account != null ? data.items[i].account.name : null;;
+										newTransaction.price = parseFloat(data.items[i].price);
+										
+										$scope.transactions.push(newTransaction);
 									}
 
-									$scope.categories
-											.sort(function(a, b) {
-												return a.name.localeCompare(b.name);
-											});
+// $scope.categories
+// .sort(function(a, b) {
+// return a.name.localeCompare(b.name);
+// });
 								},
 								function(response) {
 									$translate('ERROR_DATA_RETRIVE').then(function (message) {
@@ -91,8 +97,8 @@ Category.prototype.clear = function() {
 								});
 					}
 
-					$scope.removeCategory = function(id, categoryName) {
-						$translate('CONFIRM_REMOVE_CATEGORY', {name : categoryName}).then(function (message) {
+					$scope.removeTransaction = function(id, transactionName) {
+						$translate('CONFIRM_REMOVE_TRANSACTION', {name : transactionName}).then(function (message) {
 						bootbox 
 								.confirm(message,
 										function(result) {
@@ -102,10 +108,10 @@ Category.prototype.clear = function() {
 											$http.delete(URL + id)
 											.then(
 													function(response) {
-														$scope.refreshCategories();
+														$scope.refreshTransactions();
 													},
 													function(response) {
-														$translate('ERROR_CATEGORY_REMOVE', {name : categoryName}).then(function (message) {
+														$translate('ERROR_TRANSACTION_REMOVE', {name : transactionName}).then(function (message) {
 														    addAlert(message, response);
 														  });
 													});
@@ -115,62 +121,60 @@ Category.prototype.clear = function() {
 
 					};
 
-					$scope.saveNewCategory = function(newCategory) {
+					$scope.saveNewTransaction = function(newTransaction) {
 
-						var category = {
-							"name" : newCategory.name
+						var transaction = {
+							"date" : newTransaction.date,
+							"description" : newTransaction.description,
+							"price" : newTransaction.price,
+							"comment" : newTransaction.comment
 						}
 
-						if (newCategory.parentCategoryId != null) {
-							category.parentCategory = {
-								"id" : {
-									"id" : newCategory.parentCategoryId
-								}
-							}
-						}
+// if (newCategory.parentCategoryId != null) {
+// category.parentCategory = {
+// "id" : {
+// "id" : newCategory.parentCategoryId
+// }
+// }
+// }
 
 						$http
 								.post(URL,
-										category)
+										transaction)
 								.then(
 										function(response) {
-											newCategory.clear();
-											$scope.newCategoryForm.$setPristine();
-											$scope.refreshCategories();
+											newTransaction.clear();
+											$scope.newTransactionForm.$setPristine();
+											$scope.refreshTransactions();
 										},
 										function(response) {
-											$translate('ERROR_CATEGORY_ADD', {name : newCategory.name}).then(function (message) {
+											$translate('ERROR_TRANSACTION_ADD', {name : newTransaction.description}).then(function (message) {
 											    addAlert(message, response);
 											  });
 										});
 
 					};
 
-					$scope.saveCategory = function(editedCategory) {
-						var category = {
-							"name" : editedCategory.name,
-							"id" : {
-								"id" : editedCategory.id
-							}
-						}
-
-						if (editedCategory.parentId != null) {
-							category.parentCategory = {
+					$scope.saveTransaction = function(editedTransaction) {
+						var transaction = {
 								"id" : {
-									"id" : editedCategory.parentId
-								}
-							}
+									"id" : editedTransaction.id
+								},
+								"date" : editedTransaction.date,
+								"description" : editedTransaction.description,
+								"price" : editedTransaction.price,
+								"comment" : editedTransaction.comment
 						}
 
 						$http
-								.put(URL, category)
+								.put(URL, transaction)
 								.then(
 										function(response) {
-											editedCategory.mode = "readOnly";
-											$scope.refreshCategories();
+											editedTransaction.mode = "readOnly";
+											$scope.refreshTransactions();
 										},
 										function(response) {
-											$translate('ERROR_CATEGORY_MODIFY', {name : editedCategory.name}).then(function (message) {
+											$translate('ERROR_TRANSACTION_MODIFY', {name : editedTransaction.description}).then(function (message) {
 											    addAlert(message, response);
 											  });
 										});
@@ -178,7 +182,7 @@ Category.prototype.clear = function() {
 					};
 					
 					$(document).ready(function() {
-						$scope.refreshCategories();
+						$scope.refreshTransactions();
 					});
 					
 

@@ -15,3 +15,13 @@ use div's instead of tables
 
 cache when changing views
 
+TRANSACTIONS:
+use objects for Account / Category in Entry
+sortowanie po dacie
+add transaction : category + account
+
+- support dla przelewów między kontami
+
+---------
+- export to Google spreedsheet
+- email with month summary
