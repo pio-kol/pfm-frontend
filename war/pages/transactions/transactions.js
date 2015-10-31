@@ -41,6 +41,8 @@
 									$scope.transactions = [];
 									
 									var data = response.data;
+									
+									if (data.items != null){
 									for (i = 0; i < data.items.length; ++i) {
 										var newTransaction = new Transaction();
 										newTransaction.id = data.items[i].id.id;
@@ -59,6 +61,7 @@
 									$scope.transactions.sort(function(a,b){
 										  return a.date - b.date;
 										});
+									}
 								},
 								function(response) {
 									$translate('ERROR_DATA_RETRIVE').then(function (message) {
