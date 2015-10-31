@@ -1,31 +1,3 @@
-var Transaction = function() {
-	this.id = "";
-	this.date = "";
-	this.description = "";
-	this.comment = "";
-	this.categoryName = "";
-	this.categoryId = "";
-	this.accountId = "";
-	this.accountName = "";
-	this.price = 0.00;
-	this.visible = false;
-	this.mode = 'readOnly';
-};
-
-Transaction.prototype.clear = function() {
-	this.id = "";
-	this.date = "";
-	this.description = "";
-	this.categoryName = "";
-	this.categoryId = "";
-	this.accountId = "";
-	this.accountName = "";
-	this.price = "";
-	this.comment = "";
-	this.visible = false;
-	this.mode = 'readOnly';
-};
-
 		app.controller(
 				'transactionsController', 
 				function($scope, $http, $translate) {
@@ -72,7 +44,7 @@ Transaction.prototype.clear = function() {
 									for (i = 0; i < data.items.length; ++i) {
 										var newTransaction = new Transaction();
 										newTransaction.id = data.items[i].id.id;
-										newTransaction.date = data.items[i].date;
+										newTransaction.date = new Date(data.items[i].date);
 										newTransaction.description = data.items[i].description;
 										newTransaction.comment = data.items[i].comment;
 										newTransaction.categoryId = data.items[i].category != null ? data.items[i].category.id.id : null;
