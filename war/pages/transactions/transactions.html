@@ -60,7 +60,7 @@
 			</tr>
 
 			<tr ng-show="newTransaction.visible" ng-form name="newTransactionForm">
-				<td><input required type="text" class="form-control" ng-model="newTransaction.date" /></td>
+				<td><input required type="date" class="form-control" ng-model="newTransaction.date" /></td>
 				<td><input required type="text" class="form-control" ng-model="newTransaction.description" /></td>
 				<td><select chosen class="form-control" ng-model="newTransaction.categoryId" ng-options="category.id as category.name for category in categories">
 				</select></td>

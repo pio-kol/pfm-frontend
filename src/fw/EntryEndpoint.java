@@ -156,6 +156,17 @@ public class EntryEndpoint {
 			}
 			// bug in GAE - NullPointer when namespace=null
 			entry.setId(KeyFactory.createKey(Entry.class.getSimpleName(), entry.getId().getId()));
+			
+			if (entry.getCategory() != null && entry.getCategory().getId() != null) {
+				Category category = mgr.getObjectById(Category.class, entry.getCategory().getId().getId());
+				entry.setCategory(category);
+			}
+			
+			if (entry.getAccount() != null && entry.getAccount().getId() != null) {
+				Account account = mgr.getObjectById(Account.class, entry.getAccount().getId().getId());
+				entry.setAccount(account);
+			}
+			
 			mgr.makePersistent(entry);
 		} finally {
 			mgr.close();

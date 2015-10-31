@@ -55,6 +55,10 @@
 										
 										$scope.transactions.push(newTransaction);
 									}
+									
+									$scope.transactions.sort(function(a,b){
+										  return a.date - b.date;
+										});
 								},
 								function(response) {
 									$translate('ERROR_DATA_RETRIVE').then(function (message) {
@@ -93,16 +97,21 @@
 							"date" : newTransaction.date,
 							"description" : newTransaction.description,
 							"price" : newTransaction.price,
-							"comment" : newTransaction.comment
+							"comment" : newTransaction.comment,
+							"category" : {
+							    "id": 
+							    {
+							      "id": newTransaction.categoryId
+							    }
+							  },
+							  "account" : {
+								    "id": 
+								    {
+								      "id": newTransaction.accountId
+								    }
+								  }
 						}
 
-// if (newCategory.parentCategoryId != null) {
-// category.parentCategory = {
-// "id" : {
-// "id" : newCategory.parentCategoryId
-// }
-// }
-// }
 
 						$http
 								.post(URL,
@@ -129,7 +138,19 @@
 								"date" : editedTransaction.date,
 								"description" : editedTransaction.description,
 								"price" : editedTransaction.price,
-								"comment" : editedTransaction.comment
+								"comment" : editedTransaction.comment,
+								"category" : {
+								    "id": 
+								    {
+								      "id": editedTransaction.categoryId
+								    }
+								  },
+								  "account" : {
+									    "id": 
+									    {
+									      "id": editedTransaction.accountId
+									    }
+									  }
 						}
 
 						$http
