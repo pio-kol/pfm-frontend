@@ -1,17 +1,3 @@
-var Account = function() {
-	this.name = "";
-	this.value = "";
-	this.visible = false;
-	this.mode = 'readOnly';
-};
-
-Account.prototype.clear = function() {
-	this.name = "";
-	this.value = "";
-	this.visible = false;
-	this.mode = 'readOnly';
-};
-
 app
 		.controller(
 				'accountController',

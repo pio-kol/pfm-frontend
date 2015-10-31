@@ -1,19 +1,3 @@
-var Category = function() {
-	this.name = "";
-	this.parentCategoryId = null;
-	this.parentCategoryName = null;
-	this.visible = false;
-	this.mode = 'readOnly';
-};
-
-Category.prototype.clear = function() {
-	this.name = "";
-	this.parentCategoryId = null;
-	this.parentCategoryName = null;
-	this.visible = false;
-	this.mode = 'readOnly';
-};
-
 		app.controller(
 				'categoryController', 
 				function($scope, $rootScope, $http, $translate) {

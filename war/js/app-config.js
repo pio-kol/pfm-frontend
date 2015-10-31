@@ -103,11 +103,11 @@ app
 					})//
 					.state("categories", {
 						url : "/categories",
-						templateUrl : 'pages/category/category.html'
+						templateUrl : 'pages/categories/categories.html'
 					})//
 					.state("accounts", {
 						url : "/accounts",
-						templateUrl : 'pages/account/account.html'
+						templateUrl : 'pages/accounts/accounts.html'
 					})
 
 				} ]);
