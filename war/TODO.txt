@@ -15,6 +15,7 @@ use div's instead of tables
 directive for category / account select
 cache when changing views
 
+use pojo in models
 rename entry to transaction
 
 TRANSACTIONS:
