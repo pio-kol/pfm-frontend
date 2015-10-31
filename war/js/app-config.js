@@ -1,6 +1,3 @@
-var app = angular.module('myApp', [ 'angular.chosen', 'pascalprecht.translate',
-		'ngSanitize', 'ui.router' ]);
-
 app
 		.config([
 				'$translateProvider',
@@ -28,7 +25,7 @@ app
 						MENU_TRANSACTION_HISTORY : "Historia transakcji",
 						MENU_ACCOUNTS : "Zarządzanie kontami",
 						MENU_CATEGORIES : "Zarządzanie kategoriami",
-						CONFIRM_REMOVE_CATEGORY : 'Kategoria "{{name}}" zostanie usunięta. Kontynuować?', 
+						CONFIRM_REMOVE_CATEGORY : 'Kategoria "{{name}}" zostanie usunięta. Kontynuować?',
 						CONFIRM_REMOVE_ACCOUNT : 'Konto "{{name}}" zostanie usunięte. Kontynuować?',
 						CONFIRM_REMOVE_TRANSACTION : 'Tranzakcja "{{name}}" zostanie usunięta. Kontynuować?',
 						ERROR_DATA_RETRIVE : "Nie udało się pobrać danych - spróbuj ponownie póżniej.",
@@ -114,19 +111,3 @@ app
 					})
 
 				} ]);
-
-function addAlert(message, additionalData) {
-	$('#alerts')
-			.append(
-					'<div id="dataLoadFailedAlert" class="alert alert-danger alert-dismissible" role="alert">'
-							+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
-							+ '<span aria-hidden="true">&times;</span>'
-							+ '</button>'
-							+ message
-							+ "<br>"
-							+ JSON.stringify(additionalData) + '</div>');
-	$("#dataLoadFailedAlert").delay(5000).fadeOut(function() {
-		$(this).remove();
-	});
-
-}

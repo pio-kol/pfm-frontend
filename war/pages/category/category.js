@@ -16,10 +16,8 @@ Category.prototype.clear = function() {
 
 		app.controller(
 				'categoryController', 
-				function($scope, $http, $translate) {
-					var URL = "/_ah/api/categoryendpoint/v1/category/";
+				function($scope, $rootScope, $http, $translate) {
 
-					$scope.categories = [];
 					$scope.newCategory = new Category();
 
 					$scope.categoriesForSelect = function(id){
@@ -60,36 +58,7 @@ Category.prototype.clear = function() {
 						$scope.refreshCategories();
 					};
 
-					$scope.refreshCategories = function() {
-
-						$http
-						.get(URL)
-						.then(
-								function(response) {
-									$scope.categories = [];
-									
-									var data = response.data;
-									for (i = 0; i < data.items.length; ++i) {
-										var newCategory = new Category();
-										newCategory.id = data.items[i].id.id;
-										newCategory.name = data.items[i].name;
-										newCategory.parentId = data.items[i].parentCategory != null ? data.items[i].parentCategory.id.id : null;
-										newCategory.parentName = data.items[i].parentCategory != null ? data.items[i].parentCategory.name : null;
-													
-										$scope.categories.push(newCategory);
-									}
-
-									$scope.categories
-											.sort(function(a, b) {
-												return a.name.localeCompare(b.name);
-											});
-								},
-								function(response) {
-									$translate('ERROR_DATA_RETRIVE').then(function (message) {
-									    addAlert(message, response);
-									  });
-								});
-					}
+					
 
 					$scope.removeCategory = function(id, categoryName) {
 						$translate('CONFIRM_REMOVE_CATEGORY', {name : categoryName}).then(function (message) {
@@ -99,7 +68,7 @@ Category.prototype.clear = function() {
 											if (!result) {
 												return;
 											}
-											$http.delete(URL + id)
+											$http.delete($rootScope.categoriesURL + id)
 											.then(
 													function(response) {
 														$scope.refreshCategories();
@@ -130,7 +99,7 @@ Category.prototype.clear = function() {
 						}
 
 						$http
-								.post(URL,
+								.post($rootScope.categoriesURL,
 										category)
 								.then(
 										function(response) {
@@ -163,7 +132,7 @@ Category.prototype.clear = function() {
 						}
 
 						$http
-								.put(URL, category)
+								.put($rootScope.categoriesURL, category)
 								.then(
 										function(response) {
 											editedCategory.mode = "readOnly";

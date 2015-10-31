@@ -35,16 +35,12 @@
 				<td ng-switch-when="readOnly">{{ transaction.comment }}</td>
 				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.date" /></td>
 				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.description" /></td>
-				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.categoryName" /></td>
+				<td ng-switch-when="edit"><select chosen class="form-control" ng-model="transaction.categoryId"
+					ng-options="category.id as category.name for category in categories"></select></td>
 				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.accountName" /></td>
 				<td ng-switch-when="edit"><input required type="number" class="form-control" ng-model="transaction.price" /></td>
 				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.comment" /></td>
-				<!-- 
-				<td ng-switch-when="edit"><select chosen ng-model="category.parentId"
-					ng-options="category.id as category.name for category in categoriesForSelect(category.id)">
-						<option value="" translate="MAIN_CATEGORY" />
-				</select></td>
- 				-->
+				
 				<td>
 					<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editTransaction(transaction.id)">
 						<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ "EDIT" | translate }}
@@ -65,16 +61,14 @@
 			<tr ng-show="newTransaction.visible" ng-form name="newTransactionForm">
 				<td><input required type="text" class="form-control" ng-model="newTransaction.date" /></td>
 				<td><input required type="text" class="form-control" ng-model="newTransaction.description" /></td>
-				<td><input required type="text" class="form-control" ng-model="newTransaction.categoryName" /></td>
+				<td><select chosen class="form-control" ng-model="newTransaction.categoryId" ng-options="category.id as category.name for category in categories">
+				</select></td>
+
 				<td><input required type="text" class="form-control" ng-model="newTransaction.accountName" /></td>
 				<td><input required type="number" class="form-control" ng-model="newTransaction.price" /></td>
 				<td><input required type="text" class="form-control" ng-model="newTransaction.comment" /></td>
 
 
-				<!-- 				<td><select chosen class="form-control" ng-model="newCategory.parentCategoryId" ng-options="category.id as category.name for category in categories">
-						<option value="" translate="MAIN_CATEGORY" />
-				</select></td>
--->
 				<td>
 					<button class="btn btn-success" ng-disabled="!newTransactionForm.$valid" ng-click="saveNewTransaction(newTransaction)">
 						<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}

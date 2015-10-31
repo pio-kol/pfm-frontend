@@ -15,10 +15,7 @@ Account.prototype.clear = function() {
 app
 		.controller(
 				'accountController',
-				function($scope, $http, $translate) {
-					var URL = "/_ah/api/accountendpoint/v1/account/";
-
-					$scope.accounts = [];
+				function($scope, $rootScope, $http, $translate) {
 					$scope.newAccount = new Account();
 
 					$scope.addNewAccount = function(id) {
@@ -48,36 +45,6 @@ app
 						$scope.refreshAccounts();
 					};
 
-					$scope.refreshAccounts = function() {
-
-						$http.get(URL)
-						.then(
-								function(response) {
-									$scope.accounts = [];
-									
-									var data = response.data;
-									for (i = 0; i < data.items.length; ++i) {
-										var newAccount = new Account();
-										newAccount.id = data.items[i].id.id;
-										newAccount.name = data.items[i].name;
-										newAccount.value = data.items[i].state;
-
-										$scope.accounts.push(newAccount);
-									}
-
-									$scope.accounts
-											.sort(function(a, b) {
-												return a.name
-														.localeCompare(b.name);
-											});
-								},
-								function(response) {
-									$translate('ERROR_DATA_RETRIVE').then(function (message) {
-									    addAlert(message, response);
-									  });
-								});
-					}
-
 					$scope.removeAccount = function(id, accountName) {
 						$translate('CONFIRM_REMOVE_ACCOUNT', {name : accountName}).then(function (message) {
 						bootbox
@@ -86,7 +53,7 @@ app
 											if (!result) {
 												return;
 											}
-											$http.delete(URL + id)
+											$http.delete($rootScope.accountsURL + id)
 											.then(
 													function(response) {
 														$scope.refreshAccounts();
@@ -110,7 +77,7 @@ app
 						}
 
 						$http
-								.put(URL, account)
+								.put($rootScope.accountsURL, account)
 								.then(
 										function(response) {
 											editedAccount.mode = "readOnly";
@@ -130,7 +97,7 @@ app
 						}
 
 						$http
-								.post(URL, account)
+								.post($rootScope.accountsURL, account)
 								.then(
 										function(response) {
 											newAccount.clear();

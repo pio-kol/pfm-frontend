@@ -12,8 +12,10 @@ deep linking with operation (new account / edit account etc.)
 massages on error (Object object)
 
 use div's instead of tables
-
+directive for category / account select
 cache when changing views
+
+rename entry to transaction
 
 TRANSACTIONS:
 use objects for Account / Category in Entry

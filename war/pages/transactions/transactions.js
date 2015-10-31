@@ -31,7 +31,6 @@ Transaction.prototype.clear = function() {
 				function($scope, $http, $translate) {
 					var URL = "_ah/api/entryendpoint/v1/entry/";
 
-					$scope.transactions = [];
 					$scope.newTransaction = new Transaction();
 					
 					$scope.addNewTransaction = function(id) {
@@ -84,11 +83,6 @@ Transaction.prototype.clear = function() {
 										
 										$scope.transactions.push(newTransaction);
 									}
-
-// $scope.categories
-// .sort(function(a, b) {
-// return a.name.localeCompare(b.name);
-// });
 								},
 								function(response) {
 									$translate('ERROR_DATA_RETRIVE').then(function (message) {
