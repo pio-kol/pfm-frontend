@@ -1,18 +1,16 @@
 -------- categories --------
 - display only categories which don't cause cycles 
 - do not allow to remove category which have children, or transactions assigned
-- enable disabling categories (do not return until explicitly requested)
-- Focus input after clicking edit
 - Keep only category id (as long) and gather other category date on user side
-- add category to model before sending to server / remove on fail
+- add category to model before sending to server / remove on fail (+ schedule update if not returned in read)
 
 -------- accounts --------
 - constrains - do not allow to remove account which is assigned to transaction
-- add account to model before sending to server / remove on fail
+- add account to model before sending to server / remove on fail (+ schedule update if not returned in read)
 
 -------- transactions --------
 - Keep only category and account id (as long) and gather other category date on user side
-- add transaction to model before sending to server / remove on fail
+- add transaction to model before sending to server / remove on fail (+ schedule update if not returned in read)
 
 -------- navigation --------
 - mark selected view
@@ -33,6 +31,8 @@
 - support for transfers between accounts
 - cookies - keep user settings
 - categories as tree widget
+- possibility to retire Account / Category (do not return but keep for reference for existing entries)
+- Focus input after clicking edit / add new
 
 -------- big features ---------
 - export to Google spreedsheet
