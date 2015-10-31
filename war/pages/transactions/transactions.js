@@ -47,10 +47,10 @@
 										newTransaction.date = new Date(data.items[i].date);
 										newTransaction.description = data.items[i].description;
 										newTransaction.comment = data.items[i].comment;
-										newTransaction.categoryId = data.items[i].category != null ? data.items[i].category.id.id : null;
-										newTransaction.categoryName = data.items[i].category != null ? data.items[i].category.name : null;
-										newTransaction.accountId = data.items[i].account != null ? data.items[i].account.id.id : null;
-										newTransaction.accountName = data.items[i].account != null ? data.items[i].account.name : null;;
+										newTransaction.category.id = data.items[i].category != null ? data.items[i].category.id.id : null;
+										newTransaction.category.name = data.items[i].category != null ? data.items[i].category.name : null;
+										newTransaction.account.id = data.items[i].account != null ? data.items[i].account.id.id : null;
+										newTransaction.account.name = data.items[i].account != null ? data.items[i].account.name : null;;
 										newTransaction.price = parseFloat(data.items[i].price);
 										
 										$scope.transactions.push(newTransaction);
@@ -101,13 +101,13 @@
 							"category" : {
 							    "id": 
 							    {
-							      "id": newTransaction.categoryId
+							      "id": newTransaction.category.id
 							    }
 							  },
 							  "account" : {
 								    "id": 
 								    {
-								      "id": newTransaction.accountId
+								      "id": newTransaction.account.id
 								    }
 								  }
 						}
@@ -142,13 +142,13 @@
 								"category" : {
 								    "id": 
 								    {
-								      "id": editedTransaction.categoryId
+								      "id": editedTransaction.category.id
 								    }
 								  },
 								  "account" : {
 									    "id": 
 									    {
-									      "id": editedTransaction.accountId
+									      "id": editedTransaction.account.id
 									    }
 									  }
 						}
