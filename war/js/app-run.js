@@ -18,9 +18,10 @@ app
 										var newCategory = new Category();
 										newCategory.id = data.items[i].id.id;
 										newCategory.name = data.items[i].name;
-										newCategory.parentId = data.items[i].parentCategory != null ? data.items[i].parentCategory.id.id
+										newCategory.parentCategory = new Category();
+										newCategory.parentCategory.id = data.items[i].parentCategory != null ? data.items[i].parentCategory.id.id
 												: null;
-										newCategory.parentName = data.items[i].parentCategory != null ? data.items[i].parentCategory.name
+										newCategory.parentCategory.name = data.items[i].parentCategory != null ? data.items[i].parentCategory.name
 												: null;
 
 										$rootScope.categories.push(newCategory);

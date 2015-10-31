@@ -74,10 +74,10 @@
 							"name" : newCategory.name
 						}
 
-						if (newCategory.parentCategoryId != null) {
+						if (newCategory.parentCategory != null && newCategory.parentCategory.id != null) {
 							category.parentCategory = {
 								"id" : {
-									"id" : newCategory.parentCategoryId
+									"id" : newCategory.parentCategory.id
 								}
 							}
 						}
@@ -107,10 +107,10 @@
 							}
 						}
 
-						if (editedCategory.parentId != null) {
+						if (editedCategory.parentCategory != null && editedCategory.parentCategory.id != null) {
 							category.parentCategory = {
 								"id" : {
-									"id" : editedCategory.parentId
+									"id" : editedCategory.parentCategory.id
 								}
 							}
 						}

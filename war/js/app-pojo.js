@@ -1,15 +1,15 @@
 var Category = function() {
+	this.id = "";
 	this.name = "";
-	this.parentCategoryId = null;
-	this.parentCategoryName = null;
+	this.parentCategory = null;
 	this.visible = false;
 	this.mode = 'readOnly';
 };
 
 Category.prototype.clear = function() {
+	this.id = "";
 	this.name = "";
-	this.parentCategoryId = null;
-	this.parentCategoryName = null;
+	this.parentCategory = null;
 	this.visible = false;
 	this.mode = 'readOnly';
 };
