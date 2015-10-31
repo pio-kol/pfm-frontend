@@ -38,8 +38,6 @@ app
 								});
 			};
 
-			$rootScope.refreshCategories();
-			
 			$rootScope.accountsURL = "/_ah/api/accountendpoint/v1/account/";
 			$rootScope.refreshAccounts = function() {
 
@@ -70,7 +68,5 @@ app
 							  });
 						});
 			};
-			
-			$rootScope.refreshAccounts();
 			
 		})

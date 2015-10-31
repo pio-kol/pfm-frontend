@@ -1,24 +1,29 @@
-CATEGORIES:
+-------- categories --------
 1) display only categories which don't cause cycles 
 2) do not allow to remove category which have children, or transactions assigned
-3) enable disabling categories (do not return until explicitely requested)
+3) enable disabling categories (do not return until explicitly requested)
 4) Focus input after clicking edit
 
-ACCOUNTS:
+-------- accounts --------
+- constrains - do not allow to remove account which is assigned to transaction
 
-use div's instead of tables
-cache when changing views
+-------- transactions --------
+- use objects for Account / Category in Entry
+- rename entry to transaction
 
-use pojo in models
-rename entry to transaction
-possibility to sort "online"
+-------- navigation --------
+- mark selected view
+- login / sign up
 
-TRANSACTIONS:
-use objects for Account / Category in Entry
-
-- constraints - nie mozna usunac konta gdy sa przypisane transakcje itp
-- support dla przelewów między kontami
+-------- nice to have --------
 - deep linking with operation (new account / edit account etc.)
----------
+- use div's instead of tables
+- cache for service calls
+- possibility to sort on screen
+- layout corrections
+- support for transfers between accounts
+- cookies - keep user settings
+
+-------- big features ---------
 - export to Google spreedsheet
 - email with month summary

@@ -21,7 +21,7 @@ app
 						LANGUAGE : 'PL',
 						LOGIN : 'Zaloguj się',
 						SIGN_UP : 'Utwórz konto',
-						PAGE_TITLE : "Formularz wydatkow",
+						PAGE_TITLE : "Formularz wydatków",
 						MENU_TRANSACTION_HISTORY : "Historia transakcji",
 						MENU_ACCOUNTS : "Zarządzanie kontami",
 						MENU_CATEGORIES : "Zarządzanie kategoriami",

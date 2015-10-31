@@ -169,6 +169,8 @@
 					};
 					
 					$(document).ready(function() {
+						$scope.refreshAccounts();
+						$scope.refreshCategories();
 						$scope.refreshTransactions();
 					});
 					
