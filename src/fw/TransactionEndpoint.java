@@ -20,8 +20,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-@Api(name = "entryendpoint", namespace = @ApiNamespace(ownerDomain = "mycompany.com", ownerName = "mycompany.com", packagePath = "services"))
-public class EntryEndpoint {
+@Api(name = "transactionendpoint", namespace = @ApiNamespace(ownerDomain = "mycompany.com", ownerName = "mycompany.com", packagePath = "services"))
+public class TransactionEndpoint {
 
 	/**
 	 * This method lists all the entities inserted in datastore. It uses HTTP
@@ -31,18 +31,18 @@ public class EntryEndpoint {
 	 *         persisted and a cursor to the next page.
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
-	@ApiMethod(name = "listEntry")
-	public CollectionResponse<Entry> listEntry(
+	@ApiMethod(name = "listTransaction")
+	public CollectionResponse<Transaction> listTransaction(
 			@Nullable @Named("cursor") String cursorString,
 			@Nullable @Named("limit") Integer limit) {
 
 		PersistenceManager mgr = null;
 		Cursor cursor = null;
-		List<Entry> execute = null;
+		List<Transaction> execute = null;
 
 		try {
 			mgr = getPersistenceManager();
-			Query query = mgr.newQuery(Entry.class);
+			Query query = mgr.newQuery(Transaction.class);
 			if (cursorString != null && cursorString != "") {
 				cursor = Cursor.fromWebSafeString(cursorString);
 				HashMap<String, Object> extensionMap = new HashMap<String, Object>();
@@ -54,7 +54,7 @@ public class EntryEndpoint {
 				query.setRange(0, limit);
 			}
 
-			execute = (List<Entry>) query.execute();
+			execute = (List<Transaction>) query.execute();
 			cursor = JDOCursorHelper.getCursor(execute);
 			if (cursor != null)
 				cursorString = cursor.toWebSafeString();
@@ -62,13 +62,13 @@ public class EntryEndpoint {
 			// Tight loop for fetching all entities from datastore and
 			// accomodate
 			// for lazy fetch.
-			for (Entry obj : execute)
+			for (Transaction obj : execute)
 				System.out.println(obj);
 		} finally {
 			mgr.close();
 		}
 
-		return CollectionResponse.<Entry> builder().setItems(execute)
+		return CollectionResponse.<Transaction> builder().setItems(execute)
 				.setNextPageToken(cursorString).build();
 	}
 
@@ -80,16 +80,16 @@ public class EntryEndpoint {
 	 *            the primary key of the java bean.
 	 * @return The entity with primary key id.
 	 */
-	@ApiMethod(name = "getEntry")
-	public Entry getEntry(@Named("id") Long id) {
+	@ApiMethod(name = "getTransaction")
+	public Transaction getTransaction(@Named("id") Long id) {
 		PersistenceManager mgr = getPersistenceManager();
-		Entry entry = null;
+		Transaction transaction = null;
 		try {
-			entry = mgr.getObjectById(Entry.class, id);
+			transaction = mgr.getObjectById(Transaction.class, id);
 		} finally {
 			mgr.close();
 		}
-		return entry;
+		return transaction;
 	}
 
 	/**
@@ -97,45 +97,45 @@ public class EntryEndpoint {
 	 * already exists in the datastore, an exception is thrown. It uses HTTP
 	 * POST method.
 	 *
-	 * @param entry
+	 * @param transaction
 	 *            the entity to be inserted.
 	 * @return The inserted entity.
 	 */
-	@ApiMethod(name = "insertEntry")
-	public Entry insertEntry(Entry entry) {
+	@ApiMethod(name = "insertTransaction")
+	public Transaction inserttransaction(Transaction transaction) {
 		PersistenceManager mgr = getPersistenceManager();
 		try {
-			if (entry.getId() != null && containsEntry(entry)) {
+			if (transaction.getId() != null && containsTransaction(transaction)) {
 				throw new EntityExistsException("Object already exists");
 			}
-			if (entry.getCategory() != null
-					&& entry.getCategory().getId() != null) {
+			if (transaction.getCategory() != null
+					&& transaction.getCategory().getId() != null) {
 				try {
-					Category category = mgr.getObjectById(Category.class, entry
+					Category category = mgr.getObjectById(Category.class, transaction
 							.getCategory().getId().getId());
-					entry.setCategory(category);
+					transaction.setCategory(category);
 				} catch (javax.jdo.JDOObjectNotFoundException ex) {
 					throw new EntityNotFoundException(
 							"Category was not found - Please add category first");
 				}
 			}
-			if (entry.getAccount() != null
-					&& entry.getAccount().getId() != null) {
+			if (transaction.getAccount() != null
+					&& transaction.getAccount().getId() != null) {
 				try {
-					Account account = mgr.getObjectById(Account.class, entry
+					Account account = mgr.getObjectById(Account.class, transaction
 							.getAccount().getId().getId());
-					entry.setAccount(account);
+					transaction.setAccount(account);
 				} catch (javax.jdo.JDOObjectNotFoundException ex) {
 					throw new EntityNotFoundException(
 							"Account was not found - Please add account first");
 				}
 			}
 
-			mgr.makePersistent(entry);
+			mgr.makePersistent(transaction);
 		} finally {
 			mgr.close();
 		}
-		return entry;
+		return transaction;
 	}
 
 	/**
@@ -143,35 +143,35 @@ public class EntryEndpoint {
 	 * not exist in the datastore, an exception is thrown. It uses HTTP PUT
 	 * method.
 	 *
-	 * @param entry
+	 * @param transaction
 	 *            the entity to be updated.
 	 * @return The updated entity.
 	 */
-	@ApiMethod(name = "updateEntry")
-	public Entry updateEntry(Entry entry) {
+	@ApiMethod(name = "updateTransaction")
+	public Transaction updateTransaction(Transaction transaction) {
 		PersistenceManager mgr = getPersistenceManager();
 		try {
-			if (!containsEntry(entry)) {
+			if (!containsTransaction(transaction)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
 			// bug in GAE - NullPointer when namespace=null
-			entry.setId(KeyFactory.createKey(Entry.class.getSimpleName(), entry.getId().getId()));
+			transaction.setId(KeyFactory.createKey(Transaction.class.getSimpleName(), transaction.getId().getId()));
 			
-			if (entry.getCategory() != null && entry.getCategory().getId() != null) {
-				Category category = mgr.getObjectById(Category.class, entry.getCategory().getId().getId());
-				entry.setCategory(category);
+			if (transaction.getCategory() != null && transaction.getCategory().getId() != null) {
+				Category category = mgr.getObjectById(Category.class, transaction.getCategory().getId().getId());
+				transaction.setCategory(category);
 			}
 			
-			if (entry.getAccount() != null && entry.getAccount().getId() != null) {
-				Account account = mgr.getObjectById(Account.class, entry.getAccount().getId().getId());
-				entry.setAccount(account);
+			if (transaction.getAccount() != null && transaction.getAccount().getId() != null) {
+				Account account = mgr.getObjectById(Account.class, transaction.getAccount().getId().getId());
+				transaction.setAccount(account);
 			}
 			
-			mgr.makePersistent(entry);
+			mgr.makePersistent(transaction);
 		} finally {
 			mgr.close();
 		}
-		return entry;
+		return transaction;
 	}
 
 	/**
@@ -181,22 +181,22 @@ public class EntryEndpoint {
 	 * @param id
 	 *            the primary key of the entity to be deleted.
 	 */
-	@ApiMethod(name = "removeEntry")
-	public void removeEntry(@Named("id") Long id) {
+	@ApiMethod(name = "removeTransaction")
+	public void removeTransaction(@Named("id") Long id) {
 		PersistenceManager mgr = getPersistenceManager();
 		try {
-			Entry entry = mgr.getObjectById(Entry.class, id);
-			mgr.deletePersistent(entry);
+			Transaction transaction = mgr.getObjectById(Transaction.class, id);
+			mgr.deletePersistent(transaction);
 		} finally {
 			mgr.close();
 		}
 	}
 
-	private boolean containsEntry(Entry entry) {
+	private boolean containsTransaction(Transaction transaction) {
 		PersistenceManager mgr = getPersistenceManager();
 		boolean contains = true;
 		try {
-			mgr.getObjectById(Entry.class, entry.getId().getId());
+			mgr.getObjectById(Transaction.class, transaction.getId().getId());
 		} catch (javax.jdo.JDOObjectNotFoundException ex) {
 			contains = false;
 		} finally {

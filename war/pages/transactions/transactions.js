@@ -1,7 +1,7 @@
 		app.controller(
 				'transactionsController', 
 				function($scope, $http, $translate) {
-					var URL = "_ah/api/entryendpoint/v1/entry/";
+					var URL = "_ah/api/transactionendpoint/v1/transaction/";
 
 					$scope.newTransaction = new Transaction();
 					

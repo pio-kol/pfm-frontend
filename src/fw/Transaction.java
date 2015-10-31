@@ -12,7 +12,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.datanucleus.annotations.Unowned;
 
 @PersistenceCapable
-public class Entry {
+public class Transaction {
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -118,7 +118,7 @@ public class Entry {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Entry other = (Entry) obj;
+		Transaction other = (Transaction) obj;
 		if (account == null) {
 			if (other.account != null)
 				return false;
@@ -159,7 +159,7 @@ public class Entry {
 
 	@Override
 	public String toString() {
-		return "Entry [id=" + id + ", date=" + date + ", description="
+		return "Transaction [id=" + id + ", date=" + date + ", description="
 				+ description + ", comment=" + comment + ", category="
 				+ category + ", account=" + account + ", price=" + price + "]";
 	}

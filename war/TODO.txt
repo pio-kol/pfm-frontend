@@ -12,7 +12,6 @@
 
 -------- transactions --------
 - Keep only category and account id (as long) and gather other category date on user side
-- rename entry to transaction
 - add transaction to model before sending to server / remove on fail
 
 -------- navigation --------
@@ -23,6 +22,7 @@
 - server side validation
 - each user should have seperate namespace
 - service calls available only to logged in users
+- i18n
 
 -------- nice to have --------
 - deep linking with operation (new account / edit account etc.)
