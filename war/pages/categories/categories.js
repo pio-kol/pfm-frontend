@@ -20,7 +20,7 @@
 					}
 
 					$scope.cancelAddNewCategory = function() {
-						$scope.newCategory.clear();
+						$scope.newCategory = new Category();
 						$scope.newCategoryForm.$setPristine();
 					}
 
@@ -87,7 +87,7 @@
 										category)
 								.then(
 										function(response) {
-											newCategory.clear();
+											$scope.newCategory = new Category();
 											$scope.newCategoryForm.$setPristine();
 											$scope.refreshCategories();
 										},

@@ -4,17 +4,14 @@
 - enable disabling categories (do not return until explicitly requested)
 - Focus input after clicking edit
 - Keep only category id (as long) and gather other category date on user side
-- replace clear method with constructor call
 
 -------- accounts --------
 - constrains - do not allow to remove account which is assigned to transaction
-- replace clear method with constructor call
 
 -------- transactions --------
 - Keep only category and account id (as long) and gather other category date on user side
 - rename entry to transaction
-- replace clear method with constructor call
-
+- comment not required
 
 -------- navigation --------
 - mark selected view

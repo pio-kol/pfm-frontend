@@ -10,7 +10,7 @@
 					}
 
 					$scope.cancelAddNewTransaction = function() {
-						$scope.newTransaction.clear();
+						$scope.newTransaction = new Transaction();
 						$scope.newTransactionForm.$setPristine();
 					}
 
@@ -121,7 +121,7 @@
 										transaction)
 								.then(
 										function(response) {
-											newTransaction.clear();
+											$scope.newTransaction = new Transaction();
 											$scope.newTransactionForm.$setPristine();
 											$scope.refreshTransactions();
 										},

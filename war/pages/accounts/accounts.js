@@ -9,7 +9,7 @@ app
 					}
 
 					$scope.cancelAddNewAccount = function() {
-						$scope.newAccount.clear();
+						$scope.newAccount = new Account();
 						$scope.newAccountForm.$setPristine();
 					}
 
@@ -86,7 +86,7 @@ app
 								.post($rootScope.accountsURL, account)
 								.then(
 										function(response) {
-											newAccount.clear();
+											$scope.newAccount = new Account();
 											$scope.newAccountForm
 													.$setPristine();
 											$scope.refreshAccounts();
