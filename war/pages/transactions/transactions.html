@@ -35,12 +35,12 @@
 				<td ng-switch-when="readOnly">{{ transaction.comment }}</td>
 				<td ng-switch-when="edit"> <input required type="date" class="form-control" ng-model="transaction.date" /> </td>
 				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.description" /></td>
-				<td ng-switch-when="edit"><select chosen class="form-control" ng-model="transaction.category.id"
+				<td ng-switch-when="edit"><select chosen required class="form-control" ng-model="transaction.category.id"
 					ng-options="category.id as category.name for category in categories"></select></td>
-				<td ng-switch-when="edit"><select chosen class="form-control" ng-model="transaction.account.id"
+				<td ng-switch-when="edit"><select chosen required class="form-control" ng-model="transaction.account.id"
 					ng-options="account.id as account.name for account in accounts"></select></td>
 				<td ng-switch-when="edit"><input required type="number" class="form-control" ng-model="transaction.price" /></td>
-				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.comment" /></td>
+				<td ng-switch-when="edit"><input type="text" class="form-control" ng-model="transaction.comment" /></td>
 
 				<td>
 					<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editTransaction(transaction.id)">
@@ -62,12 +62,12 @@
 			<tr ng-show="newTransaction.visible" ng-form name="newTransactionForm">
 				<td><input required type="date" class="form-control" ng-model="newTransaction.date" /></td>
 				<td><input required type="text" class="form-control" ng-model="newTransaction.description" /></td>
-				<td><select chosen class="form-control" ng-model="newTransaction.category.id" ng-options="category.id as category.name for category in categories">
+				<td><select chosen required class="form-control" ng-model="newTransaction.category.id" ng-options="category.id as category.name for category in categories">
 				</select></td>
-				<td><select chosen class="form-control" ng-model="newTransaction.account.id" ng-options="account.id as account.name for account in accounts">
+				<td><select chosen required class="form-control" ng-model="newTransaction.account.id" ng-options="account.id as account.name for account in accounts">
 				</select></td>
 				<td><input required type="number" class="form-control" ng-model="newTransaction.price" /></td>
-				<td><input required type="text" class="form-control" ng-model="newTransaction.comment" /></td>
+				<td><input type="text" class="form-control" ng-model="newTransaction.comment" /></td>
 
 
 				<td>
