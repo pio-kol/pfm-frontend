@@ -1,7 +1,7 @@
 -------- categories --------
 - display only categories which don't cause cycles 
 - do not allow to remove category which have children, or transactions assigned
-- Keep only category id (as long) and gather other category date on user side
+- parent category sometimes not available
 
 -------- accounts --------
 - constrains - do not allow to remove account which is assigned to transaction

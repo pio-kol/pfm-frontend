@@ -7,7 +7,6 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.datanucleus.annotations.Unowned;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION)
 public class Category {
@@ -17,8 +16,7 @@ public class Category {
 	private Key id;
 	
 	@Persistent
-	@Unowned
-	private Category parentCategory;
+	private Long parentCategoryId;
 	
 	@Persistent
 	private String name;
@@ -31,12 +29,12 @@ public class Category {
 		this.id = id;
 	}
 
-	public Category getParentCategory() {
-		return parentCategory;
+	public Long getParentCategoryId() {
+		return parentCategoryId;
 	}
 
-	public void setParentCategory(Category parentCategory) {
-		this.parentCategory = parentCategory;
+	public void setParentCategoryId(Long parentCategoryId) {
+		this.parentCategoryId = parentCategoryId;
 	}
 
 	public String getName() {
@@ -54,7 +52,7 @@ public class Category {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
-				+ ((parentCategory == null) ? 0 : parentCategory.hashCode());
+				+ ((parentCategoryId == null) ? 0 : parentCategoryId.hashCode());
 		return result;
 	}
 
@@ -77,17 +75,17 @@ public class Category {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (parentCategory == null) {
-			if (other.parentCategory != null)
+		if (parentCategoryId == null) {
+			if (other.parentCategoryId != null)
 				return false;
-		} else if (!parentCategory.equals(other.parentCategory))
+		} else if (!parentCategoryId.equals(other.parentCategoryId))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Category [id=" + id + ", parentCategory=" + parentCategory
+		return "Category [id=" + id + ", parentCategoryId=" + parentCategoryId
 				+ ", name=" + name + "]";
 	}
 }

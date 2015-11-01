@@ -30,7 +30,7 @@ public class CategoryEndpoint {
 	 * @return A CollectionResponse class containing the list of all entities
 	 *         persisted and a cursor to the next page.
 	 */
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings({ "unchecked" })
 	@ApiMethod(name = "listCategory")
 	public CollectionResponse<Category> listCategory(@Nullable @Named("cursor") String cursorString, @Nullable @Named("limit") Integer limit) {
 
@@ -60,9 +60,9 @@ public class CategoryEndpoint {
 			// Tight loop for fetching all entities from datastore and
 			// accomodate
 			// for lazy fetch.
-			for (Category obj : execute)
-				System.out.println(obj); // ugly trick to fetch parent id
-				;
+//			for (Category obj : execute)
+//				System.out.println(obj); // ugly trick to fetch parent id
+//				;
 		} finally {
 			mgr.close();
 		}
@@ -107,14 +107,14 @@ public class CategoryEndpoint {
 			if (category.getId() != null && containsCategory(category)) {
 				throw new EntityExistsException("Object already exists");
 			}
-			if (category.getParentCategory() != null && category.getParentCategory().getId() != null) {
-				try {
-					Category parentCategory = mgr.getObjectById(Category.class, category.getParentCategory().getId().getId());
-					category.setParentCategory(parentCategory);
-				} catch (javax.jdo.JDOObjectNotFoundException ex) {
-					throw new EntityNotFoundException("Parent category was not found - Please add parent category first");
-				}
-			}
+//			if (category.getParentCategory() != null && category.getParentCategory().getId() != null) {
+//				try {
+//					Category parentCategory = mgr.getObjectById(Category.class, category.getParentCategory().getId().getId());
+//					category.setParentCategory(parentCategory);
+//				} catch (javax.jdo.JDOObjectNotFoundException ex) {
+//					throw new EntityNotFoundException("Parent category was not found - Please add parent category first");
+//				}
+//			}
 			mgr.makePersistent(category);
 		} finally {
 			mgr.close();
@@ -140,11 +140,11 @@ public class CategoryEndpoint {
 			}
 			// bug in GAE - NullPointer when namespace=null
 			category.setId(KeyFactory.createKey(Category.class.getSimpleName(), category.getId().getId()));
-			if (category.getParentCategory() != null && category.getParentCategory().getId() != null) {
-				//category.getParentCategory().setId(KeyFactory.createKey(Category.class.getSimpleName(), category.getParentCategory().getId().getId()));
-				Category parentCategory = mgr.getObjectById(Category.class, category.getParentCategory().getId().getId());
-				category.setParentCategory(parentCategory);
-			}
+//			if (category.getParentCategory() != null && category.getParentCategory().getId() != null) {
+//				//category.getParentCategory().setId(KeyFactory.createKey(Category.class.getSimpleName(), category.getParentCategory().getId().getId()));
+//				Category parentCategory = mgr.getObjectById(Category.class, category.getParentCategory().getId().getId());
+//				category.setParentCategory(parentCategory);
+//			}
 			mgr.makePersistent(category); 
 		} finally {
 			mgr.close();

@@ -29,14 +29,14 @@
 
 				<td ng-switch-when="readOnly">{{ category.name }}</td>
 				<td ng-switch-when="readOnly">{{ category.parentCategory.name }}</td>
-				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="category.name" /></td>
-				<td ng-switch-when="edit"><select chosen ng-model="category.parentCategory.id"
+				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="category.copyForEdit.name" /></td>
+				<td ng-switch-when="edit"><select chosen ng-model="category.copyForEdit.parentCategory.id"
 					ng-options="category.id as category.name for category in categoriesForSelect(category.id)">
 						<option value="" translate="MAIN_CATEGORY" />
 				</select></td>
 
 				<td>
-					<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editCategory(category.id)">
+					<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editCategory(category)">
 						<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ "EDIT" | translate }}
 					</button>
 					<button ng-switch-when="edit" class="btn btn-success" ng-disabled="!editCategoryForm_{{category.id}}.$valid" ng-click="saveCategory(category)">

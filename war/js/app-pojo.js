@@ -1,12 +1,20 @@
-var Category = function() {
+var Editable = function() {
+	this.copyForEdit = null;
+	this.visible = false;
+	this.mode = 'readOnly';
+}
+
+Category.prototype = new Editable(); 
+Category.prototype.constructor=Category;       
+function Category(){ 
 	this.id = "";
 	this.name = "";
 	this.parentCategory = null;
-	this.visible = false;
-	this.mode = 'readOnly';
-};
+}
 
-var Account = function() {
+Account.prototype = new Editable(); 
+Account.prototype.constructor=Account;       
+function Account() {
 	this.id = "";
 	this.name = "";
 	this.value = 0.00;
@@ -14,7 +22,9 @@ var Account = function() {
 	this.mode = 'readOnly';
 };
 
-var Transaction = function() {
+Transaction.prototype = new Editable(); 
+Transaction.prototype.constructor=Transaction;       
+function Transaction() {
 	this.id = "";
 	this.date = "";
 	this.description = "";

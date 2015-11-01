@@ -35,25 +35,14 @@
 						}
 					}
 
-					$scope.editCategory = function(id) {
-						getCategory(id).mode = "edit";
+					$scope.editCategory = function(category) {
+						category.copyForEdit = jQuery.extend(true, {}, category);
+						category.mode = "edit";
 					};
 
 					$scope.cancelEditCategory = function(editedCategory) {
-						$http
-						.get($rootScope.categoriesURL + editedCategory.id)
-						.then(
-								function(response) {
-									var categoryFromServer = $rootScope.createNewCategory(response.data);
-									$scope.categories[$scope.categories.indexOf(editedCategory)] = categoryFromServer;
-
-									getCategory(editedCategory.id).mode = "readOnly";
-								},
-								function(response) {
-									$translate('ERROR_DATA_RETRIVE').then(function (message) {
-									    addAlert(message, response);
-									  });
-								});
+						editedCategory.copyForEdit = null; 
+						editedCategory.mode = "readOnly";
 					};
 
 					
@@ -89,11 +78,7 @@
 						}
 
 						if (newCategory.parentCategory != null && newCategory.parentCategory.id != null) {
-							category.parentCategory = {
-								"id" : {
-									"id" : newCategory.parentCategory.id
-								}
-							}
+							category.parentCategoryId = newCategory.parentCategory.id;
 						}
 
 						$http
@@ -105,6 +90,8 @@
 											$scope.newCategoryForm.$setPristine();
 											
 											var newCategory = $rootScope.createNewCategory(response.data);
+											$rootScope.updateParentCategoryReference(newCategory);
+											
 											$scope.categories.push(newCategory);
 										},
 										function(response) {
@@ -124,11 +111,7 @@
 						}
 
 						if (editedCategory.parentCategory != null && editedCategory.parentCategory.id != null) {
-							category.parentCategory = {
-								"id" : {
-									"id" : editedCategory.parentCategory.id
-								}
-							}
+							category.parentCategoryId = editedCategory.parentCategory.id;
 						}
 
 						$http
@@ -138,6 +121,8 @@
 											editedCategory.mode = "readOnly";
 											
 											var updatedCategory = $rootScope.createNewCategory(response.data);
+											$rootScope.updateParentCategoryReference(updatedCategory);
+											
 											$scope.categories[$scope.categories.indexOf(editedCategory)] = updatedCategory;
 										},
 										function(response) {
