@@ -2,6 +2,9 @@ app
 		.controller(
 				'accountController',
 				function($scope, $rootScope, $http, $translate) {
+					$scope.orderByField = 'name';
+					$scope.reverseSort = false;
+					
 					$scope.newAccount = new Account();
 
 					$scope.addNewAccount = function(id) {

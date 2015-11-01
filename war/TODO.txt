@@ -25,11 +25,9 @@
 -------- nice to have --------
 - deep linking with operation (new account / edit account etc.)
 - use div's instead of tables
-- cache for service calls
-- possibility to sort on screen
 - layout corrections
 - support for transfers between accounts
-- cookies - keep user settings
+- cookies - keep user settings (e.g. selected sort)
 - categories as tree widget
 - possibility to retire Account / Category (do not return but keep for reference for existing entries)
 - Focus input after clicking edit / add new

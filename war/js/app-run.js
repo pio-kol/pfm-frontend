@@ -55,10 +55,6 @@ app
 
 							$rootScope.accounts.push(newAccount);
 						}
-
-						$rootScope.accounts.sort(function(a, b) {
-							return a.name.localeCompare(b.name);
-						});
 					}
 				}, function(response) {
 					$translate('ERROR_DATA_RETRIVE').then(function(message) {

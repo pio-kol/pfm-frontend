@@ -15,13 +15,17 @@
 	<table class="table table-striped">
 		<thead>
 			<tr id="accountHeader">
-				<th translate="ACCOUNT_NAME" />
-				<th translate="ACCOUNT_STATE" />
+				<th><a href="#/accounts" ng-click="orderByField='name'; reverseSort = !reverseSort"> {{"ACCOUNT_NAME" | translate}} <span ng-show="orderByField == 'name'"><span
+							ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+				</a></th>
+				<th><a href="#/accounts" ng-click="orderByField='value'; reverseSort = !reverseSort"> {{"ACCOUNT_STATE" | translate}} <span
+						ng-show="orderByField == 'value'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+				</a></th>
 				<th />
 			</tr>
 		</thead>
 		<tbody id="accountsTableBody">
-			<tr ng-switch on="account.mode" ng-form name="editAccountForm_{{ account.id }}" ng-repeat="account in accounts">
+			<tr ng-switch on="account.mode" ng-form name="editAccountForm_{{ account.id }}" ng-repeat="account in accounts|orderBy:orderByField:reverseSort">
 
 				<td ng-switch-when="edit"><input type="text" required class="form-control" ng-model="account.name" /></td>
 				<td ng-switch-when="edit"><input required type="number" value="1000" step="0.01" class="form-control currency" ng-model="account.value" /></td>
