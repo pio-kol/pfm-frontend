@@ -1,6 +1,6 @@
 		app.controller(
 				'transactionsController', 
-				function($scope, $rootScope, $http, $translate) {
+				function($scope, $rootScope, $http, $translate, $q) {
 					$scope.orderByField = 'date';
 					$scope.reverseSort = false;
 
@@ -170,11 +170,10 @@
 					};
 					
 					$(document).ready(function() {
-						$scope.refreshAccounts();
-						$scope.refreshCategories();
-						$scope.refreshTransactions();
+						$q.all($scope.refreshAccounts(), $scope.refreshCategories())
+						.then(function(){
+							$scope.refreshTransactions();
+						});
 					});
-					
-
 
 				});

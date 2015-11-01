@@ -7,7 +7,7 @@
 - constrains - do not allow to remove account which is assigned to transaction
 
 -------- transactions --------
-- on page load transactions should be loaded on promise after categories and accounts are loaded
+
 
 -------- navigation --------
 - mark selected view

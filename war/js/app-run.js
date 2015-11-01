@@ -1,4 +1,4 @@
-app.run(function($rootScope, $http, $translate) {
+app.run(function($rootScope, $http, $translate, $q) {
 	$rootScope.accountsURL = "/_ah/api/accountendpoint/v1/account/";
 	$rootScope.categoriesURL = "/_ah/api/categoryendpoint/v1/category/";
 	$rootScope.transactionsURL = "_ah/api/transactionendpoint/v1/transaction/";
@@ -34,6 +34,7 @@ app.run(function($rootScope, $http, $translate) {
 	}
 
 	$rootScope.refreshCategories = function() {
+		var defer = $q.defer();
 
 		$http.get($rootScope.categoriesURL).then(
 				function(response) {
@@ -50,12 +51,16 @@ app.run(function($rootScope, $http, $translate) {
 							$rootScope
 									.updateParentCategoryReference($rootScope.categories[i]);
 						}
+						defer.resolve();
 					}
 				}, function(response) {
 					$translate('ERROR_DATA_RETRIVE').then(function(message) {
 						addAlert(message, response);
 					});
+					defer.reject();
 				});
+		
+		return defer.promise;
 	};
 
 	$rootScope.createNewAccount = function(data) {
@@ -68,7 +73,8 @@ app.run(function($rootScope, $http, $translate) {
 	}
 
 	$rootScope.refreshAccounts = function() {
-
+		var defer = $q.defer();
+		
 		$http.get($rootScope.accountsURL).then(
 				function(response) {
 					$rootScope.accounts = [];
@@ -82,11 +88,15 @@ app.run(function($rootScope, $http, $translate) {
 							$rootScope.accounts.push(newAccount);
 						}
 					}
+					defer.resolve();
 				}, function(response) {
 					$translate('ERROR_DATA_RETRIVE').then(function(message) {
 						addAlert(message, response);
 					});
+					defer.reject();
 				});
+		
+		return defer.promise;
 	};
 
 })
