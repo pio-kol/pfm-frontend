@@ -7,7 +7,7 @@
 - constrains - do not allow to remove account which is assigned to transaction
 
 -------- transactions --------
-- Keep only category and account id (as long) and gather other category date on user side
+- on page load transactions should be loaded on promise after categories and accounts are loaded
 
 -------- navigation --------
 - mark selected view

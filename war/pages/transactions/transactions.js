@@ -39,6 +39,24 @@
 						return newTransaction;
 					}
 					
+					$scope.updateAccountAndCategoryReference = function(transaction) {
+						for (var i = 0; i < $rootScope.categories.length; ++i) {
+							existingCategory = $rootScope.categories[i];
+							if (transaction.category.id === existingCategory.id) {
+								transaction.category = existingCategory;
+								break;
+							}
+						}
+						
+						for (var i = 0; i < $rootScope.accounts.length; ++i) {
+							existingAccount = $rootScope.accounts[i];
+							if (transaction.account.id === existingAccount.id) {
+								transaction.account = existingAccount;
+								break;
+							}
+						}
+					}
+					
 					$scope.refreshTransactions = function() {
 
 						$http
@@ -50,10 +68,11 @@
 									var data = response.data;
 									
 									if (data.items != null){
-									for (i = 0; i < data.items.length; ++i) {
-										var newTransaction = createNewTransaction(data.items[i]);
-										$scope.transactions.push(newTransaction);
-									}
+										for (i = 0; i < data.items.length; ++i) {
+											var newTransaction = createNewTransaction(data.items[i]);
+											$scope.updateAccountAndCategoryReference(newTransaction);
+											$scope.transactions.push(newTransaction);
+										}
 									}
 								},
 								function(response) {
@@ -107,6 +126,7 @@
 											$scope.newTransactionForm.$setPristine();
 											
 											var newTransaction = createNewTransaction(response.data);
+											$scope.updateAccountAndCategoryReference(newTransaction);
 											$scope.transactions.push(newTransaction);
 								
 										},
@@ -138,6 +158,7 @@
 											editedTransaction.readOnlyMode();
 											
 											var updatedTransaction = createNewTransaction(response.data);
+											$scope.updateAccountAndCategoryReference(updatedTransaction);
 											$scope.transactions[$scope.transactions.indexOf(editedTransaction)] = updatedTransaction;
 										},
 										function(response) {
@@ -145,7 +166,7 @@
 											    addAlert(message, response);
 											  });
 										});
-
+						
 					};
 					
 					$(document).ready(function() {
