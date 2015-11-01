@@ -15,17 +15,29 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th translate="TRANSACTION_DATE" />
-				<th translate="TRANSACTION_DESCRIPTION" />
-				<th translate="TRANSACTION_CATEGORY" />
-				<th translate="TRANSACTION_ACCOUNT" />
-				<th translate="TRANSACTION_PRICE" />
-				<th translate="TRANSACTION_COMMENT" />
-				<th />
+				<th><a href="#" ng-click="orderByField='date'; reverseSort = !reverseSort"> {{"TRANSACTION_DATE" | translate}} <span
+						ng-show="orderByField == 'date'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+				</a></th>
+				<th><a href="#" ng-click="orderByField='description'; reverseSort = !reverseSort"> {{"TRANSACTION_DESCRIPTION" | translate}} <span
+						ng-show="orderByField == 'description'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+				</a></th>
+				<th><a href="#" ng-click="orderByField='category.name'; reverseSort = !reverseSort"> {{"TRANSACTION_CATEGORY" | translate}} <span
+						ng-show="orderByField == 'category.name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+				</a></th>
+				<th><a href="#" ng-click="orderByField='account.name'; reverseSort = !reverseSort"> {{"TRANSACTION_ACCOUNT" | translate}} <span
+						ng-show="orderByField == 'account.name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+				</a></th>
+				<th><a href="#" ng-click="orderByField='price'; reverseSort = !reverseSort"> {{"TRANSACTION_PRICE" | translate}} <span
+						ng-show="orderByField == 'price'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+				</a></th>
+				<th><a href="#" ng-click="orderByField='comment'; reverseSort = !reverseSort"> {{"TRANSACTION_COMMENT" | translate}} <span
+						ng-show="orderByField == 'comment'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+				</a></th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-switch on="transaction.mode" ng-repeat="transaction in transactions" ng-form name="editTransactionForm_{{transaction.id}}">
+			<tr ng-switch on="transaction.mode" ng-repeat="transaction in transactions|orderBy:orderByField:reverseSort" ng-form
+				name="editTransactionForm_{{transaction.id}}">
 
 				<td ng-switch-when="readOnly">{{ transaction.date | date : "yyyy-MM-dd" }}</td>
 				<td ng-switch-when="readOnly">{{ transaction.description }}</td>
@@ -33,7 +45,7 @@
 				<td ng-switch-when="readOnly">{{ transaction.account.name }}</td>
 				<td ng-switch-when="readOnly">{{ transaction.price }}</td>
 				<td ng-switch-when="readOnly">{{ transaction.comment }}</td>
-				<td ng-switch-when="edit"> <input required type="date" class="form-control" ng-model="transaction.date" /> </td>
+				<td ng-switch-when="edit"><input required type="date" class="form-control" ng-model="transaction.date" /></td>
 				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.description" /></td>
 				<td ng-switch-when="edit"><select chosen required class="form-control" ng-model="transaction.category.id"
 					ng-options="category.id as category.name for category in categories"></select></td>
@@ -62,7 +74,8 @@
 			<tr ng-show="newTransaction.visible" ng-form name="newTransactionForm">
 				<td><input required type="date" class="form-control" ng-model="newTransaction.date" /></td>
 				<td><input required type="text" class="form-control" ng-model="newTransaction.description" /></td>
-				<td><select chosen required class="form-control" ng-model="newTransaction.category.id" ng-options="category.id as category.name for category in categories">
+				<td><select chosen required class="form-control" ng-model="newTransaction.category.id"
+					ng-options="category.id as category.name for category in categories">
 				</select></td>
 				<td><select chosen required class="form-control" ng-model="newTransaction.account.id" ng-options="account.id as account.name for account in accounts">
 				</select></td>

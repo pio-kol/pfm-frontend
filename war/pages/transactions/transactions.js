@@ -2,6 +2,9 @@
 				'transactionsController', 
 				function($scope, $http, $translate) {
 					var URL = "_ah/api/transactionendpoint/v1/transaction/";
+					
+					$scope.orderByField = 'date';
+					$scope.reverseSort = false;
 
 					$scope.newTransaction = new Transaction();
 					
@@ -51,10 +54,6 @@
 									$scope.transactions[$scope.transactions.indexOf(editedTransaction)] = transactionFromServer;
 
 									getTransaction(editedTransaction.id).mode = "readOnly";
-									
-									$scope.transactions.sort(function(a,b){
-										  return a.date - b.date;
-									});
 								},
 								function(response) {
 									$translate('ERROR_DATA_RETRIVE').then(function (message) {
@@ -78,10 +77,6 @@
 										var newTransaction = createNewTransaction(data.items[i]);
 										$scope.transactions.push(newTransaction);
 									}
-									
-									$scope.transactions.sort(function(a,b){
-										  return a.date - b.date;
-										});
 									}
 								},
 								function(response) {
@@ -146,10 +141,7 @@
 											
 											var newTransaction = createNewTransaction(response.data);
 											$scope.transactions.push(newTransaction);
-											
-											$scope.transactions.sort(function(a,b){
-												  return a.date - b.date;
-											});
+								
 										},
 										function(response) {
 											$translate('ERROR_TRANSACTION_ADD', {name : newTransaction.description}).then(function (message) {
@@ -190,10 +182,6 @@
 											
 											var updatedTransaction = createNewTransaction(response.data);
 											$scope.transactions[$scope.transactions.indexOf(editedTransaction)] = updatedTransaction;
-											
-											$scope.transactions.sort(function(a,b){
-												  return a.date - b.date;
-											});
 										},
 										function(response) {
 											$translate('ERROR_TRANSACTION_MODIFY', {name : editedTransaction.description}).then(function (message) {
