@@ -24,8 +24,13 @@
 						}
 					}
 
-					$scope.editTransaction = function(id) {
-						getTransaction(id).mode = "edit";
+					$scope.editTransaction = function(transaction) {
+						transaction.editMode();
+						transaction.copyForEdit.date = new Date(transaction.copyForEdit.date);
+					};
+
+					$scope.cancelEditTransaction = function(transaction) {
+						transaction.readOnlyMode();
 					};
 
 					function createNewTransaction(data){
@@ -42,23 +47,6 @@
 						
 						return newTransaction;
 					}
-					
-					$scope.cancelEditTransaction = function(editedTransaction) {
-						$http
-						.get($rootScope.transactionsURL + editedTransaction.id)
-						.then(
-								function(response) {
-									var transactionFromServer = createNewTransaction(response.data);
-									$scope.transactions[$scope.transactions.indexOf(editedTransaction)] = transactionFromServer;
-
-									getTransaction(editedTransaction.id).mode = "readOnly";
-								},
-								function(response) {
-									$translate('ERROR_DATA_RETRIVE').then(function (message) {
-									    addAlert(message, response);
-									  });
-								});
-					};
 					
 					$scope.refreshTransactions = function() {
 
@@ -154,20 +142,20 @@
 								"id" : {
 									"id" : editedTransaction.id
 								},
-								"date" : editedTransaction.date,
-								"description" : editedTransaction.description,
-								"price" : editedTransaction.price,
-								"comment" : editedTransaction.comment,
+								"date" : editedTransaction.copyForEdit.date,
+								"description" : editedTransaction.copyForEdit.description,
+								"price" : editedTransaction.copyForEdit.price,
+								"comment" : editedTransaction.copyForEdit.comment,
 								"category" : {
 								    "id": 
 								    {
-								      "id": editedTransaction.category.id
+								      "id": editedTransaction.copyForEdit.category.id
 								    }
 								  },
 								  "account" : {
 									    "id": 
 									    {
-									      "id": editedTransaction.account.id
+									      "id": editedTransaction.copyForEdit.account.id
 									    }
 									  }
 						}
@@ -176,7 +164,7 @@
 								.put($rootScope.transactionsURL, transaction)
 								.then(
 										function(response) {
-											editedTransaction.mode = "readOnly";
+											editedTransaction.readOnlyMode();
 											
 											var updatedTransaction = createNewTransaction(response.data);
 											$scope.transactions[$scope.transactions.indexOf(editedTransaction)] = updatedTransaction;

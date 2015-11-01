@@ -68,7 +68,7 @@ app
 								.put($rootScope.accountsURL, account)
 								.then(
 										function(response) {
-											editedAccount.mode = "readOnly";
+											editedAccount.readOnlyMode();
 
 											var updatedAccount = $rootScope.createNewAccount(response.data);
 											$scope.accounts[$scope.accounts.indexOf(editedAccount)] = updatedAccount;
