@@ -84,6 +84,7 @@ public class CategoryEndpoint {
 		Category category = null;
 		try {
 			category = mgr.getObjectById(Category.class, id);
+			System.out.println(category);
 		} finally {
 			mgr.close();
 		}

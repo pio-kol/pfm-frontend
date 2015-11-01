@@ -42,10 +42,10 @@
 					<button ng-switch-when="edit" class="btn btn-success" ng-disabled="!editCategoryForm_{{category.id}}.$valid" ng-click="saveCategory(category)">
 						<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
 					</button>
-					<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditCategory(category.id)">
+					<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditCategory(category)">
 						<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;{{ "CANCEL" | translate }}
 					</button>
-					<button ng-switch-when="edit" class="btn btn-danger" ng-click="removeCategory(category.id, category.name)">
+					<button ng-switch-when="edit" class="btn btn-danger" ng-click="removeCategory(category)">
 						<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{ "DELETE" | translate }}
 					</button>
 				</td>

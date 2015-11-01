@@ -1,8 +1,6 @@
 		app.controller(
 				'transactionsController', 
-				function($scope, $http, $translate) {
-					var URL = "_ah/api/transactionendpoint/v1/transaction/";
-					
+				function($scope, $rootScope, $http, $translate) {
 					$scope.orderByField = 'date';
 					$scope.reverseSort = false;
 
@@ -47,7 +45,7 @@
 					
 					$scope.cancelEditTransaction = function(editedTransaction) {
 						$http
-						.get(URL + editedTransaction.id)
+						.get($rootScope.transactionsURL + editedTransaction.id)
 						.then(
 								function(response) {
 									var transactionFromServer = createNewTransaction(response.data);
@@ -65,7 +63,7 @@
 					$scope.refreshTransactions = function() {
 
 						$http
-						.get(URL)
+						.get($rootScope.transactionsURL)
 						.then(
 								function(response) {
 									$scope.transactions = [];
@@ -94,7 +92,7 @@
 											if (!result) {
 												return;
 											}
-											$http.delete(URL + transactionToDelete.id)
+											$http.delete($rootScope.transactionsURL + transactionToDelete.id)
 											.then(
 													function(response) {
 														$scope.transactions.splice($scope.transactions.indexOf(transactionToDelete), 1); 
@@ -132,7 +130,7 @@
 						}
 						
 						$http
-								.post(URL,
+								.post($rootScope.transactionsURL,
 										transaction)
 								.then(
 										function(response) {
@@ -175,7 +173,7 @@
 						}
 
 						$http
-								.put(URL, transaction)
+								.put($rootScope.transactionsURL, transaction)
 								.then(
 										function(response) {
 											editedTransaction.mode = "readOnly";

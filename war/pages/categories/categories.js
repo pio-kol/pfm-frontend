@@ -39,28 +39,40 @@
 						getCategory(id).mode = "edit";
 					};
 
-					$scope.cancelEditCategory = function(id) {
-						getCategory(id).mode = "readOnly";
-						$scope.refreshCategories();
+					$scope.cancelEditCategory = function(editedCategory) {
+						$http
+						.get($rootScope.categoriesURL + editedCategory.id)
+						.then(
+								function(response) {
+									var categoryFromServer = $rootScope.createNewCategory(response.data);
+									$scope.categories[$scope.categories.indexOf(editedCategory)] = categoryFromServer;
+
+									getCategory(editedCategory.id).mode = "readOnly";
+								},
+								function(response) {
+									$translate('ERROR_DATA_RETRIVE').then(function (message) {
+									    addAlert(message, response);
+									  });
+								});
 					};
 
 					
 
-					$scope.removeCategory = function(id, categoryName) {
-						$translate('CONFIRM_REMOVE_CATEGORY', {name : categoryName}).then(function (message) {
+					$scope.removeCategory = function(categoryToDelete) {
+						$translate('CONFIRM_REMOVE_CATEGORY', {name : categoryToDelete.name}).then(function (message) {
 						bootbox 
 								.confirm(message,
 										function(result) {
 											if (!result) {
 												return;
 											}
-											$http.delete($rootScope.categoriesURL + id)
+											$http.delete($rootScope.categoriesURL + categoryToDelete.id)
 											.then(
 													function(response) {
-														$scope.refreshCategories();
+														$scope.categories.splice($scope.categories.indexOf(categoryToDelete), 1);
 													},
 													function(response) {
-														$translate('ERROR_CATEGORY_REMOVE', {name : categoryName}).then(function (message) {
+														$translate('ERROR_CATEGORY_REMOVE', {name : categoryToDelete.name}).then(function (message) {
 														    addAlert(message, response);
 														  });
 													});
@@ -91,7 +103,9 @@
 										function(response) {
 											$scope.newCategory = new Category();
 											$scope.newCategoryForm.$setPristine();
-											$scope.refreshCategories();
+											
+											var newCategory = $rootScope.createNewCategory(response.data);
+											$scope.categories.push(newCategory);
 										},
 										function(response) {
 											$translate('ERROR_CATEGORY_ADD', {name : newCategory.name}).then(function (message) {
@@ -122,7 +136,9 @@
 								.then(
 										function(response) {
 											editedCategory.mode = "readOnly";
-											$scope.refreshCategories();
+											
+											var updatedCategory = $rootScope.createNewCategory(response.data);
+											$scope.categories[$scope.categories.indexOf(editedCategory)] = updatedCategory;
 										},
 										function(response) {
 											$translate('ERROR_CATEGORY_MODIFY', {name : editedCategory.name}).then(function (message) {

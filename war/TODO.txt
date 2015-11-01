@@ -2,7 +2,6 @@
 - display only categories which don't cause cycles 
 - do not allow to remove category which have children, or transactions assigned
 - Keep only category id (as long) and gather other category date on user side
-- add category to model after successful put / post, then refresh categories
 
 -------- accounts --------
 - constrains - do not allow to remove account which is assigned to transaction
@@ -10,7 +9,6 @@
 
 -------- transactions --------
 - Keep only category and account id (as long) and gather other category date on user side
-- move endpoint to app
 
 -------- navigation --------
 - mark selected view
