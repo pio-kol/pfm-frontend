@@ -18,8 +18,6 @@ function Account() {
 	this.id = "";
 	this.name = "";
 	this.value = 0.00;
-	this.visible = false;
-	this.mode = 'readOnly';
 };
 
 Transaction.prototype = new Editable(); 
@@ -32,6 +30,4 @@ function Transaction() {
 	this.category = new Category();
 	this.account = new Account();
 	this.price = 0.00;
-	this.visible = false;
-	this.mode = 'readOnly';
 };
