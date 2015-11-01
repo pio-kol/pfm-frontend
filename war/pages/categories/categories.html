@@ -15,13 +15,17 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th translate="CATEGORY_NAME" />
-				<th translate="PARENT_CATEGORY" />
+				<th><a href="#" ng-click="orderByField='name'; reverseSort = !reverseSort"> {{"CATEGORY_NAME" | translate}} <span
+						ng-show="orderByField == 'name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+				</a></th>
+				<th><a href="#" ng-click="orderByField='parentCategory.name'; reverseSort = !reverseSort"> {{"PARENT_CATEGORY" | translate}} <span
+						ng-show="orderByField == 'parentCategory.name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+				</a></th>
 				<th />
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-switch on="category.mode" ng-repeat="category in categories" ng-form name="editCategoryForm_{{category.id}}">
+			<tr ng-switch on="category.mode" ng-repeat="category in categories|orderBy:orderByField:reverseSort" ng-form name="editCategoryForm_{{category.id}}">
 
 				<td ng-switch-when="readOnly">{{ category.name }}</td>
 				<td ng-switch-when="readOnly">{{ category.parentCategory.name }}</td>

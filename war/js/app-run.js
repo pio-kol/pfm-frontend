@@ -28,12 +28,6 @@ app
 											$rootScope.categories
 													.push(newCategory);
 										}
-
-										$rootScope.categories
-												.sort(function(a, b) {
-													return a.name
-															.localeCompare(b.name);
-												});
 									}
 								},
 								function(response) {

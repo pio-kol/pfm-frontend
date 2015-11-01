@@ -1,7 +1,9 @@
 		app.controller(
 				'categoryController', 
 				function($scope, $rootScope, $http, $translate) {
-
+					$scope.orderByField = 'name';
+					$scope.reverseSort = false;
+					
 					$scope.newCategory = new Category();
 
 					$scope.categoriesForSelect = function(id){

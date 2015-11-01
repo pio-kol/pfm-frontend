@@ -10,6 +10,7 @@
 
 -------- transactions --------
 - Keep only category and account id (as long) and gather other category date on user side
+- move endpoint to app
 
 -------- navigation --------
 - mark selected view
