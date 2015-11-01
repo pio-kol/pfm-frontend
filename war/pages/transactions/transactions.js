@@ -27,11 +27,42 @@
 						getTransaction(id).mode = "edit";
 					};
 
-					$scope.cancelEditTransaction = function(id) {
-						getTransaction(id).mode = "readOnly";
-						$scope.refreshTransactions();
-					};
+					function createNewTransaction(data){
+						var newTransaction = new Transaction();
+						newTransaction.id = data.id.id;
+						newTransaction.date = new Date(data.date);
+						newTransaction.description = data.description;
+						newTransaction.comment = data.comment;
+						newTransaction.category.id = data.category != null ? data.category.id.id : null;
+						newTransaction.category.name = data.category != null ? data.category.name : null;
+						newTransaction.account.id = data.account != null ? data.account.id.id : null;
+						newTransaction.account.name = data.account != null ? data.account.name : null;;
+						newTransaction.price = parseFloat(data.price);
+						
+						return newTransaction;
+					}
+					
+					$scope.cancelEditTransaction = function(editedTransaction) {
+						$http
+						.get(URL + editedTransaction.id)
+						.then(
+								function(response) {
+									var transactionFromServer = createNewTransaction(response.data);
+									$scope.transactions[$scope.transactions.indexOf(editedTransaction)] = transactionFromServer;
 
+									getTransaction(editedTransaction.id).mode = "readOnly";
+									
+									$scope.transactions.sort(function(a,b){
+										  return a.date - b.date;
+									});
+								},
+								function(response) {
+									$translate('ERROR_DATA_RETRIVE').then(function (message) {
+									    addAlert(message, response);
+									  });
+								});
+					};
+					
 					$scope.refreshTransactions = function() {
 
 						$http
@@ -44,17 +75,7 @@
 									
 									if (data.items != null){
 									for (i = 0; i < data.items.length; ++i) {
-										var newTransaction = new Transaction();
-										newTransaction.id = data.items[i].id.id;
-										newTransaction.date = new Date(data.items[i].date);
-										newTransaction.description = data.items[i].description;
-										newTransaction.comment = data.items[i].comment;
-										newTransaction.category.id = data.items[i].category != null ? data.items[i].category.id.id : null;
-										newTransaction.category.name = data.items[i].category != null ? data.items[i].category.name : null;
-										newTransaction.account.id = data.items[i].account != null ? data.items[i].account.id.id : null;
-										newTransaction.account.name = data.items[i].account != null ? data.items[i].account.name : null;;
-										newTransaction.price = parseFloat(data.items[i].price);
-										
+										var newTransaction = createNewTransaction(data.items[i]);
 										$scope.transactions.push(newTransaction);
 									}
 									
@@ -70,21 +91,21 @@
 								});
 					}
 
-					$scope.removeTransaction = function(id, transactionName) {
-						$translate('CONFIRM_REMOVE_TRANSACTION', {name : transactionName}).then(function (message) {
+					$scope.removeTransaction = function(transactionToDelete) {
+						$translate('CONFIRM_REMOVE_TRANSACTION', {name : transactionToDelete.name}).then(function (message) {
 						bootbox 
 								.confirm(message,
 										function(result) {
 											if (!result) {
 												return;
 											}
-											$http.delete(URL + id)
+											$http.delete(URL + transactionToDelete.id)
 											.then(
 													function(response) {
-														$scope.refreshTransactions();
+														$scope.transactions.splice($scope.transactions.indexOf(transactionToDelete), 1); 
 													},
 													function(response) {
-														$translate('ERROR_TRANSACTION_REMOVE', {name : transactionName}).then(function (message) {
+														$translate('ERROR_TRANSACTION_REMOVE', {name : transactionToDelete.name}).then(function (message) {
 														    addAlert(message, response);
 														  });
 													});
@@ -93,7 +114,7 @@
 						});
 
 					};
-
+					
 					$scope.saveNewTransaction = function(newTransaction) {
 
 						var transaction = {
@@ -114,8 +135,7 @@
 								    }
 								  }
 						}
-
-
+						
 						$http
 								.post(URL,
 										transaction)
@@ -123,7 +143,13 @@
 										function(response) {
 											$scope.newTransaction = new Transaction();
 											$scope.newTransactionForm.$setPristine();
-											$scope.refreshTransactions();
+											
+											var newTransaction = createNewTransaction(response.data);
+											$scope.transactions.push(newTransaction);
+											
+											$scope.transactions.sort(function(a,b){
+												  return a.date - b.date;
+											});
 										},
 										function(response) {
 											$translate('ERROR_TRANSACTION_ADD', {name : newTransaction.description}).then(function (message) {
@@ -161,7 +187,13 @@
 								.then(
 										function(response) {
 											editedTransaction.mode = "readOnly";
-											$scope.refreshTransactions();
+											
+											var updatedTransaction = createNewTransaction(response.data);
+											$scope.transactions[$scope.transactions.indexOf(editedTransaction)] = updatedTransaction;
+											
+											$scope.transactions.sort(function(a,b){
+												  return a.date - b.date;
+											});
 										},
 										function(response) {
 											$translate('ERROR_TRANSACTION_MODIFY', {name : editedTransaction.description}).then(function (message) {

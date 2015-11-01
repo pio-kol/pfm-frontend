@@ -86,6 +86,7 @@ public class TransactionEndpoint {
 		Transaction transaction = null;
 		try {
 			transaction = mgr.getObjectById(Transaction.class, id);
+			System.out.println(transaction); // to get category and account
 		} finally {
 			mgr.close();
 		}

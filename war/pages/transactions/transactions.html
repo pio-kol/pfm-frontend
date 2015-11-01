@@ -49,10 +49,10 @@
 					<button ng-switch-when="edit" class="btn btn-success" ng-disabled="!editTransactionForm_{{transaction.id}}.$valid" ng-click="saveTransaction(transaction)">
 						<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
 					</button>
-					<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditTransaction(transaction.id)">
+					<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditTransaction(transaction)">
 						<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;{{ "CANCEL" | translate }}
 					</button>
-					<button ng-switch-when="edit" class="btn btn-danger" ng-click="removeTransaction(transaction.id, transaction.description)">
+					<button ng-switch-when="edit" class="btn btn-danger" ng-click="removeTransaction(transaction)">
 						<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{ "DELETE" | translate }}
 					</button>
 				</td>
