@@ -16,15 +16,6 @@ app
 						$scope.newAccountForm.$setPristine();
 					}
 
-					function getAccount(id) {
-						for (var i = 0; i < $scope.accounts.length; ++i) {
-							var account = $scope.accounts[i];
-							if (id == account.id) {
-								return account;
-							}
-						}
-					}
-
 					$scope.editAccount = function(account) {
 						account.editMode();
 					};

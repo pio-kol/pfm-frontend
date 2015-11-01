@@ -26,15 +26,6 @@
 						$scope.newCategoryForm.$setPristine();
 					}
 
-					function getCategory(id) {
-						for (var i = 0; i < $rootScope.categories.length; ++i) {
-							var category = $rootScope.categories[i];
-							if (id == category.id) {
-								return category;
-							}
-						}
-					}
-
 					$scope.editCategory = function(category) {
 						category.editMode();
 					};

@@ -15,15 +15,6 @@
 						$scope.newTransactionForm.$setPristine();
 					}
 
-					function getTransaction(id) {
-						for (var i = 0; i < $scope.transactions.length; ++i) {
-							var transaction = $scope.transactions[i];
-							if (id == transaction.id) {
-								return transaction;
-							}
-						}
-					}
-
 					$scope.editTransaction = function(transaction) {
 						transaction.editMode();
 						transaction.copyForEdit.date = new Date(transaction.copyForEdit.date);

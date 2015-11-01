@@ -14,8 +14,7 @@
 - login / sign up
 
 -------- all -----------
-clear getAccont/Transaction/Category usage
-alerts don't clear if more than one
+
 
 -------- server side -------
 - server side validation
