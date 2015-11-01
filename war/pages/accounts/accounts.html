@@ -27,14 +27,14 @@
 		<tbody id="accountsTableBody">
 			<tr ng-switch on="account.mode" ng-form name="editAccountForm_{{ account.id }}" ng-repeat="account in accounts|orderBy:orderByField:reverseSort">
 
-				<td ng-switch-when="edit"><input type="text" required class="form-control" ng-model="account.name" /></td>
-				<td ng-switch-when="edit"><input required type="number" value="1000" step="0.01" class="form-control currency" ng-model="account.value" /></td>
+				<td ng-switch-when="edit"><input type="text" required class="form-control" ng-model="account.copyForEdit.name" /></td>
+				<td ng-switch-when="edit"><input required type="number" value="1000" step="0.01" class="form-control currency" ng-model="account.copyForEdit.value" /></td>
 
 				<td ng-switch-when="readOnly">{{ account.name }}</td>
 				<td ng-switch-when="readOnly">{{ account.value | currency }}</td>
 
 				<td>
-					<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editAccount(account.id)">
+					<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editAccount(account)">
 						<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ "EDIT" | translate }}
 					</button>
 					<button ng-switch-when="edit" class="btn btn-success" ng-disabled="!editAccountForm_{{account.id}}.$valid" ng-click="saveAccount(account)">

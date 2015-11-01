@@ -13,6 +13,11 @@
 - mark selected view
 - login / sign up
 
+-------- all -----------
+switch mode="readOnly" to method call
+clear getAccont/Transaction/Category usage
+alerts don't clear if more than one
+
 -------- server side -------
 - server side validation
 - each user should have seperate namespace

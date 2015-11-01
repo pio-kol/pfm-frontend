@@ -25,25 +25,12 @@ app
 						}
 					}
 
-					$scope.editAccount = function(id) {
-						getAccount(id).mode = "edit";
+					$scope.editAccount = function(account) {
+						account.editMode();
 					};
 
-					$scope.cancelEditAccount = function(editedAccount) {
-						$http
-						.get($rootScope.accountsURL + editedAccount.id)
-						.then(
-								function(response) {
-									var accountFromServer = $rootScope.createNewAccount(response.data);
-									$scope.accounts[$scope.accounts.indexOf(editedAccount)] = accountFromServer;
-
-									getAccount(editedAccount.id).mode = "readOnly";
-								},
-								function(response) {
-									$translate('ERROR_DATA_RETRIVE').then(function (message) {
-									    addAlert(message, response);
-									  });
-								});
+					$scope.cancelEditAccount = function(account) {
+						account.readOnlyMode();
 					};
 
 					$scope.removeAccount = function(accountToDelete) {
@@ -73,8 +60,8 @@ app
 							"id" : {
 								"id" : editedAccount.id
 							},
-							"name" : editedAccount.name,
-							"state" : editedAccount.value
+							"name" : editedAccount.copyForEdit.name,
+							"state" : editedAccount.copyForEdit.value
 						}
 
 						$http

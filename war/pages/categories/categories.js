@@ -8,8 +8,8 @@
 
 					$scope.categoriesForSelect = function(id){
 						var filteredCategories = [];
-						for (var i = 0; i < $scope.categories.length; ++i) {
-							var category = $scope.categories[i];
+						for (var i = 0; i < $rootScope.categories.length; ++i) {
+							var category = $rootScope.categories[i];
 							if (id != category.id) {
 								filteredCategories.push(category);
 							}
@@ -27,8 +27,8 @@
 					}
 
 					function getCategory(id) {
-						for (var i = 0; i < $scope.categories.length; ++i) {
-							var category = $scope.categories[i];
+						for (var i = 0; i < $rootScope.categories.length; ++i) {
+							var category = $rootScope.categories[i];
 							if (id == category.id) {
 								return category;
 							}
@@ -36,13 +36,11 @@
 					}
 
 					$scope.editCategory = function(category) {
-						category.copyForEdit = jQuery.extend(true, {}, category);
-						category.mode = "edit";
+						category.editMode();
 					};
 
-					$scope.cancelEditCategory = function(editedCategory) {
-						editedCategory.copyForEdit = null; 
-						editedCategory.mode = "readOnly";
+					$scope.cancelEditCategory = function(category) {
+						category.readOnlyMode(); 
 					};
 
 					
@@ -58,7 +56,7 @@
 											$http.delete($rootScope.categoriesURL + categoryToDelete.id)
 											.then(
 													function(response) {
-														$scope.categories.splice($scope.categories.indexOf(categoryToDelete), 1);
+														$rootScope.categories.splice($rootScope.categories.indexOf(categoryToDelete), 1);
 													},
 													function(response) {
 														$translate('ERROR_CATEGORY_REMOVE', {name : categoryToDelete.name}).then(function (message) {
@@ -92,7 +90,7 @@
 											var newCategory = $rootScope.createNewCategory(response.data);
 											$rootScope.updateParentCategoryReference(newCategory);
 											
-											$scope.categories.push(newCategory);
+											$rootScope.categories.push(newCategory);
 										},
 										function(response) {
 											$translate('ERROR_CATEGORY_ADD', {name : newCategory.name}).then(function (message) {
@@ -104,26 +102,26 @@
 
 					$scope.saveCategory = function(editedCategory) {
 						var category = {
-							"name" : editedCategory.name,
+							"name" : editedCategory.copyForEdit.name,
 							"id" : {
 								"id" : editedCategory.id
 							}
 						}
 
-						if (editedCategory.parentCategory != null && editedCategory.parentCategory.id != null) {
-							category.parentCategoryId = editedCategory.parentCategory.id;
+						if (editedCategory.copyForEdit.parentCategory != null && editedCategory.copyForEdit.parentCategory.id != null) {
+							category.parentCategoryId = editedCategory.copyForEdit.parentCategory.id;
 						}
 
 						$http
 								.put($rootScope.categoriesURL, category)
 								.then(
 										function(response) {
-											editedCategory.mode = "readOnly";
+											editedCategory.readOnlyMode();
 											
 											var updatedCategory = $rootScope.createNewCategory(response.data);
 											$rootScope.updateParentCategoryReference(updatedCategory);
 											
-											$scope.categories[$scope.categories.indexOf(editedCategory)] = updatedCategory;
+											$rootScope.categories[$rootScope.categories.indexOf(editedCategory)] = updatedCategory;
 										},
 										function(response) {
 											$translate('ERROR_CATEGORY_MODIFY', {name : editedCategory.name}).then(function (message) {
@@ -134,7 +132,7 @@
 					};
 					
 					$(document).ready(function() {
-						$scope.refreshCategories();
+						$rootScope.refreshCategories();
 					});
 					
 

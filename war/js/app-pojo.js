@@ -4,6 +4,16 @@ var Editable = function() {
 	this.mode = 'readOnly';
 }
 
+Editable.prototype.editMode = function(){
+	this.copyForEdit = JSON.parse(JSON.stringify(this)); 
+	this.mode = "edit";
+}
+
+Editable.prototype.readOnlyMode = function(){
+	this.mode = "readOnly";
+	this.copyForEdit = null; 
+}
+
 Category.prototype = new Editable(); 
 Category.prototype.constructor=Category;       
 function Category(){ 
