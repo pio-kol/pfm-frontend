@@ -57,12 +57,6 @@ public class CategoryEndpoint {
 			if (cursor != null)
 				cursorString = cursor.toWebSafeString();
 
-			// Tight loop for fetching all entities from datastore and
-			// accomodate
-			// for lazy fetch.
-//			for (Category obj : execute)
-//				System.out.println(obj); // ugly trick to fetch parent id
-//				;
 		} finally {
 			mgr.close();
 		}
@@ -84,7 +78,6 @@ public class CategoryEndpoint {
 		Category category = null;
 		try {
 			category = mgr.getObjectById(Category.class, id);
-			System.out.println(category);
 		} finally {
 			mgr.close();
 		}

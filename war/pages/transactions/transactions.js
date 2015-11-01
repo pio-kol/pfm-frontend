@@ -30,10 +30,10 @@
 						newTransaction.date = new Date(data.date);
 						newTransaction.description = data.description;
 						newTransaction.comment = data.comment;
-						newTransaction.category.id = data.category != null ? data.category.id.id : null;
-						newTransaction.category.name = data.category != null ? data.category.name : null;
-						newTransaction.account.id = data.account != null ? data.account.id.id : null;
-						newTransaction.account.name = data.account != null ? data.account.name : null;;
+						newTransaction.category.id = data.categoryId;
+						newTransaction.category.name = "";
+						newTransaction.account.id = data.accountId;
+						newTransaction.account.name = "";
 						newTransaction.price = parseFloat(data.price);
 						
 						return newTransaction;
@@ -94,18 +94,8 @@
 							"description" : newTransaction.description,
 							"price" : newTransaction.price,
 							"comment" : newTransaction.comment,
-							"category" : {
-							    "id": 
-							    {
-							      "id": newTransaction.category.id
-							    }
-							  },
-							  "account" : {
-								    "id": 
-								    {
-								      "id": newTransaction.account.id
-								    }
-								  }
+							"categoryId" : newTransaction.category.id,
+        					"accountId" : newTransaction.account.id
 						}
 						
 						$http
@@ -137,18 +127,8 @@
 								"description" : editedTransaction.copyForEdit.description,
 								"price" : editedTransaction.copyForEdit.price,
 								"comment" : editedTransaction.copyForEdit.comment,
-								"category" : {
-								    "id": 
-								    {
-								      "id": editedTransaction.copyForEdit.category.id
-								    }
-								  },
-								  "account" : {
-									    "id": 
-									    {
-									      "id": editedTransaction.copyForEdit.account.id
-									    }
-									  }
+								"categoryId" : editedTransaction.copyForEdit.category.id,
+	        					"accountId" : editedTransaction.copyForEdit.account.id
 						}
 
 						$http

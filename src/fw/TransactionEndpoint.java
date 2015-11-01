@@ -30,7 +30,7 @@ public class TransactionEndpoint {
 	 * @return A CollectionResponse class containing the list of all entities
 	 *         persisted and a cursor to the next page.
 	 */
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings({ "unchecked" })
 	@ApiMethod(name = "listTransaction")
 	public CollectionResponse<Transaction> listTransaction(
 			@Nullable @Named("cursor") String cursorString,
@@ -59,11 +59,6 @@ public class TransactionEndpoint {
 			if (cursor != null)
 				cursorString = cursor.toWebSafeString();
 
-			// Tight loop for fetching all entities from datastore and
-			// accomodate
-			// for lazy fetch.
-			for (Transaction obj : execute)
-				System.out.println(obj);
 		} finally {
 			mgr.close();
 		}
@@ -86,7 +81,6 @@ public class TransactionEndpoint {
 		Transaction transaction = null;
 		try {
 			transaction = mgr.getObjectById(Transaction.class, id);
-			System.out.println(transaction); // to get category and account
 		} finally {
 			mgr.close();
 		}
@@ -108,28 +102,6 @@ public class TransactionEndpoint {
 		try {
 			if (transaction.getId() != null && containsTransaction(transaction)) {
 				throw new EntityExistsException("Object already exists");
-			}
-			if (transaction.getCategory() != null
-					&& transaction.getCategory().getId() != null) {
-				try {
-					Category category = mgr.getObjectById(Category.class, transaction
-							.getCategory().getId().getId());
-					transaction.setCategory(category);
-				} catch (javax.jdo.JDOObjectNotFoundException ex) {
-					throw new EntityNotFoundException(
-							"Category was not found - Please add category first");
-				}
-			}
-			if (transaction.getAccount() != null
-					&& transaction.getAccount().getId() != null) {
-				try {
-					Account account = mgr.getObjectById(Account.class, transaction
-							.getAccount().getId().getId());
-					transaction.setAccount(account);
-				} catch (javax.jdo.JDOObjectNotFoundException ex) {
-					throw new EntityNotFoundException(
-							"Account was not found - Please add account first");
-				}
 			}
 
 			mgr.makePersistent(transaction);
@@ -157,16 +129,6 @@ public class TransactionEndpoint {
 			}
 			// bug in GAE - NullPointer when namespace=null
 			transaction.setId(KeyFactory.createKey(Transaction.class.getSimpleName(), transaction.getId().getId()));
-			
-			if (transaction.getCategory() != null && transaction.getCategory().getId() != null) {
-				Category category = mgr.getObjectById(Category.class, transaction.getCategory().getId().getId());
-				transaction.setCategory(category);
-			}
-			
-			if (transaction.getAccount() != null && transaction.getAccount().getId() != null) {
-				Account account = mgr.getObjectById(Account.class, transaction.getAccount().getId().getId());
-				transaction.setAccount(account);
-			}
 			
 			mgr.makePersistent(transaction);
 		} finally {

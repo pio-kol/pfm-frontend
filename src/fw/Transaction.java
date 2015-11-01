@@ -1,6 +1,5 @@
 package fw;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -9,7 +8,6 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.datanucleus.annotations.Unowned;
 
 @PersistenceCapable
 public class Transaction {
@@ -27,13 +25,11 @@ public class Transaction {
 	@Persistent
 	private String comment;
 
-	@Unowned
 	@Persistent
-	private Category category;
+	private Long categoryId;
 
-	@Unowned
 	@Persistent
-	private Account account;
+	private Long accountId;
 
 	@Persistent
 	private String price;
@@ -70,20 +66,20 @@ public class Transaction {
 		this.comment = comment;
 	}
 
-	public Category getCategory() {
-		return category;
+	public Long getCategoryId() {
+		return categoryId;
 	}
 
-	public void setCategory(Category category) {
-		this.category = category;
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
 	}
 
-	public Account getAccount() {
-		return account;
+	public Long getAccountId() {
+		return accountId;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
 	}
 
 	public String getPrice() {
@@ -98,9 +94,9 @@ public class Transaction {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((account == null) ? 0 : account.hashCode());
+		result = prime * result + ((accountId == null) ? 0 : accountId.hashCode());
 		result = prime * result
-				+ ((category == null) ? 0 : category.hashCode());
+				+ ((categoryId == null) ? 0 : categoryId.hashCode());
 		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result
@@ -119,15 +115,15 @@ public class Transaction {
 		if (getClass() != obj.getClass())
 			return false;
 		Transaction other = (Transaction) obj;
-		if (account == null) {
-			if (other.account != null)
+		if (accountId == null) {
+			if (other.accountId != null)
 				return false;
-		} else if (!account.equals(other.account))
+		} else if (!accountId.equals(other.accountId))
 			return false;
-		if (category == null) {
-			if (other.category != null)
+		if (categoryId == null) {
+			if (other.categoryId != null)
 				return false;
-		} else if (!category.equals(other.category))
+		} else if (!categoryId.equals(other.categoryId))
 			return false;
 		if (comment == null) {
 			if (other.comment != null)
@@ -161,7 +157,7 @@ public class Transaction {
 	public String toString() {
 		return "Transaction [id=" + id + ", date=" + date + ", description="
 				+ description + ", comment=" + comment + ", category="
-				+ category + ", account=" + account + ", price=" + price + "]";
+				+ categoryId + ", account=" + accountId + ", price=" + price + "]";
 	}
 
 	
