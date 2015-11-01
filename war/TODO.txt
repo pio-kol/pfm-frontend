@@ -14,7 +14,7 @@
 - login / sign up
 
 -------- all -----------
-
+- testy
 
 -------- server side -------
 - server side validation
@@ -32,7 +32,3 @@
 - categories as tree widget
 - possibility to retire Account / Category (do not return but keep for reference for existing entries)
 - Focus input after clicking edit / add new
-
--------- big features ---------
-- export to Google spreedsheet
-- email with month summary
