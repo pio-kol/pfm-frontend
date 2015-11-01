@@ -34,7 +34,7 @@ Transaction.prototype = new Editable();
 Transaction.prototype.constructor=Transaction;       
 function Transaction() {
 	this.id = "";
-	this.date = "";
+	this.date = new Date();
 	this.description = "";
 	this.comment = "";
 	this.category = new Category();

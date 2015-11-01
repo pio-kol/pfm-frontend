@@ -170,7 +170,7 @@
 					};
 					
 					$(document).ready(function() {
-						$q.all($scope.refreshAccounts(), $scope.refreshCategories())
+						$q.all([$scope.refreshAccounts(), $scope.refreshCategories()])
 						.then(function(){
 							$scope.refreshTransactions();
 						});

@@ -1,7 +1,8 @@
 -------- categories --------
 - display only categories which don't cause cycles 
 - do not allow to remove category which have children, or transactions assigned
-- parent category sometimes not available
+- parent category sometimes not available (new)
+- parent category name does not update when category updated
 
 -------- accounts --------
 - constrains - do not allow to remove account which is assigned to transaction

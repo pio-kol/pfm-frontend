@@ -43,7 +43,7 @@
 				<td ng-switch-when="readOnly">{{ transaction.description }}</td>
 				<td ng-switch-when="readOnly">{{ transaction.category.name }}</td>
 				<td ng-switch-when="readOnly">{{ transaction.account.name }}</td>
-				<td ng-switch-when="readOnly">{{ transaction.price }}</td>
+				<td ng-switch-when="readOnly">{{ transaction.price | currency }}</td>
 				<td ng-switch-when="readOnly">{{ transaction.comment }}</td>
 				<td ng-switch-when="edit"><input required type="date" class="form-control" ng-model="transaction.copyForEdit.date" /></td>
 				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.copyForEdit.description" /></td>
