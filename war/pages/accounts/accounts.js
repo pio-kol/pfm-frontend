@@ -29,26 +29,38 @@ app
 						getAccount(id).mode = "edit";
 					};
 
-					$scope.cancelEditAccount = function(id) {
-						getAccount(id).mode = "readOnly";
-						$scope.refreshAccounts();
+					$scope.cancelEditAccount = function(editedAccount) {
+						$http
+						.get($rootScope.accountsURL + editedAccount.id)
+						.then(
+								function(response) {
+									var accountFromServer = $rootScope.createNewAccount(response.data);
+									$scope.accounts[$scope.accounts.indexOf(editedAccount)] = accountFromServer;
+
+									getAccount(editedAccount.id).mode = "readOnly";
+								},
+								function(response) {
+									$translate('ERROR_DATA_RETRIVE').then(function (message) {
+									    addAlert(message, response);
+									  });
+								});
 					};
 
-					$scope.removeAccount = function(id, accountName) {
-						$translate('CONFIRM_REMOVE_ACCOUNT', {name : accountName}).then(function (message) {
+					$scope.removeAccount = function(accountToDelete) {
+						$translate('CONFIRM_REMOVE_ACCOUNT', {name : accountToDelete.name}).then(function (message) {
 						bootbox
 								.confirm(message,
 										function(result) {
 											if (!result) {
 												return;
 											}
-											$http.delete($rootScope.accountsURL + id)
+											$http.delete($rootScope.accountsURL + accountToDelete.id)
 											.then(
 													function(response) {
-														$scope.refreshAccounts();
+														$scope.accounts.splice($scope.accounts.indexOf(accountToDelete), 1);
 													},
 													function(response) {
-														$translate('ERROR_ACCOUNT_REMOVE', {name : accountName}).then(function (message) {
+														$translate('ERROR_ACCOUNT_REMOVE', {name : accountToDelete.name}).then(function (message) {
 														    addAlert(message, response);
 														  });
 													});
@@ -70,7 +82,9 @@ app
 								.then(
 										function(response) {
 											editedAccount.mode = "readOnly";
-											$scope.refreshAccounts();
+
+											var updatedAccount = $rootScope.createNewAccount(response.data);
+											$scope.accounts[$scope.accounts.indexOf(editedAccount)] = updatedAccount;
 										},
 										function(response) {
 											$translate('ERROR_ACCOUNT_MODIFY', {name : editedAccount.name}).then(function (message) {
@@ -92,7 +106,9 @@ app
 											$scope.newAccount = new Account();
 											$scope.newAccountForm
 													.$setPristine();
-											$scope.refreshAccounts();
+											
+											var newAccount = $rootScope.createNewAccount(response.data);
+											$scope.accounts.push(newAccount);
 										},
 										function(response) {
 											$translate('ERROR_ACCOUNT_ADD', {name : newAccount.name}).then(function (message) {

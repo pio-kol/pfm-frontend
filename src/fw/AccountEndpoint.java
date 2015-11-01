@@ -84,6 +84,7 @@ public class AccountEndpoint {
     Account account  = null;
     try {
       account = mgr.getObjectById(Account.class, id);
+      System.out.println(account);
     } finally {
       mgr.close();
     }

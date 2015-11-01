@@ -5,7 +5,6 @@
 
 -------- accounts --------
 - constrains - do not allow to remove account which is assigned to transaction
-- add account to model after successful put / post, then accounts categories
 
 -------- transactions --------
 - Keep only category and account id (as long) and gather other category date on user side
@@ -19,6 +18,7 @@
 - each user should have seperate namespace
 - service calls available only to logged in users
 - i18n
+- why data change is not reflected immediately?
 
 -------- nice to have --------
 - deep linking with operation (new account / edit account etc.)

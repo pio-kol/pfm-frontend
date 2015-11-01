@@ -43,6 +43,15 @@ app
 						});
 			};
 
+			$rootScope.createNewAccount = function(data) {
+				var newAccount = new Account();
+				newAccount.id = data.id.id;
+				newAccount.name = data.name;
+				newAccount.value = data.state;
+				
+				return newAccount;
+			}
+
 			$rootScope.refreshAccounts = function() {
 
 				$http.get($rootScope.accountsURL).then(function(response) {
@@ -52,11 +61,7 @@ app
 
 					if (data.items != null) {
 						for (i = 0; i < data.items.length; ++i) {
-							var newAccount = new Account();
-							newAccount.id = data.items[i].id.id;
-							newAccount.name = data.items[i].name;
-							newAccount.value = data.items[i].state;
-
+							var newAccount = $rootScope.createNewAccount(data.items[i]);
 							$rootScope.accounts.push(newAccount);
 						}
 					}
