@@ -10,6 +10,8 @@ import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.datanucleus.query.JDOCursorHelper;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,12 +32,24 @@ public class TransactionEndpoint {
 	 * @return A CollectionResponse class containing the list of all entities
 	 *         persisted and a cursor to the next page.
 	 */
-	@SuppressWarnings({ "unchecked" })
 	@ApiMethod(name = "listTransaction")
-	public CollectionResponse<Transaction> listTransaction(
-			@Nullable @Named("cursor") String cursorString,
-			@Nullable @Named("limit") Integer limit) {
+	public CollectionResponse<Transaction> listTransaction(@Nullable @Named("cursor") String cursorString, @Nullable @Named("limit") Integer limit,
+			@Nullable @Named("descriptionContains") String description, @Nullable @Named("dateFrom") Date dateFrom, @Nullable @Named("dateTo") Date dateTo) {
+ 
+		Pair<List<Transaction>, String> result = getTransactions(cursorString, limit);
 
+		List<Transaction> filteredTransactions = new Filter() //
+				.descriptionContains(description) //
+				.dateFrom(dateFrom) //
+				.dateTo(dateTo) //
+				.filter(result.getLeft());
+
+		return CollectionResponse.<Transaction> builder().setItems(filteredTransactions).setNextPageToken(result.getRight()).build();
+	}
+
+	// FIXME limit should be done at the end
+	@SuppressWarnings("unchecked")
+	private Pair<List<Transaction>, String> getTransactions(String cursorString, Integer limit) {
 		PersistenceManager mgr = null;
 		Cursor cursor = null;
 		List<Transaction> execute = null;
@@ -63,8 +77,7 @@ public class TransactionEndpoint {
 			mgr.close();
 		}
 
-		return CollectionResponse.<Transaction> builder().setItems(execute)
-				.setNextPageToken(cursorString).build();
+		return Pair.of(execute, cursorString);
 	}
 
 	/**
@@ -129,7 +142,7 @@ public class TransactionEndpoint {
 			}
 			// bug in GAE - NullPointer when namespace=null
 			transaction.setId(KeyFactory.createKey(Transaction.class.getSimpleName(), transaction.getId().getId()));
-			
+
 			mgr.makePersistent(transaction);
 		} finally {
 			mgr.close();
