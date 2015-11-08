@@ -8,7 +8,7 @@ webAppDirName = 'war'
 ext {
    springVersion = '3.2.6.RELEASE'
    appEngineHome = "$System.env.APPENGINE_HOME"
-   appEngineSdkVersion = '1.9.27'
+   appEngineSdkVersion = '1.9.28'
 }
 
 buildscript {
@@ -17,7 +17,6 @@ buildscript {
    }
    dependencies {
       classpath 'com.google.appengine:gradle-appengine-plugin:1.9.27'
-	  //appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.27'
    }
 }
 
