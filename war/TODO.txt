@@ -16,6 +16,7 @@
 
 -------- all -----------
 - testy
+- start repo from scratch without libraries - or remove libraries from repo history
 
 -------- server side -------
 - server side validation
