@@ -17,6 +17,7 @@
 -------- all -----------
 - testy
 - formatter for code
+- frontend and backend as separate projects
 
 -------- server side -------
 - server side validation
