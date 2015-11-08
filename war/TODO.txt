@@ -16,7 +16,6 @@
 
 -------- all -----------
 - testy
-- start repo from scratch without libraries - or remove libraries from repo history
 - formatter for code
 
 -------- server side -------
