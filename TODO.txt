@@ -8,7 +8,9 @@
 - constrains - do not allow to remove account which is assigned to transaction
 
 -------- transactions --------
-
+- save date always with time 00:00:00
+- description contains - to websafe (all parameters)
+- update url when search parameter changed and filter applied
 
 -------- navigation --------
 - mark selected view
@@ -17,14 +19,14 @@
 -------- all -----------
 - testy
 - formatter for code
-- frontend and backend as separate projects
+- logging of operations
 
 -------- server side -------
 - server side validation
 - each user should have seperate namespace
 - service calls available only to logged in users
 - i18n
-- why data change is not reflected immediately?
+
 
 -------- nice to have --------
 - deep linking with operation (new account / edit account etc.)

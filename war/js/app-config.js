@@ -98,7 +98,7 @@ app
 
 					$stateProvider //
 					.state("transactions", {
-						url : "/transactions",
+						url : "/transactions?dateFrom&dateTo&descriptionContains",
 						templateUrl : 'pages/transactions/transactions.html'
 					})//
 					.state("categories", {

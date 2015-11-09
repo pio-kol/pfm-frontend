@@ -32,23 +32,31 @@ public class TransactionEndpoint {
 	 *         persisted and a cursor to the next page.
 	 */
 	@ApiMethod(name = "listTransaction")
-	public CollectionResponse<Transaction> listTransaction(@Nullable @Named("cursor") String cursorString, @Nullable @Named("limit") Integer limit,
-			@Nullable @Named("descriptionContains") String description, @Nullable @Named("dateFrom") Date dateFrom, @Nullable @Named("dateTo") Date dateTo) {
- 
-		Pair<List<Transaction>, String> result = getTransactions(cursorString, limit);
+	public CollectionResponse<Transaction> listTransaction(
+			@Nullable @Named("cursor") String cursorString,
+			@Nullable @Named("limit") Integer limit,
+			@Nullable @Named("descriptionContains") String description,
+			@Nullable @Named("dateFrom") Date dateFrom,
+			@Nullable @Named("dateTo") Date dateTo) {
 
+		// sort by date is done directly in DB to limit number of processed entries
+		Pair<List<Transaction>, String> result = getTransactions(cursorString,
+				limit, dateFrom, dateTo);
+
+		// other filters are implemented on results as GAE does not support multiple filters in query
 		List<Transaction> filteredTransactions = new Filter() //
 				.descriptionContains(description) //
-				.dateFrom(dateFrom) //
-				.dateTo(dateTo) //
 				.filter(result.getLeft());
 
-		return CollectionResponse.<Transaction> builder().setItems(filteredTransactions).setNextPageToken(result.getRight()).build();
+		return CollectionResponse.<Transaction> builder()
+				.setItems(filteredTransactions)
+				.setNextPageToken(result.getRight()).build();
 	}
 
 	// FIXME limit should be done at the end
 	@SuppressWarnings("unchecked")
-	private Pair<List<Transaction>, String> getTransactions(String cursorString, Integer limit) {
+	private Pair<List<Transaction>, String> getTransactions(
+			String cursorString, Integer limit, Date dateFrom, Date dateTo) {
 		PersistenceManager mgr = null;
 		Cursor cursor = null;
 		List<Transaction> execute = null;
@@ -56,6 +64,7 @@ public class TransactionEndpoint {
 		try {
 			mgr = getPersistenceManager();
 			Query query = mgr.newQuery(Transaction.class);
+
 			if (cursorString != null && cursorString != "") {
 				cursor = Cursor.fromWebSafeString(cursorString);
 				HashMap<String, Object> extensionMap = new HashMap<String, Object>();
@@ -67,7 +76,22 @@ public class TransactionEndpoint {
 				query.setRange(0, limit);
 			}
 
-			execute = (List<Transaction>) query.execute();
+			if (dateFrom != null && dateTo != null) {
+				query.setFilter("date >= dateFromParam && date <= dateToParam");
+				query.declareParameters("java.util.Date dateFromParam, java.util.Date dateToParam");
+				execute = (List<Transaction>) query.execute(dateFrom, dateTo);
+			} else if (dateFrom != null) {
+				query.setFilter("date >= dateFromParam");
+				query.declareParameters("java.util.Date dateFromParam");
+				execute = (List<Transaction>) query.execute(dateFrom);
+			} else if (dateTo != null) {
+				query.setFilter("date <= dateToParam");
+				query.declareParameters("java.util.Date dateToParam");
+				execute = (List<Transaction>) query.execute(dateTo);
+			} else {
+				execute = (List<Transaction>) query.execute();
+			}
+
 			cursor = JDOCursorHelper.getCursor(execute);
 			if (cursor != null)
 				cursorString = cursor.toWebSafeString();
@@ -140,7 +164,8 @@ public class TransactionEndpoint {
 				throw new EntityNotFoundException("Object does not exist");
 			}
 			// bug in GAE - NullPointer when namespace=null
-			transaction.setId(KeyFactory.createKey(Transaction.class.getSimpleName(), transaction.getId().getId()));
+			transaction.setId(KeyFactory.createKey(Transaction.class
+					.getSimpleName(), transaction.getId().getId()));
 
 			mgr.makePersistent(transaction);
 		} finally {

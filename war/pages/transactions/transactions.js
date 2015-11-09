@@ -1,9 +1,9 @@
 		app.controller(
 				'transactionsController', 
-				function($scope, $rootScope, $http, $translate, $q) {
+				function($scope, $rootScope, $http, $translate, $q, $stateParams) {
 					$scope.orderByField = 'date';
 					$scope.reverseSort = false;
-
+					
 					$scope.newTransaction = new Transaction();
 					
 					$scope.addNewTransaction = function(id) {
@@ -58,9 +58,13 @@
 					}
 					
 					$scope.refreshTransactions = function() {
-
+						var url = $rootScope.transactionsURL + "?";
+						url = $stateParams.dateFrom != null ? url + "dateFrom=" + $stateParams.dateFrom + "&" : url;
+						url = $stateParams.dateTo != null ? url + "&dateTo=" + $stateParams.dateTo + "&" : url;
+						url = $stateParams.descriptionContains != null ? url + "&descriptionContains=" + $stateParams.descriptionContains + "&" : url;
+						
 						$http
-						.get($rootScope.transactionsURL)
+						.get(url)
 						.then(
 								function(response) {
 									$scope.transactions = [];
