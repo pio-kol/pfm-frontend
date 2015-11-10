@@ -3,7 +3,8 @@ app
 				'$translateProvider',
 				'$stateProvider',
 				'$urlRouterProvider',
-				function($translateProvider, $stateProvider, $urlRouterProvider) {
+				'$locationProvider',
+				function($translateProvider, $stateProvider, $urlRouterProvider, $locationProvider) {
 					var translations_pl = {
 						MAIN_CATEGORY : 'Kategoria główna',
 						SAVE : 'Zapisz',
@@ -94,6 +95,8 @@ app
 					.translations('en', translations_en) //
 					.preferredLanguage('en');
 
+					//$locationProvider.html5Mode(true);
+					
 					$urlRouterProvider.otherwise('/transactions');
 
 					$stateProvider //

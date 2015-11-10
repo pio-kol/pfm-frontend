@@ -1,12 +1,21 @@
 		app.controller(
 				'transactionsController', 
-				function($scope, $rootScope, $http, $translate, $q, $stateParams) {
+				function($scope, $rootScope, $http, $translate, $q, $stateParams, $state) {
 					$scope.orderByField = 'date';
 					$scope.reverseSort = false;
 					
 					$scope.newTransaction = new Transaction();
 					
 					$scope.transactionsFilter = new TransactionsFilter();
+					if ($stateParams.dateFrom != null){
+						$scope.transactionsFilter.dateFrom = new Date($stateParams.dateFrom); 
+					}
+					if ($stateParams.dateTo != null){
+						$scope.transactionsFilter.dateTo = new Date($stateParams.dateTo); 
+					}
+					if ($stateParams.descriptionContains != null){
+						$scope.transactionsFilter.description = $stateParams.descriptionContains; 
+					}
 					
 					$scope.addNewTransaction = function(id) {
 						$scope.newTransaction.visible = true;
@@ -59,11 +68,26 @@
 						}
 					}
 					
+					function convertDateToString(date){
+						var dd = date.getDate();
+						var mm = date.getMonth()+1; //January is 0!
+						var yyyy = date.getFullYear();
+						if(dd<10){dd='0'+dd};
+						if(mm<10){mm='0'+mm};
+						return "" + yyyy + "-" + mm + "-" + dd;
+					}
+					
 					$scope.refreshTransactions = function() {
+						dateFrom = $scope.transactionsFilter.dateFrom != null ? convertDateToString($scope.transactionsFilter.dateFrom) : null;
+						dateTo = $scope.transactionsFilter.dateTo != null ? convertDateToString($scope.transactionsFilter.dateTo) : null;
+
 						var url = $rootScope.transactionsURL + "?";
-						url = $stateParams.dateFrom != null ? url + "dateFrom=" + $stateParams.dateFrom + "&" : url;
-						url = $stateParams.dateTo != null ? url + "&dateTo=" + $stateParams.dateTo + "&" : url;
-						url = $stateParams.descriptionContains != null ? url + "&descriptionContains=" + $stateParams.descriptionContains + "&" : url;
+						url = dateFrom != null ? url + "dateFrom=" + dateFrom + "&" : url;
+						url = dateTo != null ? url + "dateTo=" + dateTo + "&" : url;
+						url = $scope.transactionsFilter.description != null ? url + "&descriptionContains=" + $scope.transactionsFilter.description + "&" : url;
+						
+						
+						$state.transitionTo('transactions', {descriptionContains: $scope.transactionsFilter.description, dateFrom: dateFrom, dateTo: dateTo}, { notify: false });
 						
 						$http
 						.get(url)
