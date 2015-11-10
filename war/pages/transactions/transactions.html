@@ -26,8 +26,8 @@
 				<th />
 			</tr>
 			<tr>
-				<th><input type="date" class="form-control" ng-model="transaction.copyForEdit.date" /></th>
-				<th><input required type="text" class="form-control" ng-model="transaction.copyForEdit.description" /></th>
+				<th><input type="date" class="form-control" ng-model="transactionsFilter.dateFrom" /><input type="date" class="form-control" ng-model="transactionsFilter.dateTo" /></th>
+				<th><input type="text" class="form-control" ng-model="transactionsFilter.description" /></th>
 				<th><select chosen required class="form-control" ng-model="transaction.copyForEdit.category.id"
 					ng-options="category.id as category.name for category in categories"></select></th>
 				<th><select chosen required class="form-control" ng-model="transaction.copyForEdit.account.id"

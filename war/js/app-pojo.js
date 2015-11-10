@@ -41,3 +41,11 @@ function Transaction() {
 	this.account = new Account();
 	this.price = 0.00;
 };
+
+var TransactionsFilter = function() {
+	this.dateFrom = new Date();
+	this.dateFrom.setMonth(this.dateFrom.getMonth()-1)
+	this.dateTo = new Date();
+	this.description = "";
+	
+}

@@ -6,6 +6,8 @@
 					
 					$scope.newTransaction = new Transaction();
 					
+					$scope.transactionsFilter = new TransactionsFilter();
+					
 					$scope.addNewTransaction = function(id) {
 						$scope.newTransaction.visible = true;
 					}
