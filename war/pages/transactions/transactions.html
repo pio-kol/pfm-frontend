@@ -2,17 +2,7 @@
 
 	<div id="alerts"></div>
 
-	<div class="btn-group pull-right" role="group">
-		<button class="btn btn-info" ng-click="addNewTransaction()">
-			<span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;{{ "NEW_TRANSACTION" | translate }}
-		</button>
-
-		<button id="refreshButton" class="btn btn-info " ng-click="refreshTransactions()">
-			<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;{{ "REFRESH" | translate }}
-		</button>
-	</div>
-
-	<table class="table table-striped">
+		<table class="table table-striped">
 		<thead>
 			<tr>
 				<th><a href="#/transactions" ng-click="orderByField='date'; reverseSort = !reverseSort"> {{"TRANSACTION_DATE" | translate}} <span
@@ -33,6 +23,20 @@
 				<th><a href="#/transactions" ng-click="orderByField='comment'; reverseSort = !reverseSort"> {{"TRANSACTION_COMMENT" | translate}} <span
 						ng-show="orderByField == 'comment'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
 				</a></th>
+				<th />
+			</tr>
+			<tr>
+				<th><input type="date" class="form-control" ng-model="transaction.copyForEdit.date" /></th>
+				<th><input required type="text" class="form-control" ng-model="transaction.copyForEdit.description" /></th>
+				<th><select chosen required class="form-control" ng-model="transaction.copyForEdit.category.id"
+					ng-options="category.id as category.name for category in categories"></select></th>
+				<th><select chosen required class="form-control" ng-model="transaction.copyForEdit.account.id"
+					ng-options="account.id as account.name for account in accounts"></select></th>
+				<th><input required type="number" class="form-control" ng-model="transaction.copyForEdit.price" /></th>
+				<th><input type="text" class="form-control" ng-model="transaction.copyForEdit.comment" /></th>
+				<th><button id="refreshButton" class="btn btn-info " ng-click="refreshTransactions()">
+						<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;{{ "REFRESH" | translate }}
+					</button></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -90,6 +94,22 @@
 
 					<button class="btn btn-warning" ng-click="cancelAddNewTransaction()">
 						<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;{{ "CANCEL" | translate }}
+					</button>
+				</td>
+			</tr>
+
+			<tr>
+				<td />
+				<td />
+				<td />
+				<td />
+				<td />
+				<td />
+
+
+				<td>
+					<button class="btn btn-info" ng-click="addNewTransaction()">
+						<span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;{{ "NEW_TRANSACTION" | translate }}
 					</button>
 				</td>
 			</tr>
