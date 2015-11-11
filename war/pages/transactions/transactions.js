@@ -5,8 +5,17 @@
 					$scope.reverseSort = false;
 					
 					$scope.newTransaction = new Transaction();
-					
 					$scope.transactionsFilterState = new TransactionsFilter();
+					
+					$scope.priceRangeChoiceOptions = [];
+					// to make value selected by default
+					$scope.priceRangeChoiceOptions.push($scope.transactionsFilterState.priceRange); 
+					$scope.priceRangeChoiceOptions.push({description : "Income", priceFrom : null, priceTo : 0});
+					$scope.priceRangeChoiceOptions.push({description : "Income > 1000", priceFrom : -1000, priceTo : 0});
+					$scope.priceRangeChoiceOptions.push({description : "Spending", priceFrom : 0, priceTo : null});
+					$scope.priceRangeChoiceOptions.push({description : "Spending <0, 100>", priceFrom : 0, priceTo : 100});
+					$scope.priceRangeChoiceOptions.push({description : "Spending > 100", priceFrom : 100, priceTo : null});
+					
 					if ($stateParams.dateFrom != null){
 						$scope.transactionsFilterState.dateRange.startDate = moment($stateParams.dateFrom); 
 					}
@@ -16,11 +25,16 @@
 					if ($stateParams.descriptionContains != null){
 						$scope.transactionsFilterState.description = $stateParams.descriptionContains; 
 					}
-					if ($stateParams.priceFrom != null){
-						$scope.transactionsFilterState.priceFrom = parseFloat($stateParams.priceFrom); 
-					}
-					if ($stateParams.priceTo != null){
-						$scope.transactionsFilterState.priceTo = parseFloat($stateParams.priceTo); 
+					
+					if ($stateParams.priceFrom != null && $stateParams.priceTo != null){
+						$scope.transactionsFilterState.priceRange = {description : "Custom <" + $stateParams.priceFrom +  ", " + $stateParams.priceTo + ">", priceFrom : parseFloat($stateParams.priceFrom), priceTo : parseFloat($stateParams.priceTo)} 
+						$scope.priceRangeChoiceOptions.push($scope.transactionsFilterState.priceRange); 
+					} else if ($stateParams.priceFrom != null){
+						$scope.transactionsFilterState.priceRange = {description : "Custom > " + $stateParams.priceFrom, priceFrom : parseFloat($stateParams.priceFrom), priceTo : null} 
+						$scope.priceRangeChoiceOptions.push($scope.transactionsFilterState.priceRange); 
+					} else if ($stateParams.priceTo != null){
+						$scope.transactionsFilterState.priceRange = {description : "Custom < " + $stateParams.priceTo, priceFrom : null, priceTo : parseFloat($stateParams.priceTo)} 
+						$scope.priceRangeChoiceOptions.push($scope.transactionsFilterState.priceRange); 
 					}
 					if ($stateParams.commentContains != null){
 						$scope.transactionsFilterState.comment = $stateParams.commentContains; 
@@ -30,7 +44,7 @@
 						var dateFrom = $scope.transactionsFilterState.dateRange.startDate.format("YYYY-MM-DD"); 
 						var dateTo = $scope.transactionsFilterState.dateRange.endDate.format("YYYY-MM-DD");
 						
-						$state.transitionTo('transactions', {descriptionContains: $scope.transactionsFilterState.description, commentContains: $scope.transactionsFilterState.comment, dateFrom: dateFrom, dateTo: dateTo, priceFrom: $scope.transactionsFilterState.priceFrom, priceTo: $scope.transactionsFilterState.priceTo}, { notify: false });
+						$state.transitionTo('transactions', {descriptionContains: $scope.transactionsFilterState.description, commentContains: $scope.transactionsFilterState.comment, dateFrom: dateFrom, dateTo: dateTo, priceFrom: $scope.transactionsFilterState.priceRange.priceFrom, priceTo: $scope.transactionsFilterState.priceRange.priceTo}, { notify: false });
 						
 						if ($scope.transactionsFilterState.description != null && $scope.transactionsFilterState.description !== "" &&
 								(transaction.description == null || !(transaction.description.indexOf($scope.transactionsFilterState.description) > -1))){
@@ -42,13 +56,13 @@
 									return false;
 						}
 						
-						if ($scope.transactionsFilterState.priceFrom !== null && 
-								(transaction.price === null || !(transaction.price >= $scope.transactionsFilterState.priceFrom))){
+						if ($scope.transactionsFilterState.priceRange.priceFrom !== null && 
+								(transaction.price === null || !(transaction.price >= $scope.transactionsFilterState.priceRange.priceFrom))){
 									return false;
 						}
 						
-						if ($scope.transactionsFilterState.priceTo !== null && 
-								(transaction.price === null || !(transaction.price <= $scope.transactionsFilterState.priceTo))){
+						if ($scope.transactionsFilterState.priceRange.priceTo !== null && 
+								(transaction.price === null || !(transaction.price <= $scope.transactionsFilterState.priceRange.priceTo))){
 									return false;
 						}
 						

@@ -46,7 +46,7 @@ var TransactionsFilter = function() {
 	this.dateRange = {startDate: moment().startOf('month'), endDate: moment().endOf('month')};
 	this.description = "";
 	this.comment = "";
-	this.priceFrom = null;
+	this.priceRange = {description : "All", priceFrom : null, priceTo : null};
 	this.priceTo = null;
 }
 

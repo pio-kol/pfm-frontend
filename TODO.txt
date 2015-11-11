@@ -14,6 +14,7 @@
 - support for decimals in price
 - clear filters button
 - translate date range picker options
+- price range translate, support for not standard range (select correct value) + think about changing parameger to priceRange=<0,10>
 
 -------- navigation --------
 - mark selected view

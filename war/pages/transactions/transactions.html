@@ -29,12 +29,12 @@
 				<th><input date-range-picker type="text" name="filter-date-from" class="form-control date-picker" ng-model="transactionsFilterState.dateRange"
 					options="datePickerConfig" /></th>
 				<th><input type="text" class="form-control" ng-model="transactionsFilterState.description" /></th>
-				<th><select chosen required class="form-control" ng-model="transaction.copyForEdit.category.id"
+				<th><select chosen class="form-control" ng-model="transaction.copyForEdit.category.id"
 					ng-options="category.id as category.name for category in categories"></select></th>
-				<th><select chosen required class="form-control" ng-model="transaction.copyForEdit.account.id"
+				<th><select chosen class="form-control" ng-model="transaction.copyForEdit.account.id"
 					ng-options="account.id as account.name for account in accounts"></select></th>
-				<th><input type="number" class="form-control" ng-model="transactionsFilterState.priceFrom" /> <input type="number" class="form-control"
-					ng-model="transactionsFilterState.priceTo" /></th>
+				<th><select chosen class="form-control" ng-model="transactionsFilterState.priceRange"
+					ng-options="priceRange as priceRange.description for priceRange in priceRangeChoiceOptions"></select></th>
 				<th><input type="text" class="form-control" ng-model="transactionsFilterState.comment" /></th>
 				<th />
 			</tr>
