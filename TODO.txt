@@ -12,6 +12,7 @@
 - description contains - to websafe (all parameters)
 - update url when search parameter changed and filter applied
 - support for decimals in price
+- clear filters button
 
 -------- navigation --------
 - mark selected view
