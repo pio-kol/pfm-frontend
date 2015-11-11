@@ -29,7 +29,7 @@
 				<th><input date-range-picker type="text" name="filter-date-from" class="form-control date-picker" ng-model="transactionsFilterState.dateRange"
 					options="datePickerConfig" /></th>
 				<th><input type="text" class="form-control" ng-model="transactionsFilterState.description" /></th>
-				<th><select chosen class="form-control" ng-model="transaction.copyForEdit.category.id"
+				<th><select chosen multiple class="form-control" ng-model="transactionsFilterState.categories"
 					ng-options="category.id as category.name for category in categories"></select></th>
 				<th><select chosen multiple class="form-control" ng-model="transactionsFilterState.accounts"
 					ng-options="account.id as account.name for account in accounts"></select></th>

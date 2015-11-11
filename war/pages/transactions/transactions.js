@@ -46,12 +46,19 @@
 							$scope.transactionsFilterState.accounts = $stateParams.accounts;
 						}
 					}
+					if ($stateParams.categories != null){
+						if(typeof $stateParams.categories === 'string' ) {
+							$scope.transactionsFilterState.categories.push($stateParams.categories); 
+						} else { // array
+							$scope.transactionsFilterState.categories = $stateParams.categories;
+						}
+					}
 					
 					$scope.transactionsFilter = function(transaction) {
 						var dateFrom = $scope.transactionsFilterState.dateRange.startDate.format("YYYY-MM-DD"); 
 						var dateTo = $scope.transactionsFilterState.dateRange.endDate.format("YYYY-MM-DD");
 						
-						$state.transitionTo('transactions', {descriptionContains: $scope.transactionsFilterState.description, commentContains: $scope.transactionsFilterState.comment, dateFrom: dateFrom, dateTo: dateTo, priceFrom: $scope.transactionsFilterState.priceRange.priceFrom, priceTo: $scope.transactionsFilterState.priceRange.priceTo, accounts: $scope.transactionsFilterState.accounts}, { notify: false });
+						$state.transitionTo('transactions', {descriptionContains: $scope.transactionsFilterState.description, commentContains: $scope.transactionsFilterState.comment, dateFrom: dateFrom, dateTo: dateTo, priceFrom: $scope.transactionsFilterState.priceRange.priceFrom, priceTo: $scope.transactionsFilterState.priceRange.priceTo, accounts: $scope.transactionsFilterState.accounts, categories: $scope.transactionsFilterState.categories}, { notify: false });
 						
 						if ($scope.transactionsFilterState.description != null && $scope.transactionsFilterState.description !== "" &&
 								(transaction.description == null || !(transaction.description.indexOf($scope.transactionsFilterState.description) > -1))){
@@ -75,6 +82,11 @@
 						
 						if ($scope.transactionsFilterState.accounts.length > 0 && 
 								(transaction.account.id === null || !($scope.transactionsFilterState.accounts.indexOf(transaction.account.id) > -1))){
+									return false;
+						}
+						
+						if ($scope.transactionsFilterState.categories.length > 0 && 
+								(transaction.category.id === null || !($scope.transactionsFilterState.categories.indexOf(transaction.category.id) > -1))){
 									return false;
 						}
 						

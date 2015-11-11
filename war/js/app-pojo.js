@@ -49,5 +49,6 @@ var TransactionsFilter = function() {
 	this.priceRange = {description : "All", priceFrom : null, priceTo : null};
 	this.priceTo = null;
 	this.accounts = [];
+	this.categories = [];
 }
 
