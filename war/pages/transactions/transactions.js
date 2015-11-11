@@ -42,13 +42,13 @@
 									return false;
 						}
 						
-						if ($scope.transactionsFilterState.priceFrom != null && 
-								(transaction.price == null || !(transaction.price >= $scope.transactionsFilterState.priceFrom))){
+						if ($scope.transactionsFilterState.priceFrom !== null && 
+								(transaction.price === null || !(transaction.price >= $scope.transactionsFilterState.priceFrom))){
 									return false;
 						}
 						
-						if ($scope.transactionsFilterState.priceTo != null && 
-								(transaction.price == null || !(transaction.price <= $scope.transactionsFilterState.priceTo))){
+						if ($scope.transactionsFilterState.priceTo !== null && 
+								(transaction.price === null || !(transaction.price <= $scope.transactionsFilterState.priceTo))){
 									return false;
 						}
 						
