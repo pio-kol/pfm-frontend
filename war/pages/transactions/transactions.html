@@ -1,4 +1,4 @@
-<div class="container" ng-controller="transactionsController" novalidate>
+<div class="container-fluid" ng-controller="transactionsController" novalidate>
 
 	<div id="alerts"></div>
 
@@ -26,8 +26,7 @@
 				<th />
 			</tr>
 			<tr>
-				<th><input type="date" class="form-control" ng-model="transactionsFilterState.dateFrom" /> <input type="date" class="form-control"
-					ng-model="transactionsFilterState.dateTo" /></th>
+				<th><input type="text" name="filter-date-from" class="form-control col-xs-4" ng-model="transactionsFilterState.dateFrom" /> </th>
 				<th><input type="text" class="form-control" ng-model="transactionsFilterState.description" /></th>
 				<th><select chosen required class="form-control" ng-model="transaction.copyForEdit.category.id"
 					ng-options="category.id as category.name for category in categories"></select></th>

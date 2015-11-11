@@ -115,8 +115,6 @@
 						url = dateFrom != null ? url + "dateFrom=" + dateFrom + "&" : url;
 						url = dateTo != null ? url + "dateTo=" + dateTo + "&" : url;
 						
-						//$state.transitionTo('transactions', {descriptionContains: $scope.transactionsFilterState.description, commentContains: $scope.transactionsFilterState.comment, dateFrom: dateFrom, dateTo: dateTo, priceFrom: $scope.transactionsFilter.priceFrom, priceTo: $scope.transactionsFilter.priceTo}, { notify: false });
-						
 						$http
 						.get(url)
 						.then(
@@ -232,6 +230,18 @@
 						.then(function(){
 							$scope.refreshTransactions();
 						});
+						
+						$('input[name="filter-date-from"]').daterangepicker({
+							"autoApply": true,
+							ranges: {
+						           'Today': [moment(), moment()],
+						           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+						           'This Week': [moment().startOf('week'), moment().endOf('week')],
+						           'Last Week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+						           'This Month': [moment().startOf('month'), moment().endOf('month')],
+						           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+						        }
+					    });
 					});
 
 				});
