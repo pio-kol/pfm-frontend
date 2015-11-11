@@ -32,7 +32,7 @@ public class Transaction {
 	private Long accountId;
 
 	@Persistent
-	private String price;
+	private Long price;
 
 	public Key getId() {
 		return id;
@@ -82,11 +82,11 @@ public class Transaction {
 		this.accountId = accountId;
 	}
 
-	public String getPrice() {
+	public Long getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(Long price) {
 		this.price = price;
 	}
 

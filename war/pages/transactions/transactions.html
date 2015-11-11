@@ -2,7 +2,7 @@
 
 	<div id="alerts"></div>
 
-		<table class="table table-striped">
+	<table class="table table-striped">
 		<thead>
 			<tr>
 				<th><a href="#/transactions" ng-click="orderByField='date'; reverseSort = !reverseSort"> {{"TRANSACTION_DATE" | translate}} <span
@@ -26,14 +26,15 @@
 				<th />
 			</tr>
 			<tr>
-				<th><input type="date" class="form-control" ng-model="transactionsFilter.dateFrom" /><input type="date" class="form-control" ng-model="transactionsFilter.dateTo" /></th>
+				<th><input type="date" class="form-control" ng-model="transactionsFilter.dateFrom" /> <input type="date" class="form-control"
+					ng-model="transactionsFilter.dateTo" /></th>
 				<th><input type="text" class="form-control" ng-model="transactionsFilter.description" /></th>
 				<th><select chosen required class="form-control" ng-model="transaction.copyForEdit.category.id"
 					ng-options="category.id as category.name for category in categories"></select></th>
 				<th><select chosen required class="form-control" ng-model="transaction.copyForEdit.account.id"
 					ng-options="account.id as account.name for account in accounts"></select></th>
-				<th><input required type="number" class="form-control" ng-model="transaction.copyForEdit.price" /></th>
-				<th><input type="text" class="form-control" ng-model="transaction.copyForEdit.comment" /></th>
+				<th><input type="number" class="form-control" ng-model="transactionsFilter.priceFrom" /><input type="number" class="form-control" ng-model="transactionsFilter.priceTo" /></th>
+				<th><input type="text" class="form-control" ng-model="transactionsFilter.comment" /></th>
 				<th><button id="refreshButton" class="btn btn-info " ng-click="refreshTransactions()">
 						<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;{{ "REFRESH" | translate }}
 					</button></th>

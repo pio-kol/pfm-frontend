@@ -11,6 +11,7 @@
 - save date always with time 00:00:00
 - description contains - to websafe (all parameters)
 - update url when search parameter changed and filter applied
+- support for decimals in price
 
 -------- navigation --------
 - mark selected view

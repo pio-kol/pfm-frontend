@@ -1,7 +1,6 @@
 package fw;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.datanucleus.util.StringUtils;
@@ -9,34 +8,37 @@ import org.datanucleus.util.StringUtils;
 public class Filter {
 
 	private String description;
-	private Date dateFrom;
-	private Date dateTo;
+	private String comment;
+	private Long priceFrom;
+	private Long priceTo;
 
 	public Filter descriptionContains(String description) {
 		this.description = description;
 		return this;
 	}
-	
-	public Filter dateTo(Date dateTo) {
-		this.dateTo = dateTo;
+
+	public Filter commentContains(String comment) {
+		this.comment = comment;
 		return this;
 	}
-	
-	public Filter dateFrom(Date dateFrom) {
-		this.dateFrom = dateFrom;
+
+	public Filter priceTo(Long priceTo) {
+		this.priceTo = priceTo;
+		return this;
+	}
+
+	public Filter priceFrom(Long priceFrom) {
+		this.priceFrom = priceFrom;
 		return this;
 	}
 
 	public List<Transaction> filter(List<Transaction> transactions) {
-		if (StringUtils.isEmpty(description) && dateFrom == null && dateTo == null) {
-			return transactions;
-		}
-
 		return //
-		filterByDateFrom( //
-		filterByDateTo( //
+		filterByPriceFrom( //
+		filterByPriceTo( //
+		filterByComment( //
 		filterByDescription(transactions) //
-		));
+		)));
 	}
 
 	private List<Transaction> filterByDescription(List<Transaction> transactions) {
@@ -53,28 +55,42 @@ public class Filter {
 		return filteredTransactions;
 	}
 
-	private List<Transaction> filterByDateFrom(List<Transaction> transactions) {
-		if (dateFrom == null) {
+	private List<Transaction> filterByComment(List<Transaction> transactions) {
+		if (StringUtils.isEmpty(comment)) {
 			return transactions;
 		}
 
 		List<Transaction> filteredTransactions = new ArrayList<>();
 		for (Transaction transaction : transactions) {
-			if (!transaction.getDate().before(dateFrom)) {
+			if (transaction.getComment().contains(comment)) {
 				filteredTransactions.add(transaction);
 			}
 		}
 		return filteredTransactions;
 	}
 
-	private List<Transaction> filterByDateTo(List<Transaction> transactions) {
-		if (dateTo == null) {
+	private List<Transaction> filterByPriceFrom(List<Transaction> transactions) {
+		if (priceFrom == null) {
 			return transactions;
 		}
 
 		List<Transaction> filteredTransactions = new ArrayList<>();
 		for (Transaction transaction : transactions) {
-			if (!transaction.getDate().after(dateTo)) {
+			if (transaction.getPrice() >= priceFrom) {
+				filteredTransactions.add(transaction);
+			}
+		}
+		return filteredTransactions;
+	}
+
+	private List<Transaction> filterByPriceTo(List<Transaction> transactions) {
+		if (priceTo == null) {
+			return transactions;
+		}
+
+		List<Transaction> filteredTransactions = new ArrayList<>();
+		for (Transaction transaction : transactions) {
+			if (transaction.getPrice() <= priceTo) {
 				filteredTransactions.add(transaction);
 			}
 		}

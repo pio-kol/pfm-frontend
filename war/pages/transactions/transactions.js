@@ -16,6 +16,15 @@
 					if ($stateParams.descriptionContains != null){
 						$scope.transactionsFilter.description = $stateParams.descriptionContains; 
 					}
+					if ($stateParams.priceFrom != null){
+						$scope.transactionsFilter.priceFrom = parseFloat($stateParams.priceFrom); 
+					}
+					if ($stateParams.priceTo != null){
+						$scope.transactionsFilter.priceTo = parseFloat($stateParams.priceTo); 
+					}
+					if ($stateParams.commentContains != null){
+						$scope.transactionsFilter.comment = $stateParams.commentContains; 
+					}
 					
 					$scope.addNewTransaction = function(id) {
 						$scope.newTransaction.visible = true;
@@ -68,15 +77,6 @@
 						}
 					}
 					
-					function convertDateToString(date){
-						var dd = date.getDate();
-						var mm = date.getMonth()+1; //January is 0!
-						var yyyy = date.getFullYear();
-						if(dd<10){dd='0'+dd};
-						if(mm<10){mm='0'+mm};
-						return "" + yyyy + "-" + mm + "-" + dd;
-					}
-					
 					$scope.refreshTransactions = function() {
 						dateFrom = $scope.transactionsFilter.dateFrom != null ? convertDateToString($scope.transactionsFilter.dateFrom) : null;
 						dateTo = $scope.transactionsFilter.dateTo != null ? convertDateToString($scope.transactionsFilter.dateTo) : null;
@@ -84,10 +84,12 @@
 						var url = $rootScope.transactionsURL + "?";
 						url = dateFrom != null ? url + "dateFrom=" + dateFrom + "&" : url;
 						url = dateTo != null ? url + "dateTo=" + dateTo + "&" : url;
-						url = $scope.transactionsFilter.description != null ? url + "&descriptionContains=" + $scope.transactionsFilter.description + "&" : url;
+						url = $scope.transactionsFilter.description != null ? url + "descriptionContains=" + $scope.transactionsFilter.description + "&" : url;
+						url = $scope.transactionsFilter.comment != null ? url + "commentContains=" + $scope.transactionsFilter.comment + "&" : url;
+						url = $scope.transactionsFilter.priceFrom != null ? url + "priceFrom=" + $scope.transactionsFilter.priceFrom + "&" : url; 
+						url = $scope.transactionsFilter.priceTo != null ? url + "priceTo=" + $scope.transactionsFilter.priceTo + "&" : url;
 						
-						
-						$state.transitionTo('transactions', {descriptionContains: $scope.transactionsFilter.description, dateFrom: dateFrom, dateTo: dateTo}, { notify: false });
+						$state.transitionTo('transactions', {descriptionContains: $scope.transactionsFilter.description, commentContains: $scope.transactionsFilter.comment, dateFrom: dateFrom, dateTo: dateTo, priceFrom: $scope.transactionsFilter.priceFrom, priceTo: $scope.transactionsFilter.priceTo}, { notify: false });
 						
 						$http
 						.get(url)
