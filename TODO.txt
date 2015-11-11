@@ -15,11 +15,13 @@
 - clear filters button
 - translate date range picker options
 - price range translate, support for not standard range (select correct value) + think about changing parameger to priceRange=<0,10>
+- categories filter - when selecting parent category all child categories should select automatically
 
 
 -------- navigation --------
 - mark selected view
 - login / sign up
+- menu not working on first click 
 
 -------- all -----------
 - testy

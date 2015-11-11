@@ -51,6 +51,7 @@ app.run(function($rootScope, $http, $translate, $q) {
 							$rootScope
 									.updateParentCategoryReference($rootScope.categories[i]);
 						}
+						
 						defer.resolve();
 					}
 				}, function(response) {

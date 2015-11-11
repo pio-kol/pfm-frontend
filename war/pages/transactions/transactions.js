@@ -85,9 +85,18 @@
 									return false;
 						}
 						
+						// must be last checked condition
 						if ($scope.transactionsFilterState.categories.length > 0 && 
 								(transaction.category.id === null || !($scope.transactionsFilterState.categories.indexOf(transaction.category.id) > -1))){
-									return false;
+							var tmpCategory = transaction.category.parentCategory;
+							while(tmpCategory != null){
+								if($scope.transactionsFilterState.categories.indexOf(tmpCategory.id) > -1){
+									return true;
+								}
+								tmpCategory = tmpCategory.parentCategory;
+							}		
+							
+							return false;
 						}
 						
 						return true;
