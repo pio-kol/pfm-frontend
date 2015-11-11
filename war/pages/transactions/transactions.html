@@ -26,7 +26,7 @@
 				<th />
 			</tr>
 			<tr>
-				<th><input type="text" name="filter-date-from" class="form-control col-xs-4" ng-model="transactionsFilterState.dateFrom" /> </th>
+				<th><input date-range-picker type="text" name="filter-date-from" class="form-control date-picker" ng-model="transactionsFilterState.dateRange" options="datePickerConfig" /> </th>
 				<th><input type="text" class="form-control" ng-model="transactionsFilterState.description" /></th>
 				<th><select chosen required class="form-control" ng-model="transaction.copyForEdit.category.id"
 					ng-options="category.id as category.name for category in categories"></select></th>
@@ -35,9 +35,7 @@
 				<th><input type="number" class="form-control" ng-model="transactionsFilter.priceFrom" /><input type="number" class="form-control"
 					ng-model="transactionsFilterState.priceTo" /></th>
 				<th><input type="text" class="form-control" ng-model="transactionsFilterState.comment" /></th>
-				<th><button id="refreshButton" class="btn btn-info " ng-click="refreshTransactions()">
-						<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;{{ "REFRESH" | translate }}
-					</button></th>
+				<th/>
 			</tr>
 		</thead>
 		<tbody>
@@ -61,16 +59,16 @@
 
 				<td>
 					<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editTransaction(transaction)">
-						<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ "EDIT" | translate }}
+						<span class="glyphicon glyphicon-pencil"></span>
 					</button>
 					<button ng-switch-when="edit" class="btn btn-success" ng-disabled="!editTransactionForm_{{transaction.id}}.$valid" ng-click="saveTransaction(transaction)">
-						<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
+						<span class="glyphicon glyphicon-ok"></span>
 					</button>
 					<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditTransaction(transaction)">
-						<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;{{ "CANCEL" | translate }}
+						<span class="glyphicon glyphicon-remove"></span>
 					</button>
 					<button ng-switch-when="edit" class="btn btn-danger" ng-click="removeTransaction(transaction)">
-						<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{ "DELETE" | translate }}
+						<span class="glyphicon glyphicon-trash"></span>
 					</button>
 				</td>
 
@@ -90,11 +88,11 @@
 
 				<td>
 					<button class="btn btn-success" ng-disabled="!newTransactionForm.$valid" ng-click="saveNewTransaction(newTransaction)">
-						<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
+						<span class="glyphicon glyphicon-ok"></span>
 					</button>
 
 					<button class="btn btn-warning" ng-click="cancelAddNewTransaction()">
-						<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;{{ "CANCEL" | translate }}
+						<span class="glyphicon glyphicon-remove"></span>
 					</button>
 				</td>
 			</tr>
@@ -110,7 +108,7 @@
 
 				<td>
 					<button class="btn btn-info" ng-click="addNewTransaction()">
-						<span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;{{ "NEW_TRANSACTION" | translate }}
+						<span class="glyphicon glyphicon-plus"></span>
 					</button>
 				</td>
 			</tr>

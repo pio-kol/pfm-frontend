@@ -8,10 +8,10 @@
 					
 					$scope.transactionsFilterState = new TransactionsFilter();
 					if ($stateParams.dateFrom != null){
-						$scope.transactionsFilterState.dateFrom = new Date($stateParams.dateFrom); 
+						$scope.transactionsFilterState.dateRange.startDate = moment($stateParams.dateFrom); 
 					}
 					if ($stateParams.dateTo != null){
-						$scope.transactionsFilterState.dateTo = new Date($stateParams.dateTo); 
+						$scope.transactionsFilterState.dateRange.endDate = moment($stateParams.dateTo); 
 					}
 					if ($stateParams.descriptionContains != null){
 						$scope.transactionsFilterState.description = $stateParams.descriptionContains; 
@@ -27,8 +27,8 @@
 					}
 					
 					$scope.transactionsFilter = function(transaction) {
-						var dateFrom = $scope.transactionsFilterState.dateFrom != null ? convertDateToString($scope.transactionsFilterState.dateFrom) : null;
-						var dateTo = $scope.transactionsFilterState.dateTo != null ? convertDateToString($scope.transactionsFilterState.dateTo) : null;
+						var dateFrom = $scope.transactionsFilterState.dateRange.startDate.format("YYYY-MM-DD"); 
+						var dateTo = $scope.transactionsFilterState.dateRange.endDate.format("YYYY-MM-DD");
 						
 						$state.transitionTo('transactions', {descriptionContains: $scope.transactionsFilterState.description, commentContains: $scope.transactionsFilterState.comment, dateFrom: dateFrom, dateTo: dateTo, priceFrom: $scope.transactionsFilterState.priceFrom, priceTo: $scope.transactionsFilterState.priceTo}, { notify: false });
 						
@@ -108,8 +108,8 @@
 					}
 					
 					$scope.refreshTransactions = function() {
-						var dateFrom = $scope.transactionsFilterState.dateFrom != null ? convertDateToString($scope.transactionsFilterState.dateFrom) : null;
-						var dateTo = $scope.transactionsFilterState.dateTo != null ? convertDateToString($scope.transactionsFilterState.dateTo) : null;
+						var dateFrom = $scope.transactionsFilterState.dateRange.startDate.format("YYYY-MM-DD"); 
+						var dateTo = $scope.transactionsFilterState.dateRange.endDate.format("YYYY-MM-DD");
 
 						var url = $rootScope.transactionsURL + "?";
 						url = dateFrom != null ? url + "dateFrom=" + dateFrom + "&" : url;
@@ -225,23 +225,26 @@
 						
 					};
 					
+					$scope.datePickerConfig = {
+					"autoApply": true,
+					ranges: {
+				           'Today': [moment(), moment()],
+				           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+				           'This Week': [moment().startOf('week'), moment().endOf('week')],
+				           'Last Week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+				           'This Month': [moment().startOf('month'), moment().endOf('month')],
+				           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+				           'This Year': [moment().startOf('year'), moment().endOf('year')],
+				           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+				        },
+				    eventHandlers: {'apply.daterangepicker': function(ev, picker) { $scope.refreshTransactions(); }}
+					};
+					
 					$(document).ready(function() {
 						$q.all([$scope.refreshAccounts(), $scope.refreshCategories()])
 						.then(function(){
 							$scope.refreshTransactions();
 						});
-						
-						$('input[name="filter-date-from"]').daterangepicker({
-							"autoApply": true,
-							ranges: {
-						           'Today': [moment(), moment()],
-						           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-						           'This Week': [moment().startOf('week'), moment().endOf('week')],
-						           'Last Week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
-						           'This Month': [moment().startOf('month'), moment().endOf('month')],
-						           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-						        }
-					    });
 					});
 
 				});
