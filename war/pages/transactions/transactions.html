@@ -31,7 +31,7 @@
 				<th><input type="text" class="form-control" ng-model="transactionsFilterState.description" /></th>
 				<th><select chosen class="form-control" ng-model="transaction.copyForEdit.category.id"
 					ng-options="category.id as category.name for category in categories"></select></th>
-				<th><select chosen class="form-control" ng-model="transaction.copyForEdit.account.id"
+				<th><select chosen multiple class="form-control" ng-model="transactionsFilterState.accounts"
 					ng-options="account.id as account.name for account in accounts"></select></th>
 				<th><select chosen class="form-control" ng-model="transactionsFilterState.priceRange"
 					ng-options="priceRange as priceRange.description for priceRange in priceRangeChoiceOptions"></select></th>
