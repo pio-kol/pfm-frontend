@@ -5,25 +5,101 @@
 					$scope.reverseSort = false;
 					
 					$scope.newTransaction = new Transaction();
+					$scope.transactionsFilterState = new TransactionsFilter();
 					
-					$scope.transactionsFilter = new TransactionsFilter();
+					$scope.priceRangeChoiceOptions = [];
+					// to make value selected by default
+					$scope.priceRangeChoiceOptions.push($scope.transactionsFilterState.priceRange); 
+					$scope.priceRangeChoiceOptions.push({description : "Income", priceFrom : null, priceTo : 0});
+					$scope.priceRangeChoiceOptions.push({description : "Income > 1000", priceFrom : -1000, priceTo : 0});
+					$scope.priceRangeChoiceOptions.push({description : "Spending", priceFrom : 0, priceTo : null});
+					$scope.priceRangeChoiceOptions.push({description : "Spending <0, 100>", priceFrom : 0, priceTo : 100});
+					$scope.priceRangeChoiceOptions.push({description : "Spending > 100", priceFrom : 100, priceTo : null});
+					
 					if ($stateParams.dateFrom != null){
-						$scope.transactionsFilter.dateFrom = new Date($stateParams.dateFrom); 
+						$scope.transactionsFilterState.dateRange.startDate = moment($stateParams.dateFrom); 
 					}
 					if ($stateParams.dateTo != null){
-						$scope.transactionsFilter.dateTo = new Date($stateParams.dateTo); 
+						$scope.transactionsFilterState.dateRange.endDate = moment($stateParams.dateTo); 
 					}
 					if ($stateParams.descriptionContains != null){
-						$scope.transactionsFilter.description = $stateParams.descriptionContains; 
+						$scope.transactionsFilterState.description = $stateParams.descriptionContains; 
 					}
-					if ($stateParams.priceFrom != null){
-						$scope.transactionsFilter.priceFrom = parseFloat($stateParams.priceFrom); 
-					}
-					if ($stateParams.priceTo != null){
-						$scope.transactionsFilter.priceTo = parseFloat($stateParams.priceTo); 
+					
+					if ($stateParams.priceFrom != null && $stateParams.priceTo != null){
+						$scope.transactionsFilterState.priceRange = {description : "Custom <" + $stateParams.priceFrom +  ", " + $stateParams.priceTo + ">", priceFrom : parseFloat($stateParams.priceFrom), priceTo : parseFloat($stateParams.priceTo)} 
+						$scope.priceRangeChoiceOptions.push($scope.transactionsFilterState.priceRange); 
+					} else if ($stateParams.priceFrom != null){
+						$scope.transactionsFilterState.priceRange = {description : "Custom > " + $stateParams.priceFrom, priceFrom : parseFloat($stateParams.priceFrom), priceTo : null} 
+						$scope.priceRangeChoiceOptions.push($scope.transactionsFilterState.priceRange); 
+					} else if ($stateParams.priceTo != null){
+						$scope.transactionsFilterState.priceRange = {description : "Custom < " + $stateParams.priceTo, priceFrom : null, priceTo : parseFloat($stateParams.priceTo)} 
+						$scope.priceRangeChoiceOptions.push($scope.transactionsFilterState.priceRange); 
 					}
 					if ($stateParams.commentContains != null){
-						$scope.transactionsFilter.comment = $stateParams.commentContains; 
+						$scope.transactionsFilterState.comment = $stateParams.commentContains; 
+					}
+					if ($stateParams.accounts != null){
+						if(typeof $stateParams.accounts === 'string' ) {
+							$scope.transactionsFilterState.accounts.push($stateParams.accounts); 
+						} else { // array
+							$scope.transactionsFilterState.accounts = $stateParams.accounts;
+						}
+					}
+					if ($stateParams.categories != null){
+						if(typeof $stateParams.categories === 'string' ) {
+							$scope.transactionsFilterState.categories.push($stateParams.categories); 
+						} else { // array
+							$scope.transactionsFilterState.categories = $stateParams.categories;
+						}
+					}
+					
+					$scope.transactionsFilter = function(transaction) {
+						var dateFrom = $scope.transactionsFilterState.dateRange.startDate.format("YYYY-MM-DD"); 
+						var dateTo = $scope.transactionsFilterState.dateRange.endDate.format("YYYY-MM-DD");
+						
+						$state.transitionTo('transactions', {descriptionContains: $scope.transactionsFilterState.description, commentContains: $scope.transactionsFilterState.comment, dateFrom: dateFrom, dateTo: dateTo, priceFrom: $scope.transactionsFilterState.priceRange.priceFrom, priceTo: $scope.transactionsFilterState.priceRange.priceTo, accounts: $scope.transactionsFilterState.accounts, categories: $scope.transactionsFilterState.categories}, { notify: false });
+						
+						if ($scope.transactionsFilterState.description != null && $scope.transactionsFilterState.description !== "" &&
+								(transaction.description == null || !(transaction.description.indexOf($scope.transactionsFilterState.description) > -1))){
+								return false;
+						}
+						
+						if ($scope.transactionsFilterState.comment != null && $scope.transactionsFilterState.comment !== "" && 
+								(transaction.comment == null ||	!(transaction.comment.indexOf($scope.transactionsFilterState.comment) > -1))){
+									return false;
+						}
+						
+						if ($scope.transactionsFilterState.priceRange.priceFrom !== null && 
+								(transaction.price === null || !(transaction.price >= $scope.transactionsFilterState.priceRange.priceFrom))){
+									return false;
+						}
+						
+						if ($scope.transactionsFilterState.priceRange.priceTo !== null && 
+								(transaction.price === null || !(transaction.price <= $scope.transactionsFilterState.priceRange.priceTo))){
+									return false;
+						}
+						
+						if ($scope.transactionsFilterState.accounts.length > 0 && 
+								(transaction.account.id === null || !($scope.transactionsFilterState.accounts.indexOf(transaction.account.id) > -1))){
+									return false;
+						}
+						
+						// must be last checked condition
+						if ($scope.transactionsFilterState.categories.length > 0 && 
+								(transaction.category.id === null || !($scope.transactionsFilterState.categories.indexOf(transaction.category.id) > -1))){
+							var tmpCategory = transaction.category.parentCategory;
+							while(tmpCategory != null){
+								if($scope.transactionsFilterState.categories.indexOf(tmpCategory.id) > -1){
+									return true;
+								}
+								tmpCategory = tmpCategory.parentCategory;
+							}		
+							
+							return false;
+						}
+						
+						return true;
 					}
 					
 					$scope.addNewTransaction = function(id) {
@@ -78,18 +154,12 @@
 					}
 					
 					$scope.refreshTransactions = function() {
-						dateFrom = $scope.transactionsFilter.dateFrom != null ? convertDateToString($scope.transactionsFilter.dateFrom) : null;
-						dateTo = $scope.transactionsFilter.dateTo != null ? convertDateToString($scope.transactionsFilter.dateTo) : null;
+						var dateFrom = $scope.transactionsFilterState.dateRange.startDate.format("YYYY-MM-DD"); 
+						var dateTo = $scope.transactionsFilterState.dateRange.endDate.format("YYYY-MM-DD");
 
 						var url = $rootScope.transactionsURL + "?";
 						url = dateFrom != null ? url + "dateFrom=" + dateFrom + "&" : url;
 						url = dateTo != null ? url + "dateTo=" + dateTo + "&" : url;
-						url = $scope.transactionsFilter.description != null ? url + "descriptionContains=" + $scope.transactionsFilter.description + "&" : url;
-						url = $scope.transactionsFilter.comment != null ? url + "commentContains=" + $scope.transactionsFilter.comment + "&" : url;
-						url = $scope.transactionsFilter.priceFrom != null ? url + "priceFrom=" + $scope.transactionsFilter.priceFrom + "&" : url; 
-						url = $scope.transactionsFilter.priceTo != null ? url + "priceTo=" + $scope.transactionsFilter.priceTo + "&" : url;
-						
-						$state.transitionTo('transactions', {descriptionContains: $scope.transactionsFilter.description, commentContains: $scope.transactionsFilter.comment, dateFrom: dateFrom, dateTo: dateTo, priceFrom: $scope.transactionsFilter.priceFrom, priceTo: $scope.transactionsFilter.priceTo}, { notify: false });
 						
 						$http
 						.get(url)
@@ -199,6 +269,21 @@
 											  });
 										});
 						
+					};
+					
+					$scope.datePickerConfig = {
+					"autoApply": true,
+					ranges: {
+				           'Today': [moment(), moment()],
+				           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+				           'This Week': [moment().startOf('week'), moment().endOf('week')],
+				           'Last Week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+				           'This Month': [moment().startOf('month'), moment().endOf('month')],
+				           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+				           'This Year': [moment().startOf('year'), moment().endOf('year')],
+				           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+				        },
+				    eventHandlers: {'apply.daterangepicker': function(ev, picker) { $scope.refreshTransactions(); }}
 					};
 					
 					$(document).ready(function() {

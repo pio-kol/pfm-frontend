@@ -35,10 +35,10 @@ public class TransactionEndpoint {
 	public CollectionResponse<Transaction> listTransaction(
 			@Nullable @Named("cursor") String cursorString,
 			@Nullable @Named("limit") Integer limit,
-			@Nullable @Named("descriptionContains") String description,
-			@Nullable @Named("commentContains") String comment,
-			@Nullable @Named("priceFrom") Long priceFrom,
-			@Nullable @Named("priceTo") Long priceTo,
+			//@Nullable @Named("descriptionContains") String description,
+			//@Nullable @Named("commentContains") String comment,
+			//@Nullable @Named("priceFrom") Long priceFrom,
+			//@Nullable @Named("priceTo") Long priceTo,
 			@Nullable @Named("dateFrom") Date dateFrom,
 			@Nullable @Named("dateTo") Date dateTo) {
 
@@ -48,10 +48,10 @@ public class TransactionEndpoint {
 
 		// other filters are implemented on results as GAE does not support multiple filters in query
 		List<Transaction> filteredTransactions = new Filter() //
-				.descriptionContains(description) //
-				.commentContains(comment) //
-				.priceFrom(priceFrom) //
-				.priceTo(priceTo) //
+			//	.descriptionContains(description) //
+			//	.commentContains(comment) //
+			//	.priceFrom(priceFrom) //
+			//	.priceTo(priceTo) //
 				.filter(result.getLeft());
 
 		return CollectionResponse.<Transaction> builder()

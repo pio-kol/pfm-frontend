@@ -12,10 +12,16 @@
 - description contains - to websafe (all parameters)
 - update url when search parameter changed and filter applied
 - support for decimals in price
+- clear filters button
+- translate date range picker options
+- price range translate, support for not standard range (select correct value) + think about changing parameger to priceRange=<0,10>
+- categories filter - when selecting parent category all child categories should select automatically
+
 
 -------- navigation --------
 - mark selected view
 - login / sign up
+- menu not working on first click 
 
 -------- all -----------
 - testy
@@ -30,11 +36,9 @@
 
 
 -------- nice to have --------
-- deep linking with operation (new account / edit account etc.)
-- use div's instead of tables
-- layout corrections
 - support for transfers between accounts
 - cookies - keep user settings (e.g. selected sort)
 - categories as tree widget
 - possibility to retire Account / Category (do not return but keep for reference for existing entries)
 - Focus input after clicking edit / add new
+- filter by price - adding custom range (popup with inputs)
