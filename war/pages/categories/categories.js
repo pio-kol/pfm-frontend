@@ -6,12 +6,23 @@
 					
 					$scope.newCategory = new Category();
 
-					$scope.categoriesForSelect = function(id){
+					var doesCategoriesCauseCycle = function(category, potential_parent_category){
+						var tmpCategory = potential_parent_category.parentCategory;
+						while(tmpCategory != null){
+							if (tmpCategory === category){
+								return true;
+							}
+							tmpCategory = tmpCategory.parentCategory;
+						}
+						return false;
+					}
+
+					$scope.categoriesForSelect = function(category){
 						var filteredCategories = [];
 						for (var i = 0; i < $rootScope.categories.length; ++i) {
-							var category = $rootScope.categories[i];
-							if (id != category.id) {
-								filteredCategories.push(category);
+							var other_category = $rootScope.categories[i];
+							if (category.id != other_category.id && !doesCategoriesCauseCycle(category, other_category)) {
+								filteredCategories.push(other_category);
 							}
 						}
 						return filteredCategories;

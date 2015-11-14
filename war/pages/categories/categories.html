@@ -31,7 +31,7 @@
 				<td id="parentCategory_{{category.id}}" ng-switch-when="readOnly">{{ category.parentCategory.name }}</td>
 				<td ng-switch-when="edit"><input id="editCategoryName_{{category.id}}" required type="text" class="form-control" ng-model="category.copyForEdit.name" /></td>
 				<td ng-switch-when="edit" id="editParentCategory_{{category.id}}"><select chosen ng-model="category.copyForEdit.parentCategory.id"
-					ng-options="category.id as category.name for category in categoriesForSelect(category.id)">
+					ng-options="categoryForSelect.id as categoryForSelect.name for categoryForSelect in categoriesForSelect(category)">
 						<option value="" translate="MAIN_CATEGORY" />
 				</select></td>
 
@@ -54,7 +54,7 @@
 
 			<tr ng-show="newCategory.visible" ng-form name="newCategoryForm">
 				<td><input id="newCategoryName" required type="text" class="form-control" ng-model="newCategory.name" /></td>
-				<td><select chosen class="form-control" ng-model="newCategory.parentCategory.id" ng-options="category.id as category.name for category in categoriesForSelect(newCategory.id)">
+				<td><select chosen class="form-control" ng-model="newCategory.parentCategory.id" ng-options="category.id as category.name for category in categories">
 						<option value="" translate="MAIN_CATEGORY" />
 				</select></td>
 				<td>
