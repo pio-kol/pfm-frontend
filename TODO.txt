@@ -1,7 +1,5 @@
 -------- categories --------
-- display only categories which don't cause cycles 
 - do not allow to remove category which have children, or transactions assigned
-- parent category sometimes not available (new)
 - parent category name does not update when category updated
 
 -------- accounts --------
@@ -16,12 +14,12 @@
 - translate date range picker options
 - price range translate, support for not standard range (select correct value) + think about changing parameger to priceRange=<0,10>
 - categories filter - when selecting parent category all child categories should select automatically
-
+- cache service for categories / accounts
 
 -------- navigation --------
 - mark selected view
 - login / sign up
-- menu not working on first click 
+- menu not working on first click (after reload) - only if starting from tranactions
 
 -------- all -----------
 - testy

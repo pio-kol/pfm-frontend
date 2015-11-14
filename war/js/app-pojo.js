@@ -43,10 +43,11 @@ function Transaction() {
 };
 
 var TransactionsFilter = function() {
+	this.filterName = "";
 	this.dateRange = {startDate: moment().startOf('month'), endDate: moment().endOf('month')};
 	this.description = "";
 	this.comment = "";
-	this.priceRange = {description : "All", priceFrom : null, priceTo : null};
+	this.priceRange = {description : "All", priceFrom : null, priceTo : null}; // FIXME I18N
 	this.priceTo = null;
 	this.accounts = [];
 	this.categories = [];

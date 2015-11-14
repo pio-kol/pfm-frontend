@@ -2,11 +2,12 @@ app.run(function($rootScope, $http, $translate, $q) {
 	$rootScope.accountsURL = "/_ah/api/accountendpoint/v1/account/";
 	$rootScope.categoriesURL = "/_ah/api/categoryendpoint/v1/category/";
 	$rootScope.transactionsURL = "_ah/api/transactionendpoint/v1/transaction/";
+	$rootScope.transactionsFilterURL = "_ah/api/transactionsfilterendpoint/v1/transactionsfilter/";
 
 	$rootScope.transactions = [];
 	$rootScope.categories = [];
 	$rootScope.accounts = [];
-
+	
 	$rootScope.createNewCategory = function(data) {
 		var newCategory = new Category();
 		newCategory.id = data.id.id;

@@ -1,30 +1,111 @@
-//angular.module('navigationBar',['ngSanitize'])
-
 app
-		.controller('navigationBarController', function($scope) {
+		.controller(
+				'navigationBarController',
+				function($scope, $rootScope, $http) {
 
-			$scope.affixed = 'top';
-			$scope.search = {
-				show : false,
-				terms : ''
-			};
-			$scope.inverse = true;
-			$scope.menus = [ {
-				title : "MENU_TRANSACTION_HISTORY",
-				action : "transactions"
-			}, {
-				title : "MENU_CATEGORIES",
-				action : "categories"
-			}, {
-				title : "MENU_ACCOUNTS",
-				action : "accounts"
-			} ]; // end menus
+					$scope.affixed = 'top';
+					$scope.search = {
+						show : false,
+						terms : ''
+					};
+					$scope.inverse = true;
 
-			$scope.styling = 'Inverse';
-			$scope.searchDisplay = 'Visible';
+					var createFilterEntryForMenu = function(filter) {
+						return {
+							title : filter.filterName,
+							action : "transactions({accounts:["
+									+ filter.accounts
+									+ "], categories:["
+									+ filter.categories
+									+ "], dateFrom:'"
+									+ filter.dateRange.startDate
+											.format("YYYY-MM-DD")
+									+ "', dateTo:'"
+									+ filter.dateRange.endDate
+											.format("YYYY-MM-DD")
+									+ "', priceFrom:"
+									+ filter.priceRange.priceFrom
+									+ ", priceTo:" + filter.priceRange.priceTo
+									+ ", commentContains:'" + filter.comment
+									+ "', descriptionContains:'"
+									+ filter.description + "'})",
+						};
+					}
 
-		})
-		// end navbarDirectiveTestCtrl
+					var createNewFilter = function(item) {
+						var filter = new TransactionsFilter();
+						filter.filterName = item.name;
+						if (item.categories != null){
+							for (var i = 0; i < item.categories.length; ++i) {
+								filter.categories.push(item.categories[i]);
+							}
+						}
+						if (item.accounts != null){
+							for (var i = 0; i < item.accounts.length; ++i) {
+								filter.accounts.push(item.accounts[i]);
+							}
+						}
+						filter.dateRange.startDate = moment(item.dateFrom);
+						filter.dateRange.endDate = moment(item.dateTo);
+						filter.description = item.description;
+						filter.priceRange.priceFrom = item.priceFrom;
+						filter.priceRange.priceTo = item.priceTo;
+						filter.comment = item.comment;
+						
+						return filter;
+					}
+
+					$scope.transactionsFilters = [];
+
+					$scope.getTransactionsFilters = function() {
+
+						$http
+								.get($rootScope.transactionsFilterURL)
+								.then(
+										function(response) {
+											//$scope.transactionsFilters = [];
+
+											var data = response.data;
+
+											if (data.items != null) {
+												for (var i = 0; i < data.items.length; ++i) {
+													var newFilter = createNewFilter(data.items[i]);
+													$scope.transactionsFilters
+															.push(createFilterEntryForMenu(newFilter));
+												}
+											}
+										},
+										function(response) {
+											$translate('ERROR_DATA_RETRIVE')
+													.then(
+															function(message) {
+																addAlert(
+																		message,
+																		response);
+															});
+										});
+					}
+
+					$scope.getTransactionsFilters();
+					// var all = new TransactionsFilter();
+					// all.filterName = "This month"; // FIXME I18N
+					// transactionsFilters.push(createFilterEntryForMenu(all));
+
+					$scope.menus = [ {
+						title : "MENU_TRANSACTION_HISTORY",
+						menu : $scope.transactionsFilters
+					}, {
+						title : "MENU_CATEGORIES",
+						action : "categories"
+					}, {
+						title : "MENU_ACCOUNTS",
+						action : "accounts"
+					} ]; // end menus
+
+					$scope.styling = 'Inverse';
+					$scope.searchDisplay = 'Visible';
+
+				})
 
 		/**
 		 * Angled Navbar Directive
@@ -46,7 +127,7 @@ app
 							navfn : '&',
 							inverse : '='
 						},
-						templateUrl : 'tmpls/nav/navbar.html',
+						templateUrl : 'pages/navigation/navigationBar.html',
 						controller : function($scope, $element, $attrs,
 								$translate) {
 							// === Scope/Attributes Defaults ===//
@@ -174,13 +255,6 @@ app
 							}; // end isDivider
 						}
 					};
-				})
-		// end navbar
-
-		.run(
-				function($templateCache) {
-					$templateCache
-							.put(
-									'tmpls/nav/navbar.html',
-									'<nav id="navigationBar" class="navbar" ng-class="{\'navbar-inverse\': inverse,\'navbar-default\': !inverse,\'navbar-fixed-top\': affixed == \'top\',\'navbar-fixed-bottom\': affixed == \'bottom\'}" role="navigation"><div class="container-fluid"><div class="navbar-header"><a id="navbarHeader" class="navbar-brand" ng-click="noop()"><span class="glyphicon glyphicon-list-alt"></span> {{"PAGE_TITLE" | translate}}</a></div><div class="collapse navbar-collapse" id="navbar-menu"><ul class="nav navbar-nav" ng-if="hasMenus()"><li ng-repeat="menu in menus" ng-class="{true: \'dropdown\'}[hasDropdownMenu(menu)]"><a id="navbarMenuItem" ng-if="!hasDropdownMenu(menu)" ui-sref="{{menu.action}}">{{menu.title | translate}}</a><a ng-if="hasDropdownMenu(menu)" class="dropdown-toggle" data-toggle="dropdown">{{menu.title}} <b class="caret"></b></a><ul ng-if="hasDropdownMenu(menu)" class="dropdown-menu"><li ng-repeat="item in menu.menu" ng-class="{true: \'divider\'}[isDivider(item)]"><a ng-if="!isDivider(item)" ui-sref="{{menu.action}}">{{item.title}}</a></li></ul></li></ul><form ng-if="search.show" class="navbar-form navbar-right" role="search"><div class="form-group"><input type="text" class="form-control" placeholder="Search" ng-model="search.terms"><button class="btn btn-default" type="button" ng-click="searchfn()"><span class="glyphicon glyphicon-search"></span></button></div></form><ul class="nav navbar-nav navbar-right"><li><a id="signUpMenuItem" href="#"><span class="glyphicon glyphicon-user"></span> {{"SIGN_UP"|translate}}</a></li><li><a id="loginMenuItem" href="#"><span class="glyphicon glyphicon-log-in"></span> {{"LOGIN"|translate}}</a></li><li><a id="languageMenuItem" ng-click="toggleLanguage()"><span class="glyphicon glyphicon-flag"></span> {{"LANGUAGE"|translate}}</a></li></ul></div></div></nav>');
 				});
+// end navbar
+

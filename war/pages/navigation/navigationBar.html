@@ -1,0 +1,33 @@
+<nav id="navigationBar" class="navbar"
+	ng-class="{'navbar-inverse': inverse,'navbar-default': !inverse,'navbar-fixed-top': affixed == 'top','navbar-fixed-bottom': affixed == 'bottom'}"
+	role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a id="navbarHeader" class="navbar-brand" ng-click="noop()"><span class="glyphicon glyphicon-list-alt"></span> {{"PAGE_TITLE" | translate}}</a>
+		</div>
+		<div class="collapse navbar-collapse" id="navbar-menu">
+			<ul class="nav navbar-nav" ng-if="hasMenus()">
+				<li ng-repeat="menu in menus" ng-class="{true: 'dropdown'}[hasDropdownMenu(menu)]"><a id="navbarMenuItem" ng-if="!hasDropdownMenu(menu)"
+					ui-sref="{{menu.action}}">{{menu.title | translate}}</a><a ng-if="hasDropdownMenu(menu)" class="dropdown-toggle" data-toggle="dropdown">{{menu.title | translate}}
+						<b class="caret"></b>
+				</a>
+				<ul ng-if="hasDropdownMenu(menu)" class="dropdown-menu">
+						<li ng-repeat="item in menu.menu" ng-class="{true: 'divider'}[isDivider(item)]"><a ng-if="!isDivider(item)" ui-sref="{{item.action}}">{{item.title}}</a></li>
+					</ul></li>
+			</ul>
+			<form ng-if="search.show" class="navbar-form navbar-right" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search" ng-model="search.terms">
+					<button class="btn btn-default" type="button" ng-click="searchfn()">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</div>
+			</form>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a id="signUpMenuItem" href="#"><span class="glyphicon glyphicon-user"></span> {{"SIGN_UP"|translate}}</a></li>
+				<li><a id="loginMenuItem" href="#"><span class="glyphicon glyphicon-log-in"></span> {{"LOGIN"|translate}}</a></li>
+				<li><a id="languageMenuItem" ng-click="toggleLanguage()"><span class="glyphicon glyphicon-flag"></span> {{"LANGUAGE"|translate}}</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>

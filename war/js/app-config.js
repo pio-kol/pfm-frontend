@@ -95,14 +95,14 @@ app
 					.translations('en', translations_en) //
 					.preferredLanguage('en');
 
-					//$locationProvider.html5Mode(true);
+					// $locationProvider.html5Mode(true);
 					
 					$urlRouterProvider.otherwise('/transactions');
 
 					$stateProvider //
 					.state("transactions", {
 						url : "/transactions?dateFrom&dateTo&descriptionContains&priceFrom&priceTo&commentContains&accounts&categories",
-						templateUrl : 'pages/transactions/transactions.html'
+						templateUrl : 'pages/transactions/transactions.html',
 					})//
 					.state("categories", {
 						url : "/categories",
