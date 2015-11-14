@@ -25,27 +25,27 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-switch on="category.mode" ng-repeat="category in categories|orderBy:orderByField:reverseSort" ng-form name="editCategoryForm_{{category.id}}">
+			<tr id="categoryRow" ng-switch on="category.mode" ng-repeat="category in categories|orderBy:orderByField:reverseSort" ng-form name="editCategoryForm_{{category.id}}">
 
-				<td id="categoryName" ng-switch-when="readOnly">{{ category.name }}</td>
-				<td id="parentCategoryName" ng-switch-when="readOnly">{{ category.parentCategory.name }}</td>
-				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="category.copyForEdit.name" /></td>
-				<td ng-switch-when="edit"><select chosen ng-model="category.copyForEdit.parentCategory.id"
+				<td id="categoryName_{{category.id}}" ng-switch-when="readOnly">{{ category.name }}</td>
+				<td id="parentCategory_{{category.id}}" ng-switch-when="readOnly">{{ category.parentCategory.name }}</td>
+				<td ng-switch-when="edit"><input id="editCategoryName_{{category.id}}" required type="text" class="form-control" ng-model="category.copyForEdit.name" /></td>
+				<td ng-switch-when="edit" id="editParentCategory_{{category.id}}"><select chosen ng-model="category.copyForEdit.parentCategory.id"
 					ng-options="category.id as category.name for category in categoriesForSelect(category.id)">
 						<option value="" translate="MAIN_CATEGORY" />
 				</select></td>
 
 				<td>
-					<button id="editButton" ng-switch-when="readOnly" class="btn btn-primary" ng-click="editCategory(category)">
+					<button id="editButton_{{category.id}}" ng-switch-when="readOnly" class="btn btn-primary" ng-click="editCategory(category)">
 						<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ "EDIT" | translate }}
 					</button>
-					<button id="saveButton" ng-switch-when="edit" class="btn btn-success" ng-disabled="!editCategoryForm_{{category.id}}.$valid" ng-click="saveCategory(category)">
+					<button id="saveButton_{{category.id}}" ng-switch-when="edit" class="btn btn-success" ng-disabled="!editCategoryForm_{{category.id}}.$valid" ng-click="saveCategory(category)">
 						<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
 					</button>
-					<button id="cancelButton" ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditCategory(category)">
+					<button id="cancelButton_{{category.id}}" ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditCategory(category)">
 						<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;{{ "CANCEL" | translate }}
 					</button>
-					<button id="deleteButton" ng-switch-when="edit" class="btn btn-danger" ng-click="removeCategory(category)">
+					<button id="deleteButton_{{category.id}}" ng-switch-when="edit" class="btn btn-danger" ng-click="removeCategory(category)">
 						<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{ "DELETE" | translate }}
 					</button>
 				</td>
