@@ -4,7 +4,8 @@ app
 				'$stateProvider',
 				'$urlRouterProvider',
 				'$locationProvider',
-				function($translateProvider, $stateProvider, $urlRouterProvider, $locationProvider) {
+				'$mdThemingProvider',
+				function($translateProvider, $stateProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider) {
 					var translations_pl = {
 						MAIN_CATEGORY : 'Kategoria główna',
 						SAVE : 'Zapisz',
@@ -88,6 +89,10 @@ app
 						TRANSACTION_PRICE : "Price",
 						TRANSACTION_COMMENT : "Comment"
 					};
+					
+					$mdThemingProvider.theme('docs-dark', 'default')
+				      .primaryPalette('yellow')
+				      .dark();
 
 					$translateProvider //
 					.useSanitizeValueStrategy('escape') //

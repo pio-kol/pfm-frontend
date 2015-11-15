@@ -1,11 +1,68 @@
 		app.controller(
 				'transactionsController', 
-				function($scope, $rootScope, $http, $translate, $q, $stateParams, $state) {
+				function($scope, $rootScope, $http, $translate, $q, $stateParams, $state, $log, $mdDialog) {
 					$scope.orderByField = 'date';
 					$scope.reverseSort = false;
 					
+					$scope.editFilter = function($event, filter){
+						$mdDialog.show({
+					          clickOutsideToClose: true,
+					          controller: CategoryEditDialogController,
+					          controllerAs: 'dialog',
+					          locals: {
+					              filters: $rootScope.transactionsFilters,
+					              selectedFilter: filter,
+					              categories: $rootScope.categories,
+					              accounts: $rootScope.accounts
+					          },
+					          templateUrl: 'pages/filters/editFiltersDialog.html',
+					          bindToController: true,
+					          targetEvent: $event
+					        });
+						
+					
+					}
+					
+					  					
+					$rootScope.transactionsFilters = [];
+
+					$scope.getTransactionsFilters = function() {
+
+						$http
+								.get($rootScope.transactionsFilterURL)
+								.then(
+										function(response) {
+											$rootScope.transactionsFilters = [];
+											$rootScope.transactionsFilters.push(new TransactionsFilter()); 
+
+											var data = response.data;
+
+											if (data.items != null) {
+												for (var i = 0; i < data.items.length; ++i) {
+													var newFilter = createNewFilter(data.items[i]);
+													$scope.transactionsFilters
+															.push(newFilter);
+												}
+											}
+										},
+										function(response) {
+											$translate('ERROR_DATA_RETRIVE')
+													.then(
+															function(message) {
+																addAlert(
+																		message,
+																		response);
+															});
+										});
+					}
+
+					$scope.applyFilter = function(filter){
+						$scope.transactionsFilterState = filter;
+						$scope.priceRangeChoiceOptions.push(filter.priceRange)
+					}
+					
 					$scope.newTransaction = new Transaction();
-					$scope.transactionsFilterState = new TransactionsFilter();
+					$rootScope.transactionsFilterState = new TransactionsFilter();
 					
 					$scope.priceRangeChoiceOptions = [];
 					// to make value selected by default
@@ -89,7 +146,7 @@
 						if ($scope.transactionsFilterState.categories.length > 0 && 
 								(transaction.category.id === null || !($scope.transactionsFilterState.categories.indexOf(transaction.category.id) > -1))){
 							var tmpCategory = transaction.category.parentCategory;
-							while(tmpCategory != null){
+							while(tmpCategory != null){ // if parent category is selected, all children categories should be also visible
 								if($scope.transactionsFilterState.categories.indexOf(tmpCategory.id) > -1){
 									return true;
 								}
@@ -271,18 +328,10 @@
 						
 					};
 					
-					$scope.datePickerConfig = {
+					
+					$rootScope.datePickerConfig = {
 					"autoApply": true,
-					ranges: {
-				           'Today': [moment(), moment()],
-				           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-				           'This Week': [moment().startOf('week'), moment().endOf('week')],
-				           'Last Week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
-				           'This Month': [moment().startOf('month'), moment().endOf('month')],
-				           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-				           'This Year': [moment().startOf('year'), moment().endOf('year')],
-				           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
-				        },
+					ranges: datePickerRanges,
 				    eventHandlers: {'apply.daterangepicker': function(ev, picker) { $scope.refreshTransactions(); }}
 					};
 					
@@ -290,6 +339,7 @@
 						$q.all([$scope.refreshAccounts(), $scope.refreshCategories()])
 						.then(function(){
 							$scope.refreshTransactions();
+							$scope.getTransactionsFilters();
 						});
 					});
 

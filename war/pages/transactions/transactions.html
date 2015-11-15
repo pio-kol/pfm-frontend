@@ -1,8 +1,11 @@
-<div class="container-fluid" ng-controller="transactionsController" novalidate>
+<div class="container-fluid" flex ng-controller="transactionsController" novalidate>
 
 	<div id="alerts"></div>
 
-	<table class="table table-striped">
+
+	<md-tabs md-dynamic-height md-selected="selectedIndex" md-border-bottom="" md-autoselect="" md-align-tabs="top"> <md-tab
+		ng-repeat="filter in transactionsFilters" ng-click="applyFilter(filter)"> <md-tab-label>{{filter.name}} </md-tab-label> <md-tab-body>
+	<table class="table table-striped" style="margin-top: 15px">
 		<thead>
 			<tr>
 				<th><a href="#/transactions" ng-click="orderByField='date'; reverseSort = !reverseSort"> {{"TRANSACTION_DATE" | translate}} <span
@@ -36,7 +39,9 @@
 				<th><select chosen class="form-control" ng-model="transactionsFilterState.priceRange"
 					ng-options="priceRange as priceRange.description for priceRange in priceRangeChoiceOptions"></select></th>
 				<th><input type="text" class="form-control" ng-model="transactionsFilterState.comment" /></th>
-				<th />
+				<th><button class="btn btn-default" ng-click="editFilter($event, transactionsFilterState)">
+						<span class="glyphicon glyphicon-pencil"></span>
+					</button></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -116,4 +121,9 @@
 
 		</tbody>
 	</table>
+	</md-tab-body> </md-tab>
+	
+	</md-tabs>
+
+
 </div>

@@ -1,7 +1,7 @@
 app
 		.controller(
 				'navigationBarController',
-				function($scope, $rootScope, $http) {
+				function($scope) {
 
 					$scope.affixed = 'top';
 					$scope.search = {
@@ -9,91 +9,10 @@ app
 						terms : ''
 					};
 					$scope.inverse = true;
-
-					var createFilterEntryForMenu = function(filter) {
-						return {
-							title : filter.filterName,
-							action : "transactions({accounts:["
-									+ filter.accounts
-									+ "], categories:["
-									+ filter.categories
-									+ "], dateFrom:'"
-									+ filter.dateRange.startDate
-											.format("YYYY-MM-DD")
-									+ "', dateTo:'"
-									+ filter.dateRange.endDate
-											.format("YYYY-MM-DD")
-									+ "', priceFrom:"
-									+ filter.priceRange.priceFrom
-									+ ", priceTo:" + filter.priceRange.priceTo
-									+ ", commentContains:'" + filter.comment
-									+ "', descriptionContains:'"
-									+ filter.description + "'})",
-						};
-					}
-
-					var createNewFilter = function(item) {
-						var filter = new TransactionsFilter();
-						filter.filterName = item.name;
-						if (item.categories != null){
-							for (var i = 0; i < item.categories.length; ++i) {
-								filter.categories.push(item.categories[i]);
-							}
-						}
-						if (item.accounts != null){
-							for (var i = 0; i < item.accounts.length; ++i) {
-								filter.accounts.push(item.accounts[i]);
-							}
-						}
-						filter.dateRange.startDate = moment(item.dateFrom);
-						filter.dateRange.endDate = moment(item.dateTo);
-						filter.description = item.description;
-						filter.priceRange.priceFrom = item.priceFrom;
-						filter.priceRange.priceTo = item.priceTo;
-						filter.comment = item.comment;
-						
-						return filter;
-					}
-
-					$scope.transactionsFilters = [];
-
-					$scope.getTransactionsFilters = function() {
-
-						$http
-								.get($rootScope.transactionsFilterURL)
-								.then(
-										function(response) {
-											//$scope.transactionsFilters = [];
-
-											var data = response.data;
-
-											if (data.items != null) {
-												for (var i = 0; i < data.items.length; ++i) {
-													var newFilter = createNewFilter(data.items[i]);
-													$scope.transactionsFilters
-															.push(createFilterEntryForMenu(newFilter));
-												}
-											}
-										},
-										function(response) {
-											$translate('ERROR_DATA_RETRIVE')
-													.then(
-															function(message) {
-																addAlert(
-																		message,
-																		response);
-															});
-										});
-					}
-
-					$scope.getTransactionsFilters();
-					// var all = new TransactionsFilter();
-					// all.filterName = "This month"; // FIXME I18N
-					// transactionsFilters.push(createFilterEntryForMenu(all));
-
+				
 					$scope.menus = [ {
 						title : "MENU_TRANSACTION_HISTORY",
-						menu : $scope.transactionsFilters
+						action : "transactions"
 					}, {
 						title : "MENU_CATEGORIES",
 						action : "categories"

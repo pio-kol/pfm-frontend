@@ -25,6 +25,7 @@
 - testy
 - formatter for code
 - logging of operations
+- all dependencies also locally
 
 -------- server side -------
 - server side validation

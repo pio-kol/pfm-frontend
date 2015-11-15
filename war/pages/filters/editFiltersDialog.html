@@ -1,0 +1,102 @@
+<md-dialog>
+      <md-toolbar>
+        <div class="md-toolbar-tools">Filter modification</div>
+      </md-toolbar>
+
+      <md-dialog-content layout-padding>
+       
+  <md-content layout-padding>
+    <form name="filterForm">
+    <div layout="row" layout-sm="column">
+        <md-input-container flex>
+          <label>Filter</label>
+          <md-select ng-model="dialog.selectedFilterId" ng-change="dialog.selectionChanged()" >
+            <md-option selected="selected" value="{{dialog.newFilter.id}}">
+              New filter
+            </md-option>
+            <md-option ng-repeat="filter in dialog.allFilters" value="{{filter.id}}">
+              {{filter.name}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+      	
+      	<md-input-container flex>
+        <label>Filter name</label>
+        <input required name="filterName" ng-model="dialog.filterToEdit.name">
+        <div ng-messages="filterName.$error">
+          <div ng-message="required">Filter name is required</div>
+        </div>
+      </md-input-container>
+  </div>
+    
+      <div layout="row" layout-sm="column">
+    
+        <md-input-container flex>
+          <label>Date range</label>
+          <input date-range-picker type="text" name="filter-date-from" class="date-picker" ng-model="dialog.filterToEdit.dateRange"
+					options="datePickerConfig" />
+        </md-input-container>
+        
+      </div>
+      <div layout="row" layout-sm="column">
+        <md-input-container flex>
+          <label>Description</label>
+          <input ng-model="dialog.filterToEdit.description">
+        </md-input-container>
+        <md-input-container flex>
+          <label>Comment</label>
+          <input ng-model="dialog.filterToEdit.comment">
+        </md-input-container>
+      </div>
+       <div layout="row" layout-sm="column">
+        <md-input-container flex>
+          <label>Price from</label>
+          <input ng-model="dialog.filterToEdit.priceRange.priceFrom"> <!-- FIXME should be number -->
+        </md-input-container>
+        <md-input-container flex>
+          <label>Price to</label>
+          <input ng-model="dialog.filterToEdit.priceRange.priceTo"> <!-- FIXME should be number -->
+        </md-input-container>
+      </div>
+      
+      <div layout="row" layout-sm="column">
+    
+        <md-input-container flex>
+          <label>Categories</label>
+          <md-select multiple ng-model="dialog.filterToEdit.categories" >
+    	  <md-option ng-repeat="category in categories" value="{{category.id}}">{{category.name}}</md-option>
+    	</md-select>
+        </md-input-container>
+        
+      </div>
+      
+        <div layout="row" layout-sm="column">
+    
+        <md-input-container flex>
+          <label>Accounts</label>
+          <md-select multiple ng-model="dialog.filterToEdit.accounts" >
+    	  <md-option ng-repeat="account in accounts" value="{{account.id}}">{{account.name}}</md-option>
+    	</md-select>
+        </md-input-container>
+        
+      </div>
+      
+      
+    </form>
+  </md-content>
+      	
+    
+      </md-dialog-content>
+
+      <md-dialog-actions>
+      <md-button ng-click="dialog.deleteFilter()" ng-disabled="dialog.filterToEdit.id === ''" class="md-warn">
+          Delete filter
+        </md-button>
+        
+        <span flex></span>
+
+        <md-button ng-click="dialog.submit()" class="md-primary">
+          Save changes
+        </md-button>
+      </md-dialog-actions>
+    </md-dialog>

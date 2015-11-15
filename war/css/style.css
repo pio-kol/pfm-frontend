@@ -5,3 +5,11 @@
 .ng-valid.ng-dirty {
   border-color: green;
 }
+
+html, body {
+    height: 100%;
+}
+
+.container-fluid {
+    height: 100%;
+}
