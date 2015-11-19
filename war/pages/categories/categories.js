@@ -118,12 +118,13 @@
 								.put($rootScope.categoriesURL, category)
 								.then(
 										function(response) {
+											editedCategory.name = editedCategory.copyForEdit.name;
+											if (editedCategory.copyForEdit.parentCategory != null && editedCategory.copyForEdit.parentCategory.id != null) {
+												editedCategory.parentCategory = editedCategory.copyForEdit.parentCategory;
+												editedCategory.parentCategoryId = editedCategory.copyForEdit.parentCategory.id;
+											}
 											editedCategory.readOnlyMode();
-											
-											var updatedCategory = $rootScope.createNewCategory(response.data);
-											$rootScope.updateParentCategoryReference(updatedCategory);
-											
-											$rootScope.categories[$rootScope.categories.indexOf(editedCategory)] = updatedCategory;
+											$rootScope.updateParentCategoryReference(editedCategory);
 										},
 										function(response) {
 											$translate('ERROR_CATEGORY_MODIFY', {name : editedCategory.name}).then(function (message) {
