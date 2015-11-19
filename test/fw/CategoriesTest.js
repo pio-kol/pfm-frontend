@@ -60,16 +60,18 @@ describe('Categories site tests', function() {
         expect(parentCategoryHeader.getText()).toBe(parentCategory + separator + revertSortSign);
     });
 
-    it('Should add and delete category', function() {
+    //TODO: add modification step!
+    xit('Should add, modify name and delete category', function() {
         //given
         var addNewCategoryButton = element(by.id('addNewCategoryButton'));
-        var newCategoryName = 'New test category';
+        var categoryNameA = 'CategoryA';
+        var categoryNameX = 'CategoryX';
 
         //part1: add new category
         //when
         browser.get(HTTP_LOCALHOST_8889);
         addNewCategoryButton.click();
-        element(by.id('newCategoryName')).sendKeys(newCategoryName);
+        element(by.id('newCategoryName')).sendKeys(categoryNameA);
         element(by.id('saveButton')).click();
 
         var response = browser.executeAsyncScript(function() {
@@ -78,7 +80,7 @@ describe('Categories site tests', function() {
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status == 200) {
                     var response = xhr.responseText;
-                    if(response.indexOf('id') != -1){
+                    if(response.indexOf('CategoryA') != -1){
                         callback(xhr.responseText);
                     }else{
                         xhr.open('GET', 'http://localhost:8889/_ah/api/categoryendpoint/v1/category/', true);
@@ -94,7 +96,7 @@ describe('Categories site tests', function() {
             var dbId = JSON.parse(str).items[0].id.id;
 
             //then
-            expect(element(by.id('categoryName_' + dbId)).getText()).toBe(newCategoryName);
+            expect(element(by.id('categoryName_' + dbId)).getText()).toBe(categoryNameA);
 
             //part2: clean up - remove the category
             //when
@@ -103,79 +105,103 @@ describe('Categories site tests', function() {
 
             var bootboxContent = element(by.className('bootbox-body'));
             waitUntilReady(bootboxContent);
-            expect(bootboxContent.getText()).toBe('Category "' + newCategoryName + '" will be removed. Continue?');
+            expect(bootboxContent.getText()).toBe('Category "' + categoryNameA + '" will be removed. Continue?');
             element(by.buttonText('OK')).click();
 
             //then
             expect(element(by.id('categoryName_' + dbId)).isPresent()).toBe(false);
         });
     });
-});
 
-//
-//
-//
-//@Test
-//public void shouldAddAndDeleteCategory() throws Exception {
-//    // given
-//    By addNewButtonCondition = By.id("addNewCategoryButton");
-//    By newCategoryFieldCondition = By.id("newCategoryName");
-//    By saveNewButtonCondition = By.id("saveButton");
-//
-//    By categoryRowCondition = By.id("categoryRow");
-//    String categoryNameIdPrefix = "categoryName";
-//    String editButtonIdPrefix = "editButton";
-//    String deleteButtonIdPrefix = "deleteButton";
-//
-//    String newCategoryName = "New test category";
-//    String deleteConfirmationMessage = "Category \"" + newCategoryName + "\" will be removed. Continue?";
-//    By bootboxConfirmationCondition = By.xpath("//div[text()='" + deleteConfirmationMessage + "']");
-//    By bootboxConfirmationButton = By.xpath("//button[text()='OK']");
-//    By bootboxWindowCondition = By.xpath("//div[@class[bootbox modal fade bootbox-confirm in]]");
-//
-//    WebDriverWait wait = new WebDriverWait(driver, 10);
-//
-//    // step 1: add new
-//    // when
-//    wait.until(ExpectedConditions.visibilityOfElementLocated(addNewButtonCondition));
-//    driver.findElement(addNewButtonCondition).click();
-//
-//    wait.until(ExpectedConditions.visibilityOfElementLocated(newCategoryFieldCondition));
-//    wait.until(ExpectedConditions.visibilityOfElementLocated(saveNewButtonCondition));
-//    driver.findElement(newCategoryFieldCondition).sendKeys(newCategoryName);
-//    driver.findElement(saveNewButtonCondition).click();
-//
-//    wait.until(ExpectedConditions.visibilityOfElementLocated(categoryRowCondition));
-//
-//    //then
-//    List<WebElement> categoryRows = driver.findElements(categoryRowCondition);
-//    //assertThat(categoryRows).hasSize(1);
-//
-//    Map<String, String> responseParsed = getJsonResponse("GET","");
-//
-//    assertEquals("Category", responseParsed.get("kind"));
-//    assertEquals("formularz-wydatkow", responseParsed.get("appId"));
-//    assertEquals("true", responseParsed.get("complete"));
-//    assertEquals(newCategoryName, responseParsed.get("name"));
-//
-//    String id = responseParsed.get("id");
-//    assertEquals(newCategoryName, driver.findElement(By.id(categoryNameIdPrefix + SEPARATOR + id)).getText());
-//
-//    // step2: clean up - delete
-//    // when
-//    driver.findElement(By.id(editButtonIdPrefix + SEPARATOR + id)).click();
-//
-//    By deleteButtonCondition = By.id(deleteButtonIdPrefix + SEPARATOR + id);
-//    wait.until(ExpectedConditions.visibilityOfElementLocated(deleteButtonCondition));
-//    driver.findElement(deleteButtonCondition).click();
-//
-//    wait.until(ExpectedConditions.visibilityOfElementLocated(bootboxConfirmationCondition));
-//    assertEquals(deleteConfirmationMessage, driver.findElement(bootboxConfirmationCondition).getText());
-//    wait.until(ExpectedConditions.visibilityOfElementLocated(bootboxConfirmationButton));
-//    driver.findElement(bootboxConfirmationButton).click();
-//
-//    wait.until(ExpectedConditions.invisibilityOfElementLocated(bootboxWindowCondition));
-//
-//    // then
-//    assertThat(driver.findElements(categoryRowCondition)).isEmpty();
-//}
+    it('Should add parent category and modify on parent\'s name change ', function() {
+        //given
+        var addNewCategoryButton = element(by.id('addNewCategoryButton'));
+        var categoryNameA = 'CategoryA';
+        var categoryNameB = 'CategoryB';
+        var categoryNameX = 'CategoryX';
+
+
+        //part1: add new category
+        //when
+        browser.get(HTTP_LOCALHOST_8889);
+        addNewCategoryButton.click();
+        element(by.id('newCategoryName')).sendKeys(categoryNameA);
+        element(by.id('saveButton')).click();
+
+        addNewCategoryButton.click();
+        element(by.id('newCategoryName')).sendKeys(categoryNameB);
+        element(by.id('saveButton')).click();
+
+        var response = browser.executeAsyncScript(function() {
+            var callback = arguments[arguments.length - 1];
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status == 200) {
+                    var response = xhr.responseText;
+                    if(response.indexOf('CategoryA') != -1 && response.indexOf('CategoryB') != -1){
+                        callback(xhr.responseText);
+                    }else{
+                        xhr.open('GET', 'http://localhost:8889/_ah/api/categoryendpoint/v1/category/', true);
+                        xhr.send();
+                    }
+                }
+            };
+            xhr.open('GET', 'http://localhost:8889/_ah/api/categoryendpoint/v1/category/', true);
+            xhr.send();
+        });
+
+        response.then(function(str){
+            var dbIdA;
+            var dbIdB;
+            if(JSON.parse(str).items[0].name === categoryNameA){
+                dbIdA = JSON.parse(str).items[0].id.id;
+                dbIdB = JSON.parse(str).items[1].id.id;
+            }else{
+                dbIdA = JSON.parse(str).items[1].id.id;
+                dbIdB = JSON.parse(str).items[0].id.id;
+            }
+
+            //then
+            expect(element(by.id('categoryName_' + dbIdA)).getText()).toBe(categoryNameA);
+            expect(element(by.id('categoryName_' + dbIdB)).getText()).toBe(categoryNameB);
+
+            //part2: add parent
+            //when
+            element(by.id('editButton_' + dbIdA)).click();
+            var parentCategorySelector = element(by.id('editParentCategory_' + dbIdA));
+            parentCategorySelector.click();
+            parentCategorySelector.all(by.css('.chosen-results li')).filter(function(elem){
+                return elem.getText().then(function(text){
+                       return text === categoryNameB;
+                    });
+            }).then(function(filteredElements) {
+                filteredElements[0].click();
+                element(by.id('saveButton_' + dbIdA)).click();
+
+                //then
+                expect(element(by.id('parentCategory_' + dbIdA)).getText()).toBe(categoryNameB);
+
+                //part3: edit parent name
+                //when
+                element(by.id('editButton_' + dbIdB)).click();
+                element(by.id('editCategoryName_' + dbIdB)).clear();
+                element(by.id('editCategoryName_' + dbIdB)).sendKeys(categoryNameX);
+                element(by.id('saveButton_' + dbIdB)).click();
+
+                //then
+                expect(element(by.id('categoryName_' + dbIdA)).getText()).toBe(categoryNameA);
+                expect(element(by.id('categoryName_' + dbIdB)).getText()).toBe(categoryNameX);
+                expect(element(by.id('parentCategory_' + dbIdA)).getText()).toBe(categoryNameX);
+            });
+
+            //var bootboxContent = element(by.className('bootbox-body'));
+            //waitUntilReady(bootboxContent);
+            //expect(bootboxContent.getText()).toBe('Category "' + newCategoryName + '" will be removed. Continue?');
+            //element(by.buttonText('OK')).click();
+            //
+            ////then
+            //expect(element(by.id('categoryName_' + dbId)).isPresent()).toBe(false);
+        });
+    });
+
+});
