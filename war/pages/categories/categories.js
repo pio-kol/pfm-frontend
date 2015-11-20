@@ -6,7 +6,7 @@
 					
 					$scope.newCategory = new Category();
 
-					var doesCategoriesCauseCycle = function(category, potential_parent_category){
+					function doCategoriesCauseCycle(category, potential_parent_category){
 						var tmpCategory = potential_parent_category.parentCategory;
 						while(tmpCategory != null){
 							if (tmpCategory === category){
@@ -17,11 +17,21 @@
 						return false;
 					}
 
+					$scope.isUsedAsParentCategory = function(category){
+						for (var i = 0; i < $rootScope.categories.length; ++i) {
+							var potential_child_category = $rootScope.categories[i];
+							if(potential_child_category.parentCategory.id === category.id){
+								return true;
+							}
+						}
+						return false;
+					};
+
 					$scope.categoriesForSelect = function(category){
 						var filteredCategories = [];
 						for (var i = 0; i < $rootScope.categories.length; ++i) {
 							var other_category = $rootScope.categories[i];
-							if (category.id != other_category.id && !doesCategoriesCauseCycle(category, other_category)) {
+							if (category.id != other_category.id && !doCategoriesCauseCycle(category, other_category)) {
 								filteredCategories.push(other_category);
 							}
 						}
@@ -38,6 +48,7 @@
 					}
 
 					$scope.editCategory = function(category) {
+						//category.copyForEdit = JSON.parse(JSON.stringify(category));
 						category.editMode();
 					};
 
@@ -87,6 +98,7 @@
 								.then(
 										function(response) {
 											$scope.newCategory = new Category();
+											$scope.newCategory.parentCategory = new Category();
 											$scope.newCategoryForm.$setPristine();
 											
 											var newCategory = $rootScope.createNewCategory(response.data);
