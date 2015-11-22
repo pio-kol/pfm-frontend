@@ -78,6 +78,21 @@ var createNewFilter = function(item) {
 	return filter;
 }
 
+function createNewTransaction(data){
+	var newTransaction = new Transaction();
+	newTransaction.id = data.id.id;
+	newTransaction.date = new Date(data.date);
+	newTransaction.description = data.description;
+	newTransaction.comment = data.comment;
+	newTransaction.category.id = data.categoryId;
+	newTransaction.category.name = "";
+	newTransaction.account.id = data.accountId;
+	newTransaction.account.name = "";
+	newTransaction.price = parseFloat(data.price);
+	
+	return newTransaction;
+}
+
 var datePickerRanges = {
         'Today': [moment(), moment()],
         'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],

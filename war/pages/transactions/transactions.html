@@ -4,7 +4,7 @@
 
 
 	<md-tabs md-dynamic-height md-selected="selectedTab" md-border-bottom="" md-autoselect="" md-align-tabs="top"> <md-tab
-		ng-repeat="filter in transactionsFilters | orderBy:'name'" ng-click="applyFilter(filter)"> <md-tab-label>{{filter.name}} </md-tab-label> <md-tab-body>
+		ng-repeat="filter in filters | orderBy:'name'" ng-click="applyFilter(filter)"> <md-tab-label>{{filter.name}} </md-tab-label> <md-tab-body>
 	<table class="table table-striped" style="margin-top: 15px">
 		<thead>
 			<tr>
