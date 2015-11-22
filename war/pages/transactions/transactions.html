@@ -3,7 +3,7 @@
 	<div id="alerts"></div>
 
 
-	<md-tabs md-dynamic-height md-selected="selectedIndex" md-border-bottom="" md-autoselect="" md-align-tabs="top"> <md-tab
+	<md-tabs md-dynamic-height md-selected="selectedTab" md-border-bottom="" md-autoselect="" md-align-tabs="top"> <md-tab
 		ng-repeat="filter in transactionsFilters" ng-click="applyFilter(filter)"> <md-tab-label>{{filter.name}} </md-tab-label> <md-tab-body>
 	<table class="table table-striped" style="margin-top: 15px">
 		<thead>

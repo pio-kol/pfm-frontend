@@ -1,9 +1,9 @@
 -------- categories --------
-- do not allow to remove category which have children, or transactions assigned
-- parent category name does not update when category updated
+- implement deleted flag for categories
 
 -------- accounts --------
-- constrains - do not allow to remove account which is assigned to transaction
+- constrains - do not allow to remove account which have money
+- implement deleted flag for accounts
 
 -------- transactions --------
 - save date always with time 00:00:00
@@ -13,8 +13,9 @@
 - clear filters button
 - translate date range picker options
 - price range translate, support for not standard range (select correct value) + think about changing parameger to priceRange=<0,10>
-- categories filter - when selecting parent category all child categories should select automatically
 - cache service for categories / accounts
+- shorter parameter names
+- display categories as a tree structure
 
 -------- navigation --------
 - mark selected view

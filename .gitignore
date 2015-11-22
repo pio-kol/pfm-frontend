@@ -11,3 +11,4 @@
 /.idea/
 /classes/
 *.iml
+/.tern-project

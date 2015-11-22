@@ -25,6 +25,7 @@
 					
 					  					
 					$rootScope.transactionsFilters = [];
+					$scope.selectedTab = 3;
 
 					$scope.getTransactionsFilters = function() {
 
@@ -33,7 +34,12 @@
 								.then(
 										function(response) {
 											$rootScope.transactionsFilters = [];
-											$rootScope.transactionsFilters.push(new TransactionsFilter()); 
+											
+											var filter = new TransactionsFilter();
+											filter.name = "This month"; 
+											filter.id = "-1";
+											
+											$rootScope.transactionsFilters.push(filter); 
 
 											var data = response.data;
 

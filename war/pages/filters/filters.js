@@ -4,12 +4,15 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 	self.allFilters = filters;
 
 	self.newFilter = JSON.parse(JSON.stringify(selectedFilter));
+	self.newFilter.priceRange.priceFrom = parseFloat(self.newFilter.priceRange.priceFrom);
+	self.newFilter.priceRange.priceTo = parseFloat(self.newFilter.priceRange.priceTo);
 	self.newFilter.id = "";
 	self.newFilter.name = "";
 
 	self.selectedFilterId = null;
 
 	self.filterToEdit = self.newFilter;
+	self.selectedFilter = self.newFilter;
 
 	self.selectionChanged = function() {
 		if (self.selectedFilterId === "") {
@@ -19,6 +22,9 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 		for (var i = 0; i < filters.length; ++i) {
 			if (filters[i].id === self.selectedFilterId) {
 				self.filterToEdit = JSON.parse(JSON.stringify(filters[i]));
+				self.filterToEdit.priceRange.priceFrom = parseFloat(self.filterToEdit.priceRange.priceFrom);
+				self.filterToEdit.priceRange.priceTo = parseFloat(self.filterToEdit.priceRange.priceTo);
+				self.selectedFilter = filters[i];
 				return;
 			}
 		}
@@ -43,6 +49,8 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 	this.submit = function() {
 		if (self.filterToEdit.id === "") {
 			saveNewFilter(self.filterToEdit);
+		} else {
+			saveEditedFilter(self.filterToEdit, self.selectedFilter);
 		}
 
 		$mdDialog.hide();
@@ -72,8 +80,40 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 								filters.push(newFilter);
 							},
 							function(response) { // FIXME message
-								$translate('ERROR_TRANSACTION_ADD', {name : newTransaction.description}).then(function (message) { // FIXME
+								$translate('ERROR_TRANSACTION_ADD', {name : newFilter.description}).then(function (message) { // FIXME
 																																	// message
+								    addAlert(message, response);
+								  });
+							});
+
+	};
+	
+	saveEditedFilter = function(editedFilter, originalFilter){
+		var filter = {
+				"id" : {
+					"id" : editedFilter.id
+				},
+				"name" : editedFilter.name,
+				"categories" : editedFilter.categories,
+				"accounts" : editedFilter.accounts,
+				"dateFrom" : editedFilter.dateRange.startDate,
+				"dateTo" : editedFilter.dateRange.endDate,
+				"priceFrom" : editedFilter.priceRange.priceFrom,
+				"priceTo" : editedFilter.priceRange.priceTo,
+				"description" : editedFilter.description,
+				"comment" : editedFilter.comment
+			}
+			
+			$http
+					.put("_ah/api/transactionsfilterendpoint/v1/transactionsfilter/", filter)
+					.then(
+							function(response) {
+								var updatedFilter = createNewFilter(response.data);
+								filters[filters.indexOf(originalFilter)] = updatedFilter;
+								
+							},
+							function(response) { // FIXME message
+								$translate('ERROR_TRANSACTION_ADD', {name : originalFilter.name}).then(function (message) { 
 								    addAlert(message, response);
 								  });
 							});
