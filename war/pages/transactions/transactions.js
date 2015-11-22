@@ -25,7 +25,7 @@
 					
 					  					
 					$rootScope.transactionsFilters = [];
-					$scope.selectedTab = 3;
+					$scope.selectedTab = 1;
 
 					$scope.getTransactionsFilters = function() {
 
@@ -79,7 +79,7 @@
 					$scope.priceRangeChoiceOptions.push({description : "Spending <0, 100>", priceFrom : 0, priceTo : 100});
 					$scope.priceRangeChoiceOptions.push({description : "Spending > 100", priceFrom : 100, priceTo : null});
 					
-					if ($stateParams.dateFrom != null){
+					if ($stateParams.filterId != null){
 						$scope.transactionsFilterState.dateRange.startDate = moment($stateParams.dateFrom); 
 					}
 					if ($stateParams.dateTo != null){

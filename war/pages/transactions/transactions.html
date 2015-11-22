@@ -4,7 +4,7 @@
 
 
 	<md-tabs md-dynamic-height md-selected="selectedTab" md-border-bottom="" md-autoselect="" md-align-tabs="top"> <md-tab
-		ng-repeat="filter in transactionsFilters" ng-click="applyFilter(filter)"> <md-tab-label>{{filter.name}} </md-tab-label> <md-tab-body>
+		ng-repeat="filter in transactionsFilters | orderBy:'name'" ng-click="applyFilter(filter)"> <md-tab-label>{{filter.name}} </md-tab-label> <md-tab-body>
 	<table class="table table-striped" style="margin-top: 15px">
 		<thead>
 			<tr>
@@ -33,9 +33,9 @@
 					options="datePickerConfig" /></th>
 				<th><input type="text" class="form-control" ng-model="transactionsFilterState.description" /></th>
 				<th><select chosen multiple class="form-control" ng-model="transactionsFilterState.categories"
-					ng-options="category.id as category.name for category in categories"></select></th>
+					ng-options="category as category.name for category in categories"></select></th>
 				<th><select chosen multiple class="form-control" ng-model="transactionsFilterState.accounts"
-					ng-options="account.id as account.name for account in accounts"></select></th>
+					ng-options="account as account.name for account in accounts"></select></th>
 				<th><select chosen class="form-control" ng-model="transactionsFilterState.priceRange"
 					ng-options="priceRange as priceRange.description for priceRange in priceRangeChoiceOptions"></select></th>
 				<th><input type="text" class="form-control" ng-model="transactionsFilterState.comment" /></th>

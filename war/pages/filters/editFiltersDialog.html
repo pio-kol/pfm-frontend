@@ -61,17 +61,39 @@
     
         <md-input-container flex>
           <label>Categories</label>
-          <md-select multiple ng-model="dialog.filterToEdit.categories" >
-    	  <md-option ng-repeat="category in categories" value="{{category.id}}">{{category.name}}</md-option>
-    	</md-select>
-        </md-input-container>
+          <md-chips ng-model="dialog.filterToEdit.categories" md-require-match="true">  
+      <md-autocomplete md-search-text="dialog.searchTextCategories" md-items="item in dialog.querySearchCategories(dialog.searchTextCategories)" md-item-text="item.name">
+        <md-item-template>
+          <span md-highlight-text="dialog.searchTextCategories" md-highlight-flags="^i">{{item.name}} </span>
+        </md-item-template>
+      </md-autocomplete>
+      <md-chip-template>
+        <span>
+          {{$chip.name}}
+        </span>
+      </md-chip-template>
+    </md-chips>
+    </md-input-container> 
         
-             <md-input-container flex>
+        <md-input-container flex>
           <label>Accounts</label>
-          <md-select multiple ng-model="dialog.filterToEdit.accounts" >
+          <md-chips ng-model="dialog.filterToEdit.accounts" md-require-match="true">  
+      <md-autocomplete md-search-text="dialog.searchTextAccounts" md-items="item in dialog.querySearchAccounts(dialog.searchTextAccounts)" md-item-text="item.name">
+        <md-item-template>
+          <span md-highlight-text="dialog.searchTextAccounts" md-highlight-flags="^i">{{item.name}} </span>
+        </md-item-template>
+      </md-autocomplete>
+      <md-chip-template>
+        <span>
+          {{$chip.name}}
+        </span>
+      </md-chip-template>
+    </md-chips>
+    </md-input-container> 
+          
+          <!-- <md-select multiple ng-model="dialog.filterToEdit.accounts" >
     	  <md-option ng-repeat="account in accounts" value="{{account.id}}">{{account.name}}</md-option>
-    	</md-select>
-        </md-input-container>
+    	</md-select> -->
         
       </div>
       

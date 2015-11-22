@@ -59,8 +59,8 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 	saveNewFilter = function(newFilter){
 		var filter = {
 				"name" : newFilter.name,
-				"categories" : newFilter.categories,
-				"accounts" : newFilter.accounts,
+				"categories" : [],
+				"accounts" : [],
 				"dateFrom" : newFilter.dateRange.startDate,
 				"dateTo" : newFilter.dateRange.endDate,
 				"priceFrom" : newFilter.priceRange.priceFrom,
@@ -68,6 +68,14 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 				"description" : newFilter.description,
 				"comment" : newFilter.comment
 			}
+		
+		for (var i=0; i < editedFilter.accounts.length; ++i){
+			filter.accounts.push(editedFilter.accounts[i].id);
+		}
+		
+		for (var i=0; i < editedFilter.categories.length; ++i){
+			filter.categories.push(editedFilter.categories[i].id);
+		}
 			
 			$http
 					.post("_ah/api/transactionsfilterendpoint/v1/transactionsfilter/", // $rootScope.transactionsFilterURL,
@@ -94,8 +102,8 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 					"id" : editedFilter.id
 				},
 				"name" : editedFilter.name,
-				"categories" : editedFilter.categories,
-				"accounts" : editedFilter.accounts,
+				"categories" : [],
+				"accounts" : [],
 				"dateFrom" : editedFilter.dateRange.startDate,
 				"dateTo" : editedFilter.dateRange.endDate,
 				"priceFrom" : editedFilter.priceRange.priceFrom,
@@ -103,6 +111,14 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 				"description" : editedFilter.description,
 				"comment" : editedFilter.comment
 			}
+		
+		for (var i=0; i < editedFilter.accounts.length; ++i){
+			filter.accounts.push(editedFilter.accounts[i].id);
+		}
+		
+		for (var i=0; i < editedFilter.categories.length; ++i){
+			filter.categories.push(editedFilter.categories[i].id);
+		}
 			
 			$http
 					.put("_ah/api/transactionsfilterendpoint/v1/transactionsfilter/", filter)
@@ -134,6 +150,35 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 										  });
 									});
 	};
+	
+	self.searchTextCategories = "";
+	self.searchTextAccounts = "";
+    self.querySearchCategories = querySearchCategories;
+    self.querySearchAccounts = querySearchAccounts;
+   
+   
+    function querySearchCategories(query) {
+        var results = query ? categories.filter(createFilterFor(query)) : [];
+        return results;
+      }
+    
+    function querySearchAccounts(query) {
+      var results = query ? accounts.filter(createFilterFor(query)) : [];
+      return results;
+    }
+
+    /**
+     * Create filter function for a query string
+     */
+    function createFilterFor(query) {
+      var lowercaseQuery = angular.lowercase(query);
+
+      return function filterFn(account) {
+        return (account.name.toLowerCase().indexOf(lowercaseQuery) != -1);
+      };
+
+    }
+    
 }
 
 

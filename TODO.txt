@@ -14,8 +14,8 @@
 - translate date range picker options
 - price range translate, support for not standard range (select correct value) + think about changing parameger to priceRange=<0,10>
 - cache service for categories / accounts
-- shorter parameter names
 - display categories as a tree structure
+- remove separate parameters from URL and replace with one - filterId	
 
 -------- navigation --------
 - mark selected view
