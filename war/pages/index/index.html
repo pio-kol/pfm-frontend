@@ -39,6 +39,7 @@
 <script src="pages/accounts/accounts.js"></script>
 <script src="pages/transactions/transactions-service.js"></script>
 <script src="pages/transactions/transactions.js"></script>
+<script src="pages/transactions/transactions-filters.js"></script>
 <script src="pages/navigation/navigationBar.js"></script>
 <script src="pages/filters/filters.js"></script>
 <script src="js/3rdParty/angular-chosen.min.js"></script>
@@ -50,6 +51,8 @@
 <body ng-controller='navigationBarController'>
 
 	<angled-navbar affixed='affixed' inverse='inverse' menus='menus' navfn='navfn(action)'></angled-navbar>
+	
+	<div id="alerts"></div>
 
 	<div class="container-fluid" ui-view />
 

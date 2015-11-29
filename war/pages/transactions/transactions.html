@@ -1,129 +1,17 @@
-<div class="container-fluid" flex ng-controller="transactionsController" novalidate>
+<div class="container-fluid" flex ng-controller="filtersController" novalidate>
 
-	<div id="alerts"></div>
-
-
-	<md-tabs md-dynamic-height md-align-tabs="top" md-autoselect="false"> <md-tab md-active="filter.id == selectedFilter.id" ng-repeat="filter in filters | orderBy:'name'"
-		md-on-select="applyFilter(filter)"> <md-tab-label> <span ng-show="filter.id !== 'new' && filter.id !== selectedFilter.id ">{{filter.name}}</span>
-	<span ng-show="filter.id !== 'new' && filter.id === selectedFilter.id" inline-edit-placeholder="No name" inline-edit="filter.name" inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-on-click></span> <span
-		ng-show="filter.id !== 'new' && filter.id === selectedFilter.id">&nbsp;&nbsp;</span> <span class="glyphicon glyphicon-ok"
-		ng-click="editFilter($event, selectedFilter)" ng-show="filter.id !== 'new' && filter.id === selectedFilter.id"></span> <span
+	<md-tabs md-dynamic-height md-align-tabs="top" md-autoselect="false"> <md-tab md-active="filter.id == selectedFilter.id"
+		ng-repeat="filter in filters | orderBy:'name'" md-on-select="applyFilter(filter)"> <md-tab-label> <span
+		ng-show="filter.id !== 'new' && filter.id !== selectedFilter.id ">{{filter.name}}</span> <span
+		ng-show="filter.id !== 'new' && filter.id === selectedFilter.id" inline-edit-placeholder="No name" inline-edit="filter.name" inline-edit-btn-edit=""
+		inline-edit-on-blur="save" inline-edit-on-click></span> <span ng-show="filter.id !== 'new' && filter.id === selectedFilter.id">&nbsp;&nbsp;</span> <span
+		class="glyphicon glyphicon-ok" ng-click="editFilter($event, selectedFilter)" ng-show="filter.id !== 'new' && filter.id === selectedFilter.id"></span> <span
 		ng-show="filter.id !== 'new' && filter.id === selectedFilter.id">&nbsp;&nbsp;</span> <span class="glyphicon glyphicon-trash"
 		ng-click="editFilter($event, selectedFilter)" ng-show="filter.id !== 'new' && filter.id === selectedFilter.id"></span> <span class="glyphicon glyphicon-plus"
-		ng-show="filter.id === 'new'"></span> </md-tab-label> <md-tab-body>
-	<table class="table table-striped" style="margin-top: 15px">
-		<thead>
-			<tr>
-				<th><a href="#/transactions" ng-click="orderByField='date'; reverseSort = !reverseSort"> {{"TRANSACTION_DATE" | translate}} <span
-						ng-show="orderByField == 'date'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
-				</a></th>
-				<th><a href="#/transactions" ng-click="orderByField='description'; reverseSort = !reverseSort"> {{"TRANSACTION_DESCRIPTION" | translate}} <span
-						ng-show="orderByField == 'description'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
-				</a></th>
-				<th><a href="#/transactions" ng-click="orderByField='category.name'; reverseSort = !reverseSort"> {{"TRANSACTION_CATEGORY" | translate}} <span
-						ng-show="orderByField == 'category.name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
-				</a></th>
-				<th><a href="#/transactions" ng-click="orderByField='account.name'; reverseSort = !reverseSort"> {{"TRANSACTION_ACCOUNT" | translate}} <span
-						ng-show="orderByField == 'account.name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
-				</a></th>
-				<th><a href="#/transactions" ng-click="orderByField='price'; reverseSort = !reverseSort"> {{"TRANSACTION_PRICE" | translate}} <span
-						ng-show="orderByField == 'price'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
-				</a></th>
-				<th><a href="#/transactions" ng-click="orderByField='comment'; reverseSort = !reverseSort"> {{"TRANSACTION_COMMENT" | translate}} <span
-						ng-show="orderByField == 'comment'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
-				</a></th>
-				<th />
-			</tr>
-			<tr>
-				<th><input date-range-picker type="text" name="filter-date-from" class="form-control date-picker" ng-model="selectedFilter.dateRange"
-					options="datePickerConfig" /></th>
-				<th><input type="text" class="form-control" ng-model="selectedFilter.description" /></th>
-				<th><select chosen multiple class="form-control" ng-model="selectedFilter.categories" ng-options="category as category.name for category in categories"></select></th>
-				<th><select chosen multiple class="form-control" ng-model="selectedFilter.accounts" ng-options="account as account.name for account in accounts"></select></th>
-				<th><input type="number" class="form-control" ng-model="selectedFilter.priceFrom" /> <input type="number" class="form-control"
-					ng-model="selectedFilter.priceTo" /></th>
-				<th><input type="text" class="form-control" ng-model="selectedFilter.comment" /></th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-switch on="transaction.mode" ng-repeat="transaction in transactions | filter:transactionsFilter | orderBy:orderByField:reverseSort" ng-form
-				name="editTransactionForm_{{transaction.id}}">
-
-				<td ng-switch-when="readOnly">{{ transaction.date | date : "yyyy-MM-dd" }}</td>
-				<td ng-switch-when="readOnly">{{ transaction.description }}</td>
-				<td ng-switch-when="readOnly">{{ transaction.category.name }}</td>
-				<td ng-switch-when="readOnly">{{ transaction.account.name }}</td>
-				<td ng-switch-when="readOnly">{{ transaction.price | currency }}</td>
-				<td ng-switch-when="readOnly">{{ transaction.comment }}</td>
-				<td ng-switch-when="edit"><input required type="date" class="form-control" ng-model="transaction.copyForEdit.date" /></td>
-				<td ng-switch-when="edit"><input required type="text" class="form-control" ng-model="transaction.copyForEdit.description" /></td>
-				<td ng-switch-when="edit"><select chosen required class="form-control" ng-model="transaction.copyForEdit.category.id"
-					ng-options="category.id as category.name for category in categories"></select></td>
-				<td ng-switch-when="edit"><select chosen required class="form-control" ng-model="transaction.copyForEdit.account.id"
-					ng-options="account.id as account.name for account in accounts"></select></td>
-				<td ng-switch-when="edit"><input required type="number" class="form-control" ng-model="transaction.copyForEdit.price" /></td>
-				<td ng-switch-when="edit"><input type="text" class="form-control" ng-model="transaction.copyForEdit.comment" /></td>
-
-				<td>
-					<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editTransaction(transaction)">
-						<span class="glyphicon glyphicon-pencil"></span>
-					</button>
-					<button ng-switch-when="edit" class="btn btn-success" ng-disabled="!editTransactionForm_{{transaction.id}}.$valid" ng-click="saveTransaction(transaction)">
-						<span class="glyphicon glyphicon-ok"></span>
-					</button>
-					<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditTransaction(transaction)">
-						<span class="glyphicon glyphicon-remove"></span>
-					</button>
-					<button ng-switch-when="edit" class="btn btn-danger" ng-click="removeTransaction(transaction)">
-						<span class="glyphicon glyphicon-trash"></span>
-					</button>
-				</td>
-
-			</tr>
-
-			<tr ng-show="newTransaction.visible" ng-form name="newTransactionForm">
-				<td><input required type="date" class="form-control" ng-model="newTransaction.date" /></td>
-				<td><input required type="text" class="form-control" ng-model="newTransaction.description" /></td>
-				<td><select chosen required class="form-control" ng-model="newTransaction.category.id"
-					ng-options="category.id as category.name for category in categories">
-				</select></td>
-				<td><select chosen required class="form-control" ng-model="newTransaction.account.id" ng-options="account.id as account.name for account in accounts">
-				</select></td>
-				<td><input required type="number" class="form-control" ng-model="newTransaction.price" /></td>
-				<td><input type="text" class="form-control" ng-model="newTransaction.comment" /></td>
-
-
-				<td>
-					<button class="btn btn-success" ng-disabled="!newTransactionForm.$valid" ng-click="saveNewTransaction(newTransaction)">
-						<span class="glyphicon glyphicon-ok"></span>
-					</button>
-
-					<button class="btn btn-warning" ng-click="cancelAddNewTransaction()">
-						<span class="glyphicon glyphicon-remove"></span>
-					</button>
-				</td>
-			</tr>
-
-			<tr>
-				<td />
-				<td />
-				<td />
-				<td />
-				<td />
-				<td />
-
-
-				<td>
-					<button class="btn btn-info" ng-click="addNewTransaction()">
-						<span class="glyphicon glyphicon-plus"></span>
-					</button>
-				</td>
-			</tr>
-
-		</tbody>
-	</table>
+		ng-show="filter.id === 'new'"></span> </md-tab-label> 
+		
+		<md-tab-body>
+		<div class="container-fluid" ng-include="'pages/transactions/transactions-table.html'"></div>
 	</md-tab-body> </md-tab> </md-tabs>
-
 
 </div>
