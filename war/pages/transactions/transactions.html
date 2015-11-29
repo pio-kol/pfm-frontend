@@ -1,17 +1,31 @@
-<div class="container-fluid" flex ng-controller="filtersController" novalidate>
+<div
+ class="container-fluid"
+ flex
+ ng-controller="filtersController"
+ novalidate>
 
-	<md-tabs md-dynamic-height md-align-tabs="top" md-autoselect="false"> <md-tab md-active="filter.id == selectedFilter.id"
-		ng-repeat="filter in filters | orderBy:'name'" md-on-select="applyFilter(filter)"> <md-tab-label> <span
-		ng-show="filter.id !== 'new' && filter.id !== selectedFilter.id ">{{filter.name}}</span> <span
-		ng-show="filter.id !== 'new' && filter.id === selectedFilter.id" inline-edit-placeholder="No name" inline-edit="filter.name" inline-edit-btn-edit=""
-		inline-edit-on-blur="save" inline-edit-on-click></span> <span ng-show="filter.id !== 'new' && filter.id === selectedFilter.id">&nbsp;&nbsp;</span> <span
-		class="glyphicon glyphicon-ok" ng-click="editFilter($event, selectedFilter)" ng-show="filter.id !== 'new' && filter.id === selectedFilter.id"></span> <span
-		ng-show="filter.id !== 'new' && filter.id === selectedFilter.id">&nbsp;&nbsp;</span> <span class="glyphicon glyphicon-trash"
-		ng-click="editFilter($event, selectedFilter)" ng-show="filter.id !== 'new' && filter.id === selectedFilter.id"></span> <span class="glyphicon glyphicon-plus"
-		ng-show="filter.id === 'new'"></span> </md-tab-label> 
-		
-		<md-tab-body>
-		<div class="container-fluid" ng-include="'pages/transactions/transactions-table.html'"></div>
-	</md-tab-body> </md-tab> </md-tabs>
+ <uib-tabset
+  type="tabs"
+  justified="false"> <uib-tab
+  ng-repeat="filter in filters | orderBy:'name'"
+  select="applyFilter(filter)"
+  active="filter.active"> <uib-tab-heading> <span ng-show="filter.id !== selectedFilter.id ">{{filter.name}}</span> <span
+  ng-show="filter.id === selectedFilter.id"
+  inline-edit-placeholder="No name"
+  inline-edit="filter.name"
+  inline-edit-btn-edit=""
+  inline-edit-on-blur="save"
+  inline-edit-on-click></span> <span ng-show="filter.id === selectedFilter.id">&nbsp;&nbsp;</span> <span
+  class="glyphicon glyphicon-remove"
+  ng-click="deleteSelectedFilter()"
+  ng-show="filter.id === selectedFilter.id"></span> </uib-tab-heading>
+ <div
+  class="container-fluid"
+  ng-include="'pages/transactions/transactions-table.html'"></div>
+ </uib-tab> 
+  <button class="btn btn-default pull-right" ng-click="addNewFilter()">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+  </uib-tabset>
 
 </div>

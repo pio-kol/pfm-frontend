@@ -52,6 +52,7 @@ var TransactionsFilter = function() {
 	this.priceTo = null;
 	this.accounts = [];
 	this.categories = [];
+	this.active = false;
 }
 
 var createNewFilter = function(item) {

@@ -1,5 +1,5 @@
 var app = angular.module('myApp', [ 'angular.chosen', 'pascalprecht.translate',
-		'ngSanitize', 'ui.router', 'daterangepicker', 'ngMaterial', 'angularInlineEdit' ]);
+		'ngSanitize', 'ui.router', 'daterangepicker', 'ngMaterial', 'angularInlineEdit', 'ui.bootstrap' ]);
 
 var alertNumber = 0;
 function addAlert(message, additionalData) {
