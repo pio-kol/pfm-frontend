@@ -106,7 +106,7 @@ app
 
 					$stateProvider //
 					.state("transactions", {
-						url : "/transactions?dateFrom&dateTo&descriptionContains&priceFrom&priceTo&commentContains&accounts&categories",
+						url : "/transactions?filter",
 						templateUrl : 'pages/transactions/transactions.html',
 					})//
 					.state("categories", {

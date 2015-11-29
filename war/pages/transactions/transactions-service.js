@@ -119,9 +119,9 @@ app
 							
 							service.refreshTransactions = function(accounts, categories) {
 								var defer = $q.defer();
-//								var dateFrom = $scope.transactionsFilterState.dateRange.startDate
+//								var dateFrom = $scope.selectedFilter.dateRange.startDate
 //										.format("YYYY-MM-DD");
-//								var dateTo = $scope.transactionsFilterState.dateRange.endDate
+//								var dateTo = $scope.selectedFilter.dateRange.endDate
 //										.format("YYYY-MM-DD");
 
 								//var url = URL + "?";

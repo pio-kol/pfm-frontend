@@ -3,8 +3,13 @@
 	<div id="alerts"></div>
 
 
-	<md-tabs md-dynamic-height md-selected="selectedTab" md-border-bottom="" md-autoselect="" md-align-tabs="top"> <md-tab
-		ng-repeat="filter in filters | orderBy:'name'" ng-click="applyFilter(filter)"> <md-tab-label>{{filter.name}} </md-tab-label> <md-tab-body>
+	<md-tabs md-dynamic-height md-align-tabs="top" > <md-tab md-active="filter.id === selectedFilter.id"
+		ng-repeat="filter in filters | orderBy:'name'" md-on-select="applyFilter(filter)"> <md-tab-label> <span ng-show="filter.id !== 'new'">{{filter.name}}</span>
+	<span ng-show="filter.id !== 'new' && filter.id === selectedFilter.id">&nbsp;&nbsp;</span> <span class="glyphicon glyphicon-ok"
+		ng-click="editFilter($event, selectedFilter)" ng-show="filter.id !== 'new' && filter.id === selectedFilter.id"></span> <span
+		ng-show="filter.id !== 'new' && filter.id === selectedFilter.id">&nbsp;&nbsp;</span> <span class="glyphicon glyphicon-trash"
+		ng-click="editFilter($event, selectedFilter)" ng-show="filter.id !== 'new' && filter.id === selectedFilter.id"></span> <span class="glyphicon glyphicon-plus"
+		ng-show="filter.id === 'new'"></span> </md-tab-label> <md-tab-body>
 	<table class="table table-striped" style="margin-top: 15px">
 		<thead>
 			<tr>
@@ -29,19 +34,15 @@
 				<th />
 			</tr>
 			<tr>
-				<th><input date-range-picker type="text" name="filter-date-from" class="form-control date-picker" ng-model="transactionsFilterState.dateRange"
+				<th><input date-range-picker type="text" name="filter-date-from" class="form-control date-picker" ng-model="selectedFilter.dateRange"
 					options="datePickerConfig" /></th>
-				<th><input type="text" class="form-control" ng-model="transactionsFilterState.description" /></th>
-				<th><select chosen multiple class="form-control" ng-model="transactionsFilterState.categories"
-					ng-options="category as category.name for category in categories"></select></th>
-				<th><select chosen multiple class="form-control" ng-model="transactionsFilterState.accounts"
-					ng-options="account as account.name for account in accounts"></select></th>
-				<th><select chosen class="form-control" ng-model="transactionsFilterState.priceRange"
-					ng-options="priceRange as priceRange.description for priceRange in priceRangeChoiceOptions"></select></th>
-				<th><input type="text" class="form-control" ng-model="transactionsFilterState.comment" /></th>
-				<th><button class="btn btn-default" ng-click="editFilter($event, transactionsFilterState)">
-						<span class="glyphicon glyphicon-pencil"></span>
-					</button></th>
+				<th><input type="text" class="form-control" ng-model="selectedFilter.description" /></th>
+				<th><select chosen multiple class="form-control" ng-model="selectedFilter.categories" ng-options="category as category.name for category in categories"></select></th>
+				<th><select chosen multiple class="form-control" ng-model="selectedFilter.accounts" ng-options="account as account.name for account in accounts"></select></th>
+				<th><input type="number" class="form-control" ng-model="selectedFilter.priceFrom" /> <input type="number" class="form-control"
+					ng-model="selectedFilter.priceTo" /></th>
+				<th><input type="text" class="form-control" ng-model="selectedFilter.comment" /></th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -121,9 +122,7 @@
 
 		</tbody>
 	</table>
-	</md-tab-body> </md-tab>
-	
-	</md-tabs>
+	</md-tab-body> </md-tab> </md-tabs>
 
 
 </div>

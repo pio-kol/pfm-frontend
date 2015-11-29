@@ -48,7 +48,8 @@ var TransactionsFilter = function() {
 	this.description = "";
 	this.comment = "";
 	this.dateRange = {startDate: moment().startOf('month'), endDate: moment().endOf('month')};
-	this.priceRange = {description : "All", priceFrom : null, priceTo : null}; // FIXME I18N
+	this.priceFrom = null;
+	this.priceTo = null;
 	this.accounts = [];
 	this.categories = [];
 }
@@ -70,9 +71,8 @@ var createNewFilter = function(item) {
 	filter.dateRange.startDate = moment(item.dateFrom);
 	filter.dateRange.endDate = moment(item.dateTo);
 	filter.description = item.description;
-	filter.priceRange.priceFrom = item.priceFrom;
-	filter.priceRange.priceTo = item.priceTo;
-	filter.priceRange.description = "Custom (tab) <" + item.priceFrom +  ", " + item.priceTo + ">";
+	filter.priceFrom = parseFloat(item.priceFrom);
+	filter.priceTo = parseFloat(item.priceTo);
 	filter.comment = item.comment;
 	
 	return filter;

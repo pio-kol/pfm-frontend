@@ -4,8 +4,8 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 	self.allFilters = filters;
 
 	self.newFilter = JSON.parse(JSON.stringify(selectedFilter));
-	self.newFilter.priceRange.priceFrom = parseFloat(self.newFilter.priceRange.priceFrom);
-	self.newFilter.priceRange.priceTo = parseFloat(self.newFilter.priceRange.priceTo);
+	self.newFilter.priceFrom = parseFloat(self.newFilter.priceFrom);
+	self.newFilter.priceTo = parseFloat(self.newFilter.priceTo);
 	self.newFilter.id = "";
 	self.newFilter.name = "";
 
@@ -22,8 +22,8 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 		for (var i = 0; i < filters.length; ++i) {
 			if (filters[i].id === self.selectedFilterId) {
 				self.filterToEdit = JSON.parse(JSON.stringify(filters[i]));
-				self.filterToEdit.priceRange.priceFrom = parseFloat(self.filterToEdit.priceRange.priceFrom);
-				self.filterToEdit.priceRange.priceTo = parseFloat(self.filterToEdit.priceRange.priceTo);
+				self.filterToEdit.priceFrom = parseFloat(self.filterToEdit.priceFrom);
+				self.filterToEdit.priceTo = parseFloat(self.filterToEdit.priceTo);
 				self.selectedFilter = filters[i];
 				return;
 			}
@@ -63,8 +63,8 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 				"accounts" : [],
 				"dateFrom" : newFilter.dateRange.startDate,
 				"dateTo" : newFilter.dateRange.endDate,
-				"priceFrom" : newFilter.priceRange.priceFrom,
-				"priceTo" : newFilter.priceRange.priceTo,
+				"priceFrom" : newFilter.priceFrom,
+				"priceTo" : newFilter.priceTo,
 				"description" : newFilter.description,
 				"comment" : newFilter.comment
 			}
@@ -106,8 +106,8 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 				"accounts" : [],
 				"dateFrom" : editedFilter.dateRange.startDate,
 				"dateTo" : editedFilter.dateRange.endDate,
-				"priceFrom" : editedFilter.priceRange.priceFrom,
-				"priceTo" : editedFilter.priceRange.priceTo,
+				"priceFrom" : editedFilter.priceFrom,
+				"priceTo" : editedFilter.priceTo,
 				"description" : editedFilter.description,
 				"comment" : editedFilter.comment
 			}
