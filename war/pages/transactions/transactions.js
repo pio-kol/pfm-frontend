@@ -29,11 +29,11 @@ app
 					$scope.applyFilter = function(filter) {
 						if (filter.id === 'new'){
 							var newFilter = new TransactionsFilter(); // replace with copy
-							newFilter.name = "( Untitled )"
+							newFilter.name = "??"
 							newFilter.id = 'unsaved';
-							//$rootScope.filters.push(newFilter);
-							//$scope.selectedFilter = newFilter;
-							//filter = newFilter;
+							$rootScope.filters.push(newFilter);
+							$scope.selectedFilter = newFilter;
+							return;
 						} 
 						
 						$scope.selectedFilter = filter;

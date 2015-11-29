@@ -3,9 +3,10 @@
 	<div id="alerts"></div>
 
 
-	<md-tabs md-dynamic-height md-align-tabs="top" > <md-tab md-active="filter.id === selectedFilter.id"
-		ng-repeat="filter in filters | orderBy:'name'" md-on-select="applyFilter(filter)"> <md-tab-label> <span ng-show="filter.id !== 'new'">{{filter.name}}</span>
-	<span ng-show="filter.id !== 'new' && filter.id === selectedFilter.id">&nbsp;&nbsp;</span> <span class="glyphicon glyphicon-ok"
+	<md-tabs md-dynamic-height md-align-tabs="top" md-autoselect="false"> <md-tab md-active="filter.id == selectedFilter.id" ng-repeat="filter in filters | orderBy:'name'"
+		md-on-select="applyFilter(filter)"> <md-tab-label> <span ng-show="filter.id !== 'new' && filter.id !== selectedFilter.id ">{{filter.name}}</span>
+	<span ng-show="filter.id !== 'new' && filter.id === selectedFilter.id" inline-edit-placeholder="No name" inline-edit="filter.name" inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-on-click></span> <span
+		ng-show="filter.id !== 'new' && filter.id === selectedFilter.id">&nbsp;&nbsp;</span> <span class="glyphicon glyphicon-ok"
 		ng-click="editFilter($event, selectedFilter)" ng-show="filter.id !== 'new' && filter.id === selectedFilter.id"></span> <span
 		ng-show="filter.id !== 'new' && filter.id === selectedFilter.id">&nbsp;&nbsp;</span> <span class="glyphicon glyphicon-trash"
 		ng-click="editFilter($event, selectedFilter)" ng-show="filter.id !== 'new' && filter.id === selectedFilter.id"></span> <span class="glyphicon glyphicon-plus"
