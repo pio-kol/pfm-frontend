@@ -3,6 +3,7 @@ package fw.account.endopoint;
 import fw.PMF;
 import fw.account.Account;
 import fw.account.AccountOperation;
+import fw.history.HistoryEntry;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -116,11 +117,11 @@ public class AccountEndpoint {
 			}
 
 			AccountOperation operation = new AccountOperation(account.getState());
-//			operation.setNewName(account.getName());
-//			operation.setNewState(account.getState());
 			account.getHistory().add(operation);
 
 			mgr.makePersistent(account);
+			
+			mgr.makePersistent(new HistoryEntry(String.format("New account %s, %d", account.getName(), account.getState())));
 		} finally {
 			mgr.close();
 		}
@@ -145,19 +146,8 @@ public class AccountEndpoint {
 			// bug in GAE - NullPointer when namespace=null
 			account.setId(KeyFactory.createKey(Account.class.getSimpleName(), account.getId().getId()));
 			
-//			AccountOperation operation = new AccountOperation();
-//			if (!stateInDB.getName().equals(account.getName())){
-//				operation.setPreviousName(stateInDB.getName());
-//				operation.setNewName(account.getName());
-//			}
-//			if (!stateInDB.getState().equals(account.getState())){
-//				operation.setPreviousState(stateInDB.getState());
-//				operation.setNewState(account.getState());
-//			}
-//			// to filter out changes when nothing changed
-//			if (operation.getNewName() != null || operation.getNewState() != null){
-//				account.getHistory().add(operation);
-//			}
+			mgr.makePersistent(new HistoryEntry(String.format("Update account %s (%s), %d (%d)", account.getName(), stateInDB.getName(), account.getState(), stateInDB.getState())));
+
 			AccountOperation operation = new AccountOperation(account.getState());
 			account.getHistory().addAll(stateInDB.getHistory());
 			account.getHistory().add(operation);
@@ -185,10 +175,7 @@ public class AccountEndpoint {
 			Account account = mgr.getObjectById(Account.class, id);
 			account.markAsDeleted();
 			
-//			AccountOperation operation = new AccountOperation();
-//			operation.setPreviousName(account.getName());
-//			operation.setPreviousState(account.getState());
-//			account.getHistory().add(operation);
+			mgr.makePersistent(new HistoryEntry(String.format("Remove account %s, %d", account.getName(), account.getState())));
 			AccountOperation operation = new AccountOperation(account.getState());
 			account.getHistory().add(operation);
 			

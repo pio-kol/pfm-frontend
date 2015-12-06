@@ -3,6 +3,7 @@ app
 			$rootScope.accountsURL = "/_ah/api/accountendpoint/v1/account/";
 			$rootScope.categoriesURL = "/_ah/api/categoryendpoint/v1/category/";
 			$rootScope.filtersURL = "_ah/api/transactionsfilterendpoint/v1/transactionsfilter/";
+			$rootScope.logURL = "_ah/api/historyentryendpoint/v1/historyentry/";
 
 			$rootScope.categories = [];
 			$rootScope.accounts = [];

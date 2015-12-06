@@ -27,6 +27,7 @@ app
 						MENU_TRANSACTION_HISTORY : "Historia transakcji",
 						MENU_ACCOUNTS : "Zarządzanie kontami",
 						MENU_CATEGORIES : "Zarządzanie kategoriami",
+						MENU_LOG : "Log",
 						CONFIRM_REMOVE_CATEGORY : 'Kategoria "{{name}}" zostanie usunięta. Kontynuować?',
 						CONFIRM_REMOVE_ACCOUNT : 'Konto "{{name}}" zostanie usunięte. Kontynuować?',
 						CONFIRM_REMOVE_TRANSACTION : 'Tranzakcja "{{name}}" zostanie usunięta. Kontynuować?',
@@ -69,6 +70,7 @@ app
 						MENU_TRANSACTION_HISTORY : "Transaction history",
 						MENU_ACCOUNTS : "Accounts",
 						MENU_CATEGORIES : "Categories",
+						MENU_LOG : "Log",
 						CONFIRM_REMOVE_CATEGORY : 'Category "{{name}}" will be removed. Continue?',
 						CONFIRM_REMOVE_ACCOUNT : 'Account "{{name}}" will be removed. Continue?',
 						CONFIRM_REMOVE_TRANSACTION : 'Transaction "{{name}}" will be removed. Continue?',
@@ -116,6 +118,10 @@ app
 					.state("accounts", {
 						url : "/accounts",
 						templateUrl : 'pages/accounts/accounts.html'
+					})//
+					.state("log", {
+						url : "/log",
+						templateUrl : 'pages/log/log.html'
 					})
 
 				} ]);

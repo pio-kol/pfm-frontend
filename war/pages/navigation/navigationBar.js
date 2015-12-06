@@ -19,7 +19,12 @@ app
 					}, {
 						title : "MENU_ACCOUNTS",
 						action : "accounts"
-					} ]; // end menus
+					}, {
+						title : "MENU_LOG",
+						action : "log"
+					}
+					
+					]; // end menus
 
 					$scope.styling = 'Inverse';
 					$scope.searchDisplay = 'Visible';

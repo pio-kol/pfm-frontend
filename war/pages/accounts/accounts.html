@@ -34,7 +34,7 @@
 				<td ng-switch-when="readOnly">{{ account.name }}</td>
 				<td ng-switch-when="readOnly">{{ account.value | currency }}</td>
                 
-                <td><button ng-switch-when="readOnly" class="btn btn-default" ng-click="getAccountHistory(account)">
+                <td><button class="btn btn-default" ng-click="getAccountHistory(account)">
                     <span class="glyphicon glyphicon-list-alt"></span>
                     </button>
                 </td>
