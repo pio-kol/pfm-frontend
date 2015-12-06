@@ -1,6 +1,8 @@
-package fw;
+package fw.account;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -20,7 +22,13 @@ public class Account {
 	private String name;
 
 	@Persistent
-	private BigDecimal state;
+	private Long state;
+	
+	@Persistent
+	private Date deleteDate;
+	
+	@Persistent
+	private List<AccountOperation> history = new ArrayList<>();
 
 	public Key getId() {
 		return id;
@@ -38,12 +46,20 @@ public class Account {
 		this.name = name;
 	}
 
-	public BigDecimal getState() {
+	public Long getState() {
 		return state;
 	}
 
-	public void setState(BigDecimal state) {
+	public void setState(Long state) {
 		this.state = state;
+	}
+
+	public List<AccountOperation> getHistory() {
+		return history;
+	}
+
+	public void setHistory(List<AccountOperation> history) {
+		this.history = history;
 	}
 
 	@Override
@@ -86,6 +102,14 @@ public class Account {
 	@Override
 	public String toString() {
 		return "Account [id=" + id + ", name=" + name + ", state=" + state + "]";
+	}
+
+	public Date getDeleteDate() {
+		return deleteDate;
+	}
+
+	public void markAsDeleted() {
+		this.deleteDate = new Date();
 	}
 
 }

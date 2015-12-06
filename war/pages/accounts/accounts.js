@@ -23,6 +23,29 @@ app
 					$scope.cancelEditAccount = function(account) {
 						account.readOnlyMode();
 					};
+					
+					$scope.getAccountHistory = function(account) {
+						$http.get($rootScope.accountsURL + account.id).then(
+								function(response) {
+									var data = response.data;
+
+									if (data.history != null) {
+										var result = "";
+										for (i = 0; i < data.history.length; ++i) {
+											result += data.history[i].timestamp + " " + data.history[i].state + "\n";
+										}
+										alert(result);
+									} else {
+										alert("No history entries found");
+									}
+								},
+								function(response) {
+									$translate('ERROR_DATA_RETRIVE').then(
+											function(message) {
+												addAlert(message, response);
+											});
+								});
+					};
 
 					$scope.removeAccount = function(accountToDelete) {
 						$translate('CONFIRM_REMOVE_ACCOUNT', {name : accountToDelete.name}).then(function (message) {
@@ -96,8 +119,8 @@ app
 
 					};
 
-					$(document).ready(function() {
+					//$(document).ready(function() {
 						$scope.refreshAccounts();
-					});
+					//});
 
 				});

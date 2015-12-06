@@ -21,6 +21,7 @@
 				<th><a href="#/accounts" ng-click="orderByField='value'; reverseSort = !reverseSort"> {{"ACCOUNT_STATE" | translate}} <span
 						ng-show="orderByField == 'value'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
 				</a></th>
+                <th />
 				<th />
 			</tr>
 		</thead>
@@ -32,6 +33,11 @@
 
 				<td ng-switch-when="readOnly">{{ account.name }}</td>
 				<td ng-switch-when="readOnly">{{ account.value | currency }}</td>
+                
+                <td><button ng-switch-when="readOnly" class="btn btn-default" ng-click="getAccountHistory(account)">
+                    <span class="glyphicon glyphicon-list-alt"></span>
+                    </button>
+                </td>
 
 				<td>
 					<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editAccount(account)">

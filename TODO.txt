@@ -7,8 +7,6 @@
 
 -------- transactions --------
 - save date always with time 00:00:00
-- description contains - to websafe (all parameters)
-- update url when search parameter changed and filter applied
 - support for decimals in price
 - clear filters button
 - translate date range picker options
@@ -27,6 +25,8 @@
 - formatter for code
 - logging of operations
 - all dependencies also locally
+- verify concept of keeping data on user Google Drive and reading it to the app only at startup
+- think about cache so app can work offline and synchronize data when network is available
 
 -------- server side -------
 - server side validation
