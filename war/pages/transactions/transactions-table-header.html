@@ -1,0 +1,126 @@
+  <tr>
+   <th>
+    <a
+     href="#/transactions"
+     ng-click="orderByField='date'; reverseSort = !reverseSort">
+     {{"TRANSACTION_DATE" | translate}}
+     <span ng-show="orderByField == 'date'">
+      <span ng-show="!reverseSort">^</span>
+      <span ng-show="reverseSort">v</span>
+     </span>
+    </a>
+   </th>
+   <th>
+    <a
+     href="#/transactions"
+     ng-click="orderByField='description'; reverseSort = !reverseSort">
+     {{"TRANSACTION_DESCRIPTION" | translate}}
+     <span ng-show="orderByField == 'description'">
+      <span ng-show="!reverseSort">^</span>
+      <span ng-show="reverseSort">v</span>
+     </span>
+    </a>
+   </th>
+   <th>
+    <a
+     href="#/transactions"
+     ng-click="orderByField='category.name'; reverseSort = !reverseSort">
+     {{"TRANSACTION_CATEGORY" | translate}}
+     <span ng-show="orderByField == 'category.name'">
+      <span ng-show="!reverseSort">^</span>
+      <span ng-show="reverseSort">v</span>
+     </span>
+    </a>
+   </th>
+   <th>
+    <a
+     href="#/transactions"
+     ng-click="orderByField='account.name'; reverseSort = !reverseSort">
+     {{"TRANSACTION_ACCOUNT" | translate}}
+     <span ng-show="orderByField == 'account.name'">
+      <span ng-show="!reverseSort">^</span>
+      <span ng-show="reverseSort">v</span>
+     </span>
+    </a>
+   </th>
+   <th>
+    <a
+     href="#/transactions"
+     ng-click="orderByField='price'; reverseSort = !reverseSort">
+     {{"TRANSACTION_PRICE" | translate}}
+     <span ng-show="orderByField == 'price'">
+      <span ng-show="!reverseSort">^</span>
+      <span ng-show="reverseSort">v</span>
+     </span>
+    </a>
+   </th>
+   <th>
+    <a
+     href="#/transactions"
+     ng-click="orderByField='comment'; reverseSort = !reverseSort">
+     {{"TRANSACTION_COMMENT" | translate}}
+     <span ng-show="orderByField == 'comment'">
+      <span ng-show="!reverseSort">^</span>
+      <span ng-show="reverseSort">v</span>
+     </span>
+    </a>
+   </th>
+   <th />
+  </tr>
+  <tr>
+   <th>
+    <input
+     date-range-picker
+     type="text"
+     name="filter-date-from"
+     class="form-control date-picker"
+     ng-model="selectedFilter.dateRange"
+     options="datePickerConfig" />
+   </th>
+   <th>
+    <input
+     type="text"
+     class="form-control"
+     ng-model="selectedFilter.description" />
+   </th>
+   <th>
+    <select
+     chosen
+     multiple
+     class="form-control"
+     ng-model="selectedFilter.categories"
+     ng-options="category as category.name for category in categories"></select>
+   </th>
+   <th>
+    <select
+     chosen
+     multiple
+     class="form-control"
+     ng-model="selectedFilter.accounts"
+     ng-options="account as account.name for account in accounts"></select>
+   </th>
+   <th>
+    <input
+     type="number"
+     class="form-control"
+     ng-model="selectedFilter.priceFrom" />
+    <input
+     type="number"
+     class="form-control"
+     ng-model="selectedFilter.priceTo" />
+   </th>
+   <th>
+    <input
+     type="text"
+     class="form-control"
+     ng-model="selectedFilter.comment" />
+   </th>
+   <th>
+    <button
+     class="btn btn-default"
+     ng-click="saveEditedFilter()">
+     <span class="glyphicon glyphicon-ok"></span>
+    </button>
+   </th>
+  </tr>
+ 

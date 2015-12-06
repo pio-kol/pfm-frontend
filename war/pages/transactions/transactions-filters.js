@@ -73,6 +73,56 @@ app.controller('filtersController', function($scope, $rootScope, $http,
 
 	};
 	
+
+	$rootScope.saveEditedFilter = function(newName){
+		var editedFilter = $scope.selectedFilter;
+		
+		// callback is called before editing model (inline-edit)
+		if (newName != null){
+			editedFilter.name = newName;
+		}
+		
+		var filter = {
+				"id" : {
+					"id" : editedFilter.id
+				},
+				"name" : editedFilter.name,
+				"categories" : [],
+				"accounts" : [],
+				"dateFrom" : editedFilter.dateRange.startDate,
+				"dateTo" : editedFilter.dateRange.endDate,
+				"priceFrom" : editedFilter.priceFrom,
+				"priceTo" : editedFilter.priceTo,
+				"description" : editedFilter.description,
+				"comment" : editedFilter.comment
+			}
+		
+		for (var i=0; i < editedFilter.accounts.length; ++i){
+			filter.accounts.push(editedFilter.accounts[i].id);
+		}
+		
+		for (var i=0; i < editedFilter.categories.length; ++i){
+			filter.categories.push(editedFilter.categories[i].id);
+		}
+			
+			$http
+					.put("_ah/api/transactionsfilterendpoint/v1/transactionsfilter/", filter)
+					.then(
+							function(response) {
+								var updatedFilter = createNewFilter(response.data);
+								//alert(updatedFilter.name);
+								//filters[filters.indexOf(originalFilter)] = updatedFilter;
+								// FIXME add update of model
+								
+							},
+							function(response) { // FIXME message
+								$translate('ERROR_TRANSACTION_ADD', {name : originalFilter.name}).then(function (message) { 
+								    addAlert(message, response);
+								  });
+							});
+
+	};
+	
 	$scope.deleteSelectedFilter = function() {
 		var filterToDelete = $scope.selectedFilter;
 		
@@ -131,6 +181,8 @@ app.controller('filtersController', function($scope, $rootScope, $http,
 					$rootScope.filters[i].active = true;
 				}
 			}
+		} else {
+			$rootScope.filters[0].active = true;
 		}
 
 	});

@@ -73,7 +73,13 @@ var createNewFilter = function(item) {
 	filter.dateRange.endDate = moment(item.dateTo);
 	filter.description = item.description;
 	filter.priceFrom = parseFloat(item.priceFrom);
+	if (isNaN(filter.priceFrom)){
+		filter.priceFrom = null;
+	}
 	filter.priceTo = parseFloat(item.priceTo);
+	if (isNaN(filter.priceTo)){
+		filter.priceTo = null;
+	}
 	filter.comment = item.comment;
 	
 	return filter;
