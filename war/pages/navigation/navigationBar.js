@@ -60,6 +60,10 @@ app
 								$translate.use($translate.use() === "en" ? "pl"
 										: "en");
 							};
+							
+							$scope.handleAuthClick = function(){
+								handleAuthClick();
+							}
 
 							$scope.defaults = {
 								menus : [],

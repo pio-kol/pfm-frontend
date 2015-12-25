@@ -15,17 +15,8 @@
 						<li ng-repeat="item in menu.menu" ng-class="{true: 'divider'}[isDivider(item)]"><a ng-if="!isDivider(item)" ui-sref="{{item.action}}">{{item.title}}</a></li>
 					</ul></li>
 			</ul>
-			<form ng-if="search.show" class="navbar-form navbar-right" role="search">
-				<div class="form-group">
-					<input type="text" class="form-control" placeholder="Search" ng-model="search.terms">
-					<button class="btn btn-default" type="button" ng-click="searchfn()">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-				</div>
-			</form>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a id="signUpMenuItem" href="#"><span class="glyphicon glyphicon-user"></span> {{"SIGN_UP"|translate}}</a></li>
-				<li><a id="loginMenuItem" href="#"><span class="glyphicon glyphicon-log-in"></span> {{"LOGIN"|translate}}</a></li>
+				<li><a id="loginMenuItem" href="#" ng-click="handleAuthClick()"><span class="glyphicon glyphicon-log-in"></span> {{"LOGIN"|translate}}</a></li>
 				<li><a id="languageMenuItem" ng-click="toggleLanguage()"><span class="glyphicon glyphicon-flag"></span> {{"LANGUAGE"|translate}}</a></li>
 			</ul>
 		</div>
