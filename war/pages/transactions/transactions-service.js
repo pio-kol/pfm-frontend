@@ -2,8 +2,8 @@ app
 		.factory(
 				'transactionsService',
 				[
-						'$http', "$q", "$translate",
-						function($http, $q, $translate) {
+						'$http', "$q", "$translate", 'googleService',
+						function($http, $q, $translate, googleService) {
 							var URL = "_ah/api/transactionendpoint/v1/transaction/";
 							
 							var service = {};
@@ -39,9 +39,7 @@ app
 		        					"accountId" : newTransaction.account.id
 								}
 								
-								$http
-										.post(URL,
-												transaction)
+								googleService.callScriptFunction("addTransaction", transaction)
 										.then(
 												function(response) {
 													var newTransaction = createNewTransaction(response.data);

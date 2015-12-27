@@ -5,6 +5,7 @@ app
 				'$urlRouterProvider',
 				'$locationProvider',
 				'$mdThemingProvider',
+				//'googleService',
 				function($translateProvider, $stateProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider) {
 					var translations_pl = {
 						MAIN_CATEGORY : 'Kategoria główna',
@@ -107,29 +108,10 @@ app
 					$urlRouterProvider.otherwise('/transactions');
 
 					var loginInterceptor = 
-						function($q) {
-	                    var deferred = $q.defer();
-	                    
-	                    function handleAuthResultInternal(authResult) {
-//	                    	alert(JSON.stringify(authResult));
-	                    	if (authResult && !authResult.error) {
-	                    		deferred.resolve();
-
-	                    	} else {
-	                    		deferred.reject();
-
-	                    	}
-	                    }
-	                    
-	                    
-	                    gapi.auth.authorize({
-	            			'client_id' : CLIENT_ID,
-	            			'scope' : SCOPES.join(' '),
-	            			'immediate' : false
-	            		}, handleAuthResultInternal);
-	                    
-	                    return deferred.promise;
-	                }
+						function($q, googleService) {
+							return googleService.checkAuth();
+	                	}
+					
 					
 					
 					$stateProvider //
