@@ -56,7 +56,7 @@ app
 						ranges : datePickerRanges,
 						eventHandlers : {
 							'apply.daterangepicker' : function(ev, picker) {
-								$scope.refreshTransactions();
+								transactionsService.refreshTransactions($rootScope.accounts, $rootScope.categories);
 							}
 						}
 					};

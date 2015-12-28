@@ -63,7 +63,7 @@ app
 								return defer.promise;
 							}
 
-							callScriptFunctionInternal = function(functionName, parameters) {
+							function callScriptFunctionInternal(functionName, parameters) {
 								var request = {
 									'function' : functionName,
 									'parameters' : parameters,
@@ -93,28 +93,39 @@ app
 
 							
 							function getSpreadsheetId(){
+								var defer = $q.defer();
+								
 								if (SPREADSHEET_ID != null){
-									return SPREADSHEET_ID;
+									defer.resolve();
+								} else {
+									callScriptFunctionInternal("prepareFolderAndSpreadsheet")
+									.then(
+											function(response) {
+												SPREADSHEET_ID = response.response.result;
+												defer.resolve();
+											},
+											function(response) {
+												defer.reject(JSON.stringify(response));
+											});
 								}
 								
-								callSpreadsheetFunctionInternal("prepareFolderAndSpreadsheet")
-								.then(
-										function(response) {
-											alert(JSON.stringify(reponse));
-											return SPREADSHEET_ID = response;
-										},
-										function(response) {
-											$translate('ERROR_TRANSACTION_ADD', {name : newTransaction.description}).then(function (message) {
-											    addAlert(message, response);
-											  });
-											throw new Exception(JSON.stringify(reponse));
-										});
+								return defer.promise;
 							}
 							
 							service.callScriptFunction = function(functionName, object) {
-								var spreadsheetId = getSpreadsheetId();
+								var defer = $q.defer();
 								
-								return callSpreadsheetFunctionInternal(functionName, [spreadsheetId, object]);
+								getSpreadsheetId().then(function(response){
+									callScriptFunctionInternal(functionName, [SPREADSHEET_ID, object])
+									.then(function(response){
+										defer.resolve(response.response.result);
+									}, 
+											function(response){
+										defer.reject(response);
+									});
+								});
+								
+								return defer.promise;
 							}
 							
 							return service;

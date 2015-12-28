@@ -87,13 +87,13 @@ var createNewFilter = function(item) {
 
 function createNewTransaction(data){
 	var newTransaction = new Transaction();
-	newTransaction.id = data.id.id;
+	newTransaction.id = data.id;
 	newTransaction.date = new Date(data.date);
 	newTransaction.description = data.description;
 	newTransaction.comment = data.comment;
-	newTransaction.category.id = data.categoryId;
+	newTransaction.category.id = "" + data.categoryId; // make sure string is used
 	newTransaction.category.name = "";
-	newTransaction.account.id = data.accountId;
+	newTransaction.account.id = "" + data.accountId; // make sure string is used
 	newTransaction.account.name = "";
 	newTransaction.price = parseFloat(data.price);
 	

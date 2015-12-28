@@ -42,7 +42,8 @@ app
 								googleService.callScriptFunction("addTransaction", transaction)
 										.then(
 												function(response) {
-													var newTransaction = createNewTransaction(response.data);
+													//alert(JSON.stringify(response));
+													var newTransaction = createNewTransaction(response);
 													updateAccountAndCategoryReference(newTransaction, accounts, categories);
 													service.transactions.push(newTransaction);
 													defer.resolve();
@@ -59,9 +60,7 @@ app
 							service.saveTransaction = function(editedTransaction, accounts, categories) {
 								var defer = $q.defer();
 								var transaction = {
-										"id" : {
-											"id" : editedTransaction.id
-										},
+										"id" : editedTransaction.id,
 										"date" : editedTransaction.copyForEdit.date,
 										"description" : editedTransaction.copyForEdit.description,
 										"price" : editedTransaction.copyForEdit.price,
@@ -71,10 +70,10 @@ app
 								}
 
 								$http
-										.put(URL, transaction)
+										googleService.callScriptFunction("updateTransaction", transaction)
 										.then(
 												function(response) {
-													var updatedTransaction = createNewTransaction(response.data);
+													var updatedTransaction = createNewTransaction(response);
 													updateAccountAndCategoryReference(updatedTransaction, accounts, categories);
 													service.transactions[service.transactions.indexOf(editedTransaction)] = updatedTransaction;
 													defer.resolve();
@@ -97,7 +96,7 @@ app
 													if (!result) {
 														return;
 													}
-													$http.delete(URL + transactionToDelete.id)
+													googleService.callScriptFunction("deleteTransaction", transactionToDelete.id)
 													.then(
 															function(response) {
 																service.transactions.splice(service.transactions.indexOf(transactionToDelete), 1);
@@ -128,17 +127,16 @@ app
 //								url = dateTo != null ? url + "dateTo=" + dateTo
 //										+ "&" : url;
 
-								$http
-										.get(URL)
+								googleService.callScriptFunction("getTransactions")
 										.then(
 												function(response) {
 													service.transactions = [];
 
-													var data = response.data;
+													var data = response;
 
-													if (data.items != null) {
-														for (i = 0; i < data.items.length; ++i) {
-															var newTransaction = createNewTransaction(data.items[i]);
+													if (data != null) {
+														for (i = 0; i < data.length; ++i) {
+															var newTransaction = createNewTransaction(data[i]);
 														    updateAccountAndCategoryReference(newTransaction, accounts, categories);
 															service.transactions.push(newTransaction);
 														}
