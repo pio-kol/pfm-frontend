@@ -21,7 +21,7 @@ app
 								gapi.auth.authorize({
 									'client_id' : CLIENT_ID,
 									'scope' : SCOPES.join(' '),
-									'immediate' : false
+									'immediate' : true
 								}, function(authResult) {
 									
 									if (authResult && !authResult.error) {
@@ -45,12 +45,18 @@ app
 										defer.resolve();
 
 									} else {
-//										gapi.auth.authorize({
-//											'client_id' : CLIENT_ID,
-//											'scope' : SCOPES.join(' '),
-//											'immediate' : false
-//										}, handleAuthResult);
-										defer.reject();
+										gapi.auth.authorize({
+											'client_id' : CLIENT_ID,
+											'scope' : SCOPES.join(' '),
+											'immediate' : false
+										}, function(authResult){
+											if (authResult && !authResult.error) {
+												defer.reject();
+											} else {
+												defer.resolve();
+											}
+										});
+										//defer.reject();
 									}
 								});
 								

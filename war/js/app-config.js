@@ -105,11 +105,27 @@ app
 
 					// $locationProvider.html5Mode(true);
 					
-					$urlRouterProvider.otherwise('/transactions');
+					$urlRouterProvider.otherwise('/login');
 
 					var loginInterceptor = 
-						function($q, googleService) {
-							return googleService.checkAuth();
+						function($q, $state, googleService) {
+							var promise = googleService.checkAuth();
+							
+							promise.then(
+									function() {
+										// success do nothing
+
+									}, 
+									function() {
+										// failure
+										$state.transitionTo('login', {
+											//filter : $scope.selectedFilter.id
+										}, {
+											notify : false
+										});
+									});
+							
+							return promise;
 	                	}
 					
 					
@@ -142,6 +158,10 @@ app
 						resolve: {
 			                login: loginInterceptor
 			            }
+					})
+					.state("login", {
+						url : "/login",
+						templateUrl : 'pages/login/login.html',
 					})
 
 				} ]);
