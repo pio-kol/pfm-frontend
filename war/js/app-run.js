@@ -1,5 +1,5 @@
 app
-		.run(function($rootScope, $http, $translate, $q) {
+		.run(function($rootScope, $http, $translate, $q, googleService) {
 			$rootScope.accountsURL = "/_ah/api/accountendpoint/v1/account/";
 			$rootScope.categoriesURL = "/_ah/api/categoryendpoint/v1/category/";
 			$rootScope.filtersURL = "_ah/api/transactionsfilterendpoint/v1/transactionsfilter/";
@@ -74,9 +74,9 @@ app
 
 			$rootScope.createNewAccount = function(data) {
 				var newAccount = new Account();
-				newAccount.id = data.id.id;
+				newAccount.id = data.id;
 				newAccount.name = data.name;
-				newAccount.value = data.state;
+				newAccount.value = data.value;
 
 				return newAccount;
 			}
@@ -84,16 +84,17 @@ app
 			$rootScope.refreshAccounts = function() {
 				var defer = $q.defer();
 
-				$http.get($rootScope.accountsURL).then(
+				googleService.callScriptFunction("getAccounts")
+				.then(
 						function(response) {
 							$rootScope.accounts = [];
 
-							var data = response.data;
+							var data = response;
 
-							if (data.items != null) {
-								for (i = 0; i < data.items.length; ++i) {
+							if (data != null) {
+								for (i = 0; i < data.length; ++i) {
 									var newAccount = $rootScope
-											.createNewAccount(data.items[i]);
+											.createNewAccount(data[i]);
 									$rootScope.accounts.push(newAccount);
 								}
 							}

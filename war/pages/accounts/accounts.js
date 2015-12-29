@@ -1,7 +1,7 @@
 app
 		.controller(
 				'accountController',
-				function($scope, $rootScope, $http, $translate) {
+				function($scope, $rootScope, $http, $translate, googleService) {
 					$scope.orderByField = 'name';
 					$scope.reverseSort = false;
 					
@@ -55,7 +55,7 @@ app
 											if (!result) {
 												return;
 											}
-											$http.delete($rootScope.accountsURL + accountToDelete.id)
+											googleService.callScriptFunction("deleteAccount", accountToDelete.id)
 											.then(
 													function(response) {
 														$scope.accounts.splice($scope.accounts.indexOf(accountToDelete), 1);
@@ -71,20 +71,17 @@ app
 
 					$scope.saveAccount = function(editedAccount) {
 						var account = {
-							"id" : {
-								"id" : editedAccount.id
-							},
+							"id" : editedAccount.id,
 							"name" : editedAccount.copyForEdit.name,
-							"state" : editedAccount.copyForEdit.value
+							"value" : editedAccount.copyForEdit.value
 						}
 
-						$http
-								.put($rootScope.accountsURL, account)
+						googleService.callScriptFunction("updateAccount", account)
 								.then(
 										function(response) {
 											editedAccount.readOnlyMode();
 
-											var updatedAccount = $rootScope.createNewAccount(response.data);
+											var updatedAccount = $rootScope.createNewAccount(response);
 											$scope.accounts[$scope.accounts.indexOf(editedAccount)] = updatedAccount;
 										},
 										function(response) {
@@ -97,18 +94,17 @@ app
 					$scope.saveNewAccount = function(newAccount) {
 						var account = {
 							"name" : newAccount.name,
-							"state" : newAccount.value,
+							"value" : newAccount.value,
 						}
 
-						$http
-								.post($rootScope.accountsURL, account)
+						googleService.callScriptFunction("addAccount", account)
 								.then(
 										function(response) {
 											$scope.newAccount = new Account();
 											$scope.newAccountForm
 													.$setPristine();
 											
-											var newAccount = $rootScope.createNewAccount(response.data);
+											var newAccount = $rootScope.createNewAccount(response);
 											$scope.accounts.push(newAccount);
 										},
 										function(response) {
