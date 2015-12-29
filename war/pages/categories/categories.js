@@ -1,6 +1,6 @@
 		app.controller(
 				'categoryController', 
-				function($scope, $rootScope, $http, $translate) {
+				function($scope, $rootScope, $http, $translate, googleService) {
 					$scope.orderByField = 'name';
 					$scope.reverseSort = false;
 					
@@ -66,7 +66,7 @@
 											if (!result) {
 												return;
 											}
-											$http.delete($rootScope.categoriesURL + categoryToDelete.id)
+											googleService.callScriptFunction("deleteCategory", categoryToDelete.id)
 											.then(
 													function(response) {
 														$rootScope.categories.splice($rootScope.categories.indexOf(categoryToDelete), 1);
@@ -92,16 +92,14 @@
 							category.parentCategoryId = newCategory.parentCategory.id;
 						}
 
-						$http
-								.post($rootScope.categoriesURL,
-										category)
+						googleService.callScriptFunction("addCategory", category)
 								.then(
 										function(response) {
 											$scope.newCategory = new Category();
 											$scope.newCategory.parentCategory = new Category();
 											$scope.newCategoryForm.$setPristine();
 											
-											var newCategory = $rootScope.createNewCategory(response.data);
+											var newCategory = $rootScope.createNewCategory(response);
 											$rootScope.updateParentCategoryReference(newCategory);
 											
 											$rootScope.categories.push(newCategory);
@@ -117,22 +115,19 @@
 					$scope.saveCategory = function(editedCategory) {
 						var category = {
 							"name" : editedCategory.copyForEdit.name,
-							"id" : {
-								"id" : editedCategory.id
-							}
+							"id" : editedCategory.id
 						}
 
 						if (editedCategory.copyForEdit.parentCategory != null && editedCategory.copyForEdit.parentCategory.id != null) {
 							category.parentCategoryId = editedCategory.copyForEdit.parentCategory.id;
 						}
 
-						$http
-								.put($rootScope.categoriesURL, category)
+						googleService.callScriptFunction("updateCategory", category)
 								.then(
-										function(response) {
+										function(response) { // TODO should take category from response
 											editedCategory.name = editedCategory.copyForEdit.name;
 											if (editedCategory.copyForEdit.parentCategory != null && editedCategory.copyForEdit.parentCategory.id != null) {
-												editedCategory.parentCategory = editedCategory.copyForEdit.parentCategory;
+												editedCategory.parentCategory = editedCategory.copyForEdit.parentCategory; // TODO WTF?
 												editedCategory.parentCategoryId = editedCategory.copyForEdit.parentCategory.id;
 											}
 											editedCategory.readOnlyMode();

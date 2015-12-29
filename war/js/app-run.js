@@ -12,7 +12,7 @@ app
 			
 			$rootScope.createNewCategory = function(data) {
 				var newCategory = new Category();
-				newCategory.id = data.id.id;
+				newCategory.id = "" + data.id;
 				newCategory.name = data.name;
 				newCategory.parentCategory = new Category();
 				newCategory.parentCategory.id = data.parentCategoryId;
@@ -39,17 +39,16 @@ app
 			$rootScope.refreshCategories = function() {
 				var defer = $q.defer();
 
-				$http
-						.get($rootScope.categoriesURL)
+				googleService.callScriptFunction("getCategories")
 						.then(
 								function(response) {
 									$rootScope.categories = [];
 
-									var data = response.data;
-									if (data.items != null) {
-										for (var i = 0; i < data.items.length; ++i) {
+									var data = response;
+									if (data != null) {
+										for (var i = 0; i < data.length; ++i) {
 											var newCategory = $rootScope
-													.createNewCategory(data.items[i]);
+													.createNewCategory(data[i]);
 											$rootScope.categories
 													.push(newCategory);
 										}
@@ -74,7 +73,7 @@ app
 
 			$rootScope.createNewAccount = function(data) {
 				var newAccount = new Account();
-				newAccount.id = data.id;
+				newAccount.id = "" + data.id;
 				newAccount.name = data.name;
 				newAccount.value = data.value;
 
