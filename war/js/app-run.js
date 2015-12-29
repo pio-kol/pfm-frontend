@@ -15,7 +15,7 @@ app
 				newCategory.id = "" + data.id;
 				newCategory.name = data.name;
 				newCategory.parentCategory = new Category();
-				newCategory.parentCategory.id = data.parentCategoryId;
+				newCategory.parentCategory.id = "" + data.parentCategoryId;
 				newCategory.parentCategory.name = "";
 
 				return newCategory;
@@ -113,14 +113,15 @@ app
 			$rootScope.refreshFilters = function() {
 				var defer = $q.defer();
 
-				$http.get($rootScope.filtersURL).then(function(response) {
+				googleService.callScriptFunction("getFilters")
+				.then(function(response) {
 					$rootScope.filters = [];
 
-					var data = response.data;
+					var data = response;
 
-					if (data.items != null) {
-						for (var i = 0; i < data.items.length; ++i) {
-							var newFilter = createNewFilter(data.items[i]);
+					if (data != null) {
+						for (var i = 0; i < data.length; ++i) {
+							var newFilter = createNewFilter(data[i]);
 							$rootScope.filters.push(newFilter);
 						}
 					}

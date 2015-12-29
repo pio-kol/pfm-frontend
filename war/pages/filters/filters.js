@@ -77,11 +77,7 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 			filter.categories.push(editedFilter.categories[i].id);
 		}
 			
-			$http
-					.post("_ah/api/transactionsfilterendpoint/v1/transactionsfilter/", // $rootScope.transactionsFilterURL,
-																						// //
-																						// FIXME
-							filter)
+			googleService.callScriptFunction("addFilter", filter)
 					.then(
 							function(response) {
 								var newFilter = createNewFilter(response.data);
@@ -98,9 +94,7 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 	
 	saveEditedFilter = function(editedFilter, originalFilter){
 		var filter = {
-				"id" : {
-					"id" : editedFilter.id
-				},
+				"id" : editedFilter.id,
 				"name" : editedFilter.name,
 				"categories" : [],
 				"accounts" : [],
@@ -120,8 +114,7 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 			filter.categories.push(editedFilter.categories[i].id);
 		}
 			
-			$http
-					.put("_ah/api/transactionsfilterendpoint/v1/transactionsfilter/", filter)
+		googleService.callScriptFunction("updateFilter", filter)
 					.then(
 							function(response) {
 								var updatedFilter = createNewFilter(response.data);
@@ -138,7 +131,7 @@ function CategoryEditDialogController($mdDialog, $http, $scope, $translate, filt
 	
 	deleteSelectedFilter = function(filterToDelete) {
 		
-							$http.delete("_ah/api/transactionsfilterendpoint/v1/transactionsfilter/" + filterToDelete.id)
+						googleService.callScriptFunction("deleteFilter", filterToDelete.id)
 							.then(
 									function(response) {
 										filters.splice(filters.indexOf(filterToDelete), 1); 

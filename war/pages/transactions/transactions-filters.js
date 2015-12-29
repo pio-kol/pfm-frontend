@@ -1,6 +1,6 @@
 app.controller('filtersController', function($scope, $rootScope, $http,
 		$translate, $q, $stateParams, $state, $log, $mdDialog,
-		transactionsService) {
+		transactionsService, googleService) {
 
 	$scope.editFilter = function($event, filter) {
 		$mdDialog.show({
@@ -54,9 +54,10 @@ app.controller('filtersController', function($scope, $rootScope, $http,
 			filter.categories.push(newFilter.categories[i].id);
 		}
 
-		$http.post($rootScope.filtersURL, filter).then(
+		googleService.callScriptFunction("addFilter", filter)
+		.then(
 				function(response) {
-					var newFilter = createNewFilter(response.data);
+					var newFilter = createNewFilter(response);
 					newFilter.name = "( New filter )"
 					newFilter.active = true;
 					$rootScope.filters.push(newFilter);
@@ -83,9 +84,7 @@ app.controller('filtersController', function($scope, $rootScope, $http,
 		}
 		
 		var filter = {
-				"id" : {
-					"id" : editedFilter.id
-				},
+				"id" : editedFilter.id,
 				"name" : editedFilter.name,
 				"categories" : [],
 				"accounts" : [],
@@ -105,8 +104,7 @@ app.controller('filtersController', function($scope, $rootScope, $http,
 			filter.categories.push(editedFilter.categories[i].id);
 		}
 			
-			$http
-					.put("_ah/api/transactionsfilterendpoint/v1/transactionsfilter/", filter)
+		googleService.callScriptFunction("updateFilter", filter)
 					.then(
 							function(response) {
 								var updatedFilter = createNewFilter(response.data);
@@ -116,7 +114,7 @@ app.controller('filtersController', function($scope, $rootScope, $http,
 								
 							},
 							function(response) { // FIXME message
-								$translate('ERROR_TRANSACTION_ADD', {name : originalFilter.name}).then(function (message) { 
+								$translate('ERROR_TRANSACTION_ADD', {name : filter.name}).then(function (message) { 
 								    addAlert(message, response);
 								  });
 							});
@@ -126,7 +124,7 @@ app.controller('filtersController', function($scope, $rootScope, $http,
 	$scope.deleteSelectedFilter = function() {
 		var filterToDelete = $scope.selectedFilter;
 		
-		$http.delete("_ah/api/transactionsfilterendpoint/v1/transactionsfilter/" + filterToDelete.id)
+		googleService.callScriptFunction("deleteFilter", filterToDelete.id)
 		.then(
 				function(response) {
 					$rootScope.filters.splice($rootScope.filters.indexOf(filterToDelete), 1); 
@@ -141,7 +139,7 @@ app.controller('filtersController', function($scope, $rootScope, $http,
 	
 	var createNewFilter = function(item) {
 		var filter = new TransactionsFilter();
-		filter.id = item.id.id;
+		filter.id = item.id;
 		filter.name = item.name;
 		if (item.categories != null){
 			for (var i = 0; i < item.categories.length; ++i) {

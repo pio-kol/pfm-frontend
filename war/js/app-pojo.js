@@ -57,7 +57,7 @@ var TransactionsFilter = function() {
 
 var createNewFilter = function(item) {
 	var filter = new TransactionsFilter();
-	filter.id = item.id.id;
+	filter.id = "" + item.id;
 	filter.name = item.name;
 	if (item.categories != null){
 		for (var i = 0; i < item.categories.length; ++i) {
