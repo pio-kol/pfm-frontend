@@ -1,10 +1,5 @@
 app
 		.run(function($rootScope, $http, $translate, $q, googleService) {
-			$rootScope.accountsURL = "/_ah/api/accountendpoint/v1/account/";
-			$rootScope.categoriesURL = "/_ah/api/categoryendpoint/v1/category/";
-			$rootScope.filtersURL = "_ah/api/transactionsfilterendpoint/v1/transactionsfilter/";
-			$rootScope.logURL = "_ah/api/historyentryendpoint/v1/historyentry/";
-
 			$rootScope.categories = [];
 			$rootScope.accounts = [];
 			$rootScope.filters = [];
@@ -110,31 +105,7 @@ app
 				return defer.promise;
 			};
 
-			$rootScope.refreshFilters = function() {
-				var defer = $q.defer();
-
-				googleService.callScriptFunction("getFilters")
-				.then(function(response) {
-					$rootScope.filters = [];
-
-					var data = response;
-
-					if (data != null) {
-						for (var i = 0; i < data.length; ++i) {
-							var newFilter = createNewFilter(data[i]);
-							$rootScope.filters.push(newFilter);
-						}
-					}
-					defer.resolve();
-				}, function(response) {
-					$translate('ERROR_DATA_RETRIVE').then(function(message) {
-						addAlert(message, response);
-					});
-					defer.reject();
-				});
-
-				return defer.promise;
-			}
+		
 			
 			
 

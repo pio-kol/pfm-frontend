@@ -8,11 +8,6 @@ app
 						for (var i = 0; i < transactions.length; ++i) {
 							transaction = transactions[i];
 
-							var dateFrom = selectedFilter.dateRange.startDate
-									.format("YYYY-MM-DD");
-							var dateTo = selectedFilter.dateRange.endDate
-									.format("YYYY-MM-DD");
-
 							if (selectedFilter.description != null
 									&& selectedFilter.description !== ""
 									&& (transaction.description == null || !(transaction.description
@@ -50,7 +45,7 @@ app
 							// must be last checked condition
 							if (selectedFilter.categories.length > 0
 									&& (transaction.category.id === null || !(selectedFilter.categories
-											.indexOf(transaction.category.id) > -1))) {
+											.indexOf(transaction.category) > -1))) { // not found in transactions, try to match children
 								var tmpCategory = transaction.category.parentCategory;
 								while (tmpCategory != null) { // if parent
 									// category is
@@ -59,7 +54,7 @@ app
 									// should be also
 									// visible
 									if (selectedFilter.categories
-											.indexOf(tmpCategory.id) > -1) {
+											.indexOf(tmpCategory) > -1) { 
 										filteredTransactions.push(transaction);
 									}
 									tmpCategory = tmpCategory.parentCategory;

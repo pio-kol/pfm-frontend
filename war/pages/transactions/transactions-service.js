@@ -2,12 +2,9 @@ app
 		.factory(
 				'transactionsService',
 				[
-						'$http', "$q", "$translate", 'googleService',
-						function($http, $q, $translate, googleService) {
-							var URL = "_ah/api/transactionendpoint/v1/transaction/";
-							
+						"$q", "$translate", 'googleService',
+						function($q, $translate, googleService) { 
 							var service = {};
-							service.transactions = [];
 							
 							updateAccountAndCategoryReference = function(transaction, accounts, categories) {
 								for (var i = 0; i < categories.length; ++i) {
@@ -45,11 +42,12 @@ app
 													//alert(JSON.stringify(response));
 													var newTransaction = createNewTransaction(response);
 													updateAccountAndCategoryReference(newTransaction, accounts, categories);
-													service.transactions.push(newTransaction);
-													defer.resolve();
+													
+													defer.resolve(newTransaction);
 												},
 												function(response) {
-													$translate('ERROR_TRANSACTION_ADD', {name : newTransaction.description}).then(function (message) {
+													$translate('ERROR_TRANSACTION_ADD', {name : newTransaction.description})
+													.then(function (message) {
 													    addAlert(message, response);
 													  });
 													defer.reject();
@@ -75,8 +73,8 @@ app
 												function(response) {
 													var updatedTransaction = createNewTransaction(response);
 													updateAccountAndCategoryReference(updatedTransaction, accounts, categories);
-													service.transactions[service.transactions.indexOf(editedTransaction)] = updatedTransaction;
-													defer.resolve();
+													
+													defer.resolve(updatedTransaction);
 												},
 												function(response) {
 													$translate('ERROR_TRANSACTION_MODIFY', {name : editedTransaction.description}).then(function (message) {
@@ -99,7 +97,6 @@ app
 													googleService.callScriptFunction("deleteTransaction", transactionToDelete.id)
 													.then(
 															function(response) {
-																service.transactions.splice(service.transactions.indexOf(transactionToDelete), 1);
 																defer.resolve();
 															},
 															function(response) {
@@ -114,23 +111,18 @@ app
 								return defer.promise;
 							};
 							
-							service.refreshTransactions = function(accounts, categories) {
+							service.refreshTransactions = function(accounts, categories, dateRange) {
 								var defer = $q.defer();
-//								var dateFrom = $scope.selectedFilter.dateRange.startDate
-//										.format("YYYY-MM-DD");
-//								var dateTo = $scope.selectedFilter.dateRange.endDate
-//										.format("YYYY-MM-DD");
 
-								//var url = URL + "?";
-//								url = dateFrom != null ? url + "dateFrom="
-//										+ dateFrom + "&" : url;
-//								url = dateTo != null ? url + "dateTo=" + dateTo
-//										+ "&" : url;
+								var criteria = {
+										"dateFrom" : dateRange.startDate,
+										"dateTo" : dateRange.endDate,
+								}
 
-								googleService.callScriptFunction("getTransactions")
+								googleService.callScriptFunction("getTransactions", criteria)
 										.then(
 												function(response) {
-													service.transactions = [];
+													var transactions = [];
 
 													var data = response;
 
@@ -138,11 +130,11 @@ app
 														for (i = 0; i < data.length; ++i) {
 															var newTransaction = createNewTransaction(data[i]);
 														    updateAccountAndCategoryReference(newTransaction, accounts, categories);
-															service.transactions.push(newTransaction);
+															transactions.push(newTransaction);
 														}
 													}
 													
-													defer.resolve();
+													defer.resolve(transactions);
 												},
 												function(response) {
 													$translate(

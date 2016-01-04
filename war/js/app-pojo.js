@@ -55,36 +55,6 @@ var TransactionsFilter = function() {
 	this.active = false;
 }
 
-var createNewFilter = function(item) {
-	var filter = new TransactionsFilter();
-	filter.id = "" + item.id;
-	filter.name = item.name;
-	if (item.categories != null){
-		for (var i = 0; i < item.categories.length; ++i) {
-			filter.categories.push(item.categories[i]);
-		}
-	}
-	if (item.accounts != null){
-		for (var i = 0; i < item.accounts.length; ++i) {
-			filter.accounts.push(item.accounts[i]);
-		}
-	}
-	filter.dateRange.startDate = moment(item.dateFrom);
-	filter.dateRange.endDate = moment(item.dateTo);
-	filter.description = item.description;
-	filter.priceFrom = parseFloat(item.priceFrom);
-	if (isNaN(filter.priceFrom)){
-		filter.priceFrom = null;
-	}
-	filter.priceTo = parseFloat(item.priceTo);
-	if (isNaN(filter.priceTo)){
-		filter.priceTo = null;
-	}
-	filter.comment = item.comment;
-	
-	return filter;
-}
-
 function createNewTransaction(data){
 	var newTransaction = new Transaction();
 	newTransaction.id = data.id;
