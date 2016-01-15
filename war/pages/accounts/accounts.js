@@ -25,14 +25,15 @@ app
 					};
 					
 					$scope.getAccountHistory = function(account) {
-						$http.get($rootScope.accountsURL + account.id).then(
+						googleService.callScriptFunction("getAccountHistory", account.id)
+						.then(
 								function(response) {
-									var data = response.data;
+									var data = response;
 
-									if (data.history != null) {
+									if (data != null) {
 										var result = "";
-										for (i = 0; i < data.history.length; ++i) {
-											result += data.history[i].timestamp + " " + data.history[i].state + "\n";
+										for (i = 0; i < data.length; ++i) {
+											result += data[i].timestamp + " " + data[i].accountState + " " + data[i].transactionId + "\n";
 										}
 										alert(result);
 									} else {

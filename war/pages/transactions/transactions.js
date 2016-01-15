@@ -31,7 +31,7 @@ app
 					$scope.saveNewTransaction = function(transaction) {
 						transactionsService.saveNewTransaction(transaction,
 								$rootScope.accounts, $rootScope.categories)
-								.then(function() {
+								.then(function(newTransaction) {
 									// $scope.newTransactionForm.$setPristine();
 									$rootScope.transactions.push(newTransaction);
 									$scope.newTransaction = new Transaction();
@@ -48,7 +48,7 @@ app
 								});
 					};
 
-					$scope.removeTransaction = function(transaction) {
+					$scope.removeTransaction = function(transactionToDelete) {
 						transactionsService.removeTransaction(transactionToDelete,
 								$rootScope.accounts, $rootScope.categories)
 								.then(function(){

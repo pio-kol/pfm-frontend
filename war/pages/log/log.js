@@ -1,17 +1,18 @@
 app
 		.controller(
 				'logController',
-				function($scope, $rootScope, $http, $translate) {
+				function($scope, $rootScope, googleService, $translate) {
 					$scope.log = [];
 					
 					$scope.getLogEntries = function() {
-						$http.get($rootScope.logURL).then(
+						googleService.callScriptFunction("getLog")
+						.then(
 								function(response) {
-									var data = response.data;
+									var data = response;
 									$scope.log = [];
-									if (data.items != null) {
-										for (i = 0; i < data.items.length; ++i) {
-											$scope.log.push(data.items[i]);
+									if (data != null) {
+										for (i = 0; i < data.length; ++i) {
+											$scope.log.push(data[i]);
 										}
 										
 									} else {
@@ -19,7 +20,8 @@ app
 									}
 								},
 								function(response) {
-									$translate('ERROR_DATA_RETRIVE').then(
+									$translate('ERROR_DATA_RETRIVE')
+									.then(
 											function(message) {
 												addAlert(message, response);
 											});

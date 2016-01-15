@@ -67,7 +67,6 @@ app
 			        					"accountId" : editedTransaction.copyForEdit.account.id
 								}
 
-								$http
 										googleService.callScriptFunction("updateTransaction", transaction)
 										.then(
 												function(response) {
