@@ -46,8 +46,8 @@ app
 										}
 									}
 								}
-								filter.dateRange.startDate = moment(item.dateFrom);
-								filter.dateRange.endDate = moment(item.dateTo);
+								filter.dateRange.startDate = moment(new Date(item.dateFrom));
+								filter.dateRange.endDate = moment(new Date(item.dateTo));
 								filter.description = item.description;
 								filter.priceFrom = parseFloat(item.priceFrom);
 								if (isNaN(filter.priceFrom)){

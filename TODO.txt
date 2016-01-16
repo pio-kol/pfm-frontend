@@ -1,37 +1,34 @@
 -------- categories --------
-- implement deleted flag for categories
-- possibility to retire Account / Category (do not return but keep for reference for existing entries)
+**** - implement deleted flag for categories
+**** - possibility to retire Account / Category (do not return but keep for reference for existing entries)
 
 -------- accounts --------
 - constrains - do not allow to remove account which have money
-- implement deleted flag for accounts
-- support for transfers between accounts (simply by adding transactions)
-- update of account state should create transaction (account update)
+**** - implement deleted flag for accounts
+**** - update of account state should create transaction (account update)
 
 -------- transactions --------
-- save date always with time 00:00:00
-- support for decimals in price
-- clear filters button
-- translate date range picker options
-- cache service for categories / accounts
-- remove separate parameters from URL and replace with one - filterId	
+*** - save date always with time 00:00:00
 
 -------- navigation --------
 - login / sign up (display information that user is logged in, allow to sign out)
+- authorization create elements on each refresh (correct this one)
 
 -------- all -----------
-- authorization create elements on each refresh
 - tests
-- formatter for code
-- logging of operations
-- i18n
 
+------- log ------------
+- logging of operations should be more detailed
 
 -------- server side -------
 - server side validation
+- verify TODO in scripts
 
 
 -------- nice to have --------
+- formatter for code
+- translate date range picker options + other i18n
+- clear filter button
 - log - possibility to revert operation
 - (navigation) mark selected view
 - think about cache so app can work offline and synchronize data when network is available
