@@ -1,44 +1,41 @@
 -------- categories --------
 - implement deleted flag for categories
+- possibility to retire Account / Category (do not return but keep for reference for existing entries)
 
 -------- accounts --------
 - constrains - do not allow to remove account which have money
 - implement deleted flag for accounts
+- support for transfers between accounts (simply by adding transactions)
+- update of account state should create transaction (account update)
 
 -------- transactions --------
 - save date always with time 00:00:00
 - support for decimals in price
 - clear filters button
 - translate date range picker options
-- price range translate, support for not standard range (select correct value) + think about changing parameger to priceRange=<0,10>
 - cache service for categories / accounts
-- display categories as a tree structure
 - remove separate parameters from URL and replace with one - filterId	
 
 -------- navigation --------
-- mark selected view
-- login / sign up
-- menu not working on first click (after reload) - only if starting from tranactions
+- login / sign up (display information that user is logged in, allow to sign out)
 
 -------- all -----------
-- testy
+- authorization create elements on each refresh
+- tests
 - formatter for code
 - logging of operations
-- all dependencies also locally
-- verify concept of keeping data on user Google Drive and reading it to the app only at startup
-- think about cache so app can work offline and synchronize data when network is available
-
--------- server side -------
-- server side validation
-- each user should have seperate namespace
-- service calls available only to logged in users
 - i18n
 
 
+-------- server side -------
+- server side validation
+
+
 -------- nice to have --------
-- support for transfers between accounts
+- log - possibility to revert operation
+- (navigation) mark selected view
+- think about cache so app can work offline and synchronize data when network is available
 - cookies - keep user settings (e.g. selected sort)
 - categories as tree widget
-- possibility to retire Account / Category (do not return but keep for reference for existing entries)
 - Focus input after clicking edit / add new
-- filter by price - adding custom range (popup with inputs)
+- menu not working on first click (after reload) - only if starting from transactions

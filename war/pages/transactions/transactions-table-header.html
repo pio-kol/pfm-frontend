@@ -87,6 +87,7 @@
     <select
      chosen
      multiple
+     width="'100%'"
      class="form-control"
      ng-model="selectedFilter.categories"
      ng-options="category as category.name for category in categories"></select>
@@ -95,6 +96,7 @@
     <select
      chosen
      multiple
+     width="'100%'"
      class="form-control"
      ng-model="selectedFilter.accounts"
      ng-options="account as account.name for account in accounts"></select>
@@ -102,11 +104,11 @@
    <th>
     <input
      type="number"
-     class="form-control"
+     class="form-control2"
      ng-model="selectedFilter.priceFrom" />
     <input
      type="number"
-     class="form-control"
+     class="form-control2"
      ng-model="selectedFilter.priceTo" />
    </th>
    <th>
