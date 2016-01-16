@@ -1,4 +1,4 @@
-var app = angular.module('myApp', [ 'angular.chosen', 'pascalprecht.translate',
+var app = angular.module('myApp', [ 'localytics.directives', 'pascalprecht.translate',
 		'ngSanitize', 'ui.router', 'daterangepicker', 'ngMaterial', 'angularInlineEdit', 'ui.bootstrap' ]);
 
 var alertNumber = 0;

@@ -1,0 +1,30 @@
+{
+  "name": "formularz-wydatkow",
+  "authors": [
+    "Piotr Kolacz <kolacz.piotrek@gmail.com>"
+  ],
+  "description": "",
+  "main": "index.html",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-daterangepicker": "~0.2.2",
+    "ng-inline-edit": "~0.7.0",
+    "angular-sanitize": "~1.4.8",
+    "angular-material": "~1.0.2",
+    "angular-translate": "~2.8.1",
+    "angular-ui-router": "~0.2.15",
+    "bootbox.js": "bootbox#~4.4.0",
+    "angular-chosen-localytics": "~1.0.7",
+    "angular-bootstrap": "~1.0.3"
+  }
+}

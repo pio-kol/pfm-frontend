@@ -12,3 +12,4 @@
 /classes/
 *.iml
 /.tern-project
+/war/bower_components

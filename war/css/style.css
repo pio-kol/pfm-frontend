@@ -6,6 +6,10 @@
   border-color: green;
 }
 
+.ng-inline-edit {
+	display: inline-block;
+}
+
 html, body {
     height: 100%;
 }
