@@ -3,7 +3,7 @@
 	role="navigation">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a id="navbarHeader" class="navbar-brand" ng-click="noop()"><span class="glyphicon glyphicon-list-alt"></span> {{"PAGE_TITLE" | translate}}</a>
+			<a id="navbarHeader" class="navbar-brand" ng-click="titleClicked()"><span class="glyphicon glyphicon-list-alt"></span> {{"PAGE_TITLE" | translate}}</a>
 		</div>
 		<div class="collapse navbar-collapse" id="navbar-menu">
 			<ul class="nav navbar-nav" ng-if="hasMenus()">
@@ -16,7 +16,9 @@
 					</ul></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a id="loginMenuItem" href="#" ng-click="handleAuthClick()"><span class="glyphicon glyphicon-log-in"></span> {{"LOGIN"|translate}}</a></li>
+				<li ng-if="!isUserLoggedIn()"><a id="loginMenuItem" href="#" ng-click="handleAuthClick()"><span class="glyphicon glyphicon-log-in"></span> {{"LOGIN"|translate}}</a></li>
+                <li ng-if="isUserLoggedIn()"><a href="#" ng-click=""> <img ng-src="{{userImageUrl}}" height="20px"/> {{userName}} </a></li>
+                <li ng-if="isUserLoggedIn()"><a href="#" ng-click="signOut()"><span class="glyphicon glyphicon-log-out"></span> {{"LOG_OUT"|translate}}</a></li>
 				<li><a id="languageMenuItem" ng-click="toggleLanguage()"><span class="glyphicon glyphicon-flag"></span> {{"LANGUAGE"|translate}}</a></li>
 			</ul>
 		</div>

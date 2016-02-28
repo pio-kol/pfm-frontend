@@ -1,35 +1,33 @@
 app
-		.controller(
-				'navigationBarController',
-				function($scope) {
+		.controller('navigationBarController', function($scope) {
 
-					$scope.affixed = 'top';
-					$scope.search = {
-						show : false,
-						terms : ''
-					};
-					$scope.inverse = true;
-				
-					$scope.menus = [ {
-						title : "MENU_TRANSACTION_HISTORY",
-						action : "transactions"
-					}, {
-						title : "MENU_CATEGORIES",
-						action : "categories"
-					}, {
-						title : "MENU_ACCOUNTS",
-						action : "accounts"
-					}, {
-						title : "MENU_LOG",
-						action : "log"
-					}
-					
-					]; // end menus
+			$scope.affixed = 'top';
+			$scope.search = {
+				show : false,
+				terms : ''
+			};
+			$scope.inverse = true;
 
-					$scope.styling = 'Inverse';
-					$scope.searchDisplay = 'Visible';
+			$scope.menus = [ {
+				title : "MENU_TRANSACTION_HISTORY",
+				action : "transactions"
+			}, {
+				title : "MENU_CATEGORIES",
+				action : "categories"
+			}, {
+				title : "MENU_ACCOUNTS",
+				action : "accounts"
+			}, {
+				title : "MENU_LOG",
+				action : "log"
+			}
 
-				})
+			]; // end menus
+
+			$scope.styling = 'Inverse';
+			$scope.searchDisplay = 'Visible';
+
+		})
 
 		/**
 		 * Angled Navbar Directive
@@ -40,7 +38,7 @@ app
 		 */
 		.directive(
 				'angledNavbar',
-				function() {
+				function(googleService, $state) {
 					return {
 						restrict : 'AE',
 						scope : {
@@ -54,15 +52,73 @@ app
 						templateUrl : 'pages/navigation/navigationBar.html',
 						controller : function($scope, $element, $attrs,
 								$translate) {
-							// === Scope/Attributes Defaults ===//
+
+							$scope.loggedIn = true;
 
 							$scope.toggleLanguage = function() {
 								$translate.use($translate.use() === "en" ? "pl"
 										: "en");
 							};
+
+							$scope.userName = "";
+							$scope.userImageUrl = "";
 							
-							$scope.handleAuthClick = function(){
-								handleAuthClick();
+							$scope.getUserInfo = function() {
+								googleService.getUserInfo()
+								.then(
+										function(response) {
+											$scope.userName = response.name;
+											$scope.userImageUrl = response.picture;
+										});
+							}
+
+							$scope.handleAuthClick = function() {
+								googleService.checkAuth().then(
+										function(response) {
+											$scope.loggedIn = true;
+											$scope.getUserInfo();
+											$state.transitionTo('logged-in',
+													{}, {
+														notify : true
+													});
+										}, function(response) {
+											$scope.loggedIn = false;
+											alert("Failed to login");
+										});
+							}
+							
+							$scope.signOut = function() {
+//								googleService.signOut()
+//								.then(
+//										function(response) {
+//											alert(JSON.stringify(response));
+//										},
+//										function(response) {
+//											alert(JSON.stringify(response));
+//										});
+								$scope.loggedIn = false;
+								$scope.userName = "";
+								$scope.userImageUrl = "";
+								
+							}
+
+							$scope.isUserLoggedIn = function() {
+								return $scope.loggedIn;
+							}
+
+
+							$scope.titleClicked = function() {
+								googleService.checkAuth().then(
+										function(response) {
+											$state.transitionTo('logged-in',
+													{}, {
+														notify : true
+													});
+										}, function(response) {
+											$state.transitionTo('login', {}, {
+												notify : true
+											});
+										});
 							}
 
 							$scope.defaults = {

@@ -23,6 +23,7 @@ app
 						ACCOUNT_STATE : 'Stan konta',
 						LANGUAGE : 'PL',
 						LOGIN : 'Zaloguj się',
+						LOG_OUT : 'Wyloguj się',
 						SIGN_UP : 'Utwórz konto',
 						PAGE_TITLE : "Formularz wydatków",
 						MENU_TRANSACTION_HISTORY : "Historia transakcji",
@@ -65,7 +66,8 @@ app
 						NEW_TRANSACTION : 'New transaction',
 						ACCOUNT_STATE : 'Account state',
 						LANGUAGE : 'EN',
-						LOGIN : 'Login',
+						LOGIN : 'Log in',
+						LOG_OUT : 'Log out',
 						SIGN_UP : 'Sign up',
 						PAGE_TITLE : "Personal Finance Manager",
 						MENU_TRANSACTION_HISTORY : "Transaction history",
@@ -105,7 +107,7 @@ app
 
 					// $locationProvider.html5Mode(true);
 					
-					$urlRouterProvider.otherwise('/login');
+					$urlRouterProvider.otherwise('/index');
 
 					var loginInterceptor = 
 						function($q, $state, googleService) {
@@ -162,6 +164,13 @@ app
 					.state("login", {
 						url : "/login",
 						templateUrl : 'pages/login/login.html',
+					})
+					.state("logged-in", {
+						url : "/index",
+						templateUrl : 'pages/main/logged-in.html',
+						resolve: {
+			                login: loginInterceptor
+			            }
 					})
 
 				} ]);

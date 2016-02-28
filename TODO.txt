@@ -11,7 +11,7 @@
 *** - save date always with time 00:00:00
 
 -------- navigation --------
-- login / sign up (display information that user is logged in, allow to sign out)
+****** - login / sign up (display information that user is logged in, allow to sign out)
 - authorization create elements on each refresh (correct this one)
 
 -------- all -----------
