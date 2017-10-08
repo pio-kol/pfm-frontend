@@ -1,0 +1,75 @@
+<div class="container-fluid" ng-controller="accountController" novalidate>
+
+	<div id="alerts"></div>
+
+	<div class="btn-group pull-right" role="group">
+		<button id="addNewAccountBtn" class="btn btn-info" ng-click="addNewAccount()">
+			<span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;{{ "NEW_ACCOUNT" | translate }}
+		</button>
+
+		<button id="refreshAccountsBtn" class="btn btn-info " ng-click="refreshAccounts()">
+			<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;{{ "REFRESH" | translate }}
+		</button>
+	</div>
+
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th><a href="#/accounts" ng-click="orderByField='name'; reverseSort = !reverseSort"> {{"ACCOUNT_NAME" | translate}} <span ng-show="orderByField == 'name'"><span
+							ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+				</a></th>
+				<th><a href="#/accounts" ng-click="orderByField='value'; reverseSort = !reverseSort"> {{"ACCOUNT_STATE" | translate}} <span
+						ng-show="orderByField == 'value'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+				</a></th>
+                <th />
+				<th />
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-switch on="account.mode" ng-form name="editAccountForm_{{ account.id }}" ng-repeat="account in accounts|orderBy:orderByField:reverseSort">
+
+				<td ng-switch-when="edit"><input id="accountNameInput_{{$index}}" type="text" required class="form-control" ng-model="account.copyForEdit.name" /></td>
+				<td ng-switch-when="edit"><input required type="number" value="1000" step="0.01" class="form-control currency" ng-model="account.copyForEdit.value" /></td>
+
+				<td ng-switch-when="readOnly">{{ account.name }}</td>
+				<td ng-switch-when="readOnly">{{ account.value | currency }}</td>
+                
+                <td><button class="btn btn-default" ng-click="getAccountHistory(account)">
+                    <span class="glyphicon glyphicon-list-alt"></span>
+                    </button>
+                </td>
+
+				<td>
+					<button ng-switch-when="readOnly" class="btn btn-primary" ng-click="editAccount(account)">
+						<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ "EDIT" | translate }}
+					</button>
+					<button ng-switch-when="edit" class="btn btn-success" ng-disabled="!editAccountForm_{{account.id}}.$valid" ng-click="saveAccount(account)">
+						<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
+					</button>
+					<button ng-switch-when="edit" class="btn btn-warning" ng-click="cancelEditAccount(account)">
+						<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;{{ "CANCEL" | translate }}
+					</button>
+					<button ng-switch-when="edit" class="btn btn-danger" ng-click="removeAccount(account)">
+						<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{ "DELETE" | translate }}
+					</button>
+				</td>
+			</tr>
+			<tr ng-show="newAccount.visible" ng-form name="newAccountForm">
+				<td><input type="text" required class="form-control" ng-model="newAccount.name" /></td>
+				<td><input required type="number" value="1000" step="0.01" class="form-control currency" ng-model="newAccount.value" /></td>
+
+				<td>
+					<button class="btn btn-success" ng-disabled="!newAccountForm.$valid" ng-click="saveNewAccount(newAccount)">
+						<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;{{ "SAVE" | translate }}
+					</button>
+
+					<button class="btn btn-warning" ng-click="cancelAddNewAccount()">
+						<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;{{ "CANCEL" | translate }}
+					</button>
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+</div>
+
