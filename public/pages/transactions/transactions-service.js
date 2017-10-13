@@ -2,8 +2,8 @@ app
 		.factory(
 				'transactionsService',
 				[
-						"$q", "$translate", 'googleService',
-						function($q, $translate, googleService) { 
+						"$q", "$translate", 'googleService', '$http',
+						function($q, $translate, googleService, $http) {
 							var service = {};
 							
 							updateAccountAndCategoryReference = function(transaction, accounts, categories) {
@@ -113,59 +113,59 @@ app
 							service.refreshTransactions = function(accounts, categories, dateRange) {
 								var defer = $q.defer();
 
-                var transactions = [];
-
-                data = {}
-                data.id = 1
-                data.date = "2017-10-08"
-                data.description = "Description"
-                data.comment = "Comment"
-                data.categoryId = 1
-                data.accountId = 1
-                data.price = 123.42
-
-                var newTransaction = createNewTransaction(data);
-                updateAccountAndCategoryReference(newTransaction, accounts, categories);
-                transactions.push(newTransaction);
-
-                defer.resolve(transactions);
+//                var transactions = [];
+//
+//                data = {}
+//                data.id = 1
+//                data.date = "2017-10-08"
+//                data.description = "Description"
+//                data.comment = "Comment"
+//                data.categoryId = 1
+//                data.accountId = 1
+//                data.price = 123.42
+//
+//                var newTransaction = createNewTransaction(data);
+//                updateAccountAndCategoryReference(newTransaction, accounts, categories);
+//                transactions.push(newTransaction);
+//
+//                defer.resolve(transactions);
 
 //								var criteria = {
 //										"dateFrom" : dateRange.startDate,
 //										"dateTo" : dateRange.endDate,
 //								}
-//
-//								$http.get("transactions", criteria)
-//										.then(
-//												function(response) {
-//													var transactions = [];
-//
-//													var data = response;
-//
-//													if (data != null) {
-//														for (i = 0; i < data.length; ++i) {
-//															var newTransaction = createNewTransaction(data[i]);
-//														    updateAccountAndCategoryReference(newTransaction, accounts, categories);
-//															transactions.push(newTransaction);
-//														}
-//													}
-//
-//													defer.resolve(transactions);
-//												},
-//												function(response) {
-//													$translate(
-//															'ERROR_DATA_RETRIVE')
-//															.then(
-//																	function(
-//																			message) {
-//																		addAlert(
-//																				message,
-//																				response);
-//																	});
-//
-//													defer.reject();
-//												});
-//
+
+								$http.get("http://localhost:8080/v1/transactions/")
+										.then(
+												function(response) {
+													var transactions = [];
+
+													var data = response.data;
+
+													if (data != null) {
+														for (i = 0; i < data.length; ++i) {
+															var newTransaction = createNewTransaction(data[i]);
+														    updateAccountAndCategoryReference(newTransaction, accounts, categories);
+															transactions.push(newTransaction);
+														}
+													}
+
+													defer.resolve(transactions);
+												},
+												function(response) {
+													$translate(
+															'ERROR_DATA_RETRIVE')
+															.then(
+																	function(
+																			message) {
+																		addAlert(
+																				message,
+																				response);
+																	});
+
+													defer.reject();
+												});
+
 								return defer.promise;
 							}
 							
