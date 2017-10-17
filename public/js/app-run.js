@@ -46,34 +46,34 @@ app
 
 				defer.resolve();
 
-//				googleService.callScriptFunction("getCategories")
-//						.then(
-//								function(response) {
-//									$rootScope.categories = [];
-//
-//									var data = response;
-//									if (data != null) {
-//										for (var i = 0; i < data.length; ++i) {
-//											var newCategory = $rootScope
-//													.createNewCategory(data[i]);
-//											$rootScope.categories
-//													.push(newCategory);
-//										}
-//										for (var i = 0; i < $rootScope.categories.length; ++i) {
-//											$rootScope
-//													.updateParentCategoryReference($rootScope.categories[i]);
-//										}
-//
-//										defer.resolve();
-//									}
-//								},
-//								function(response) {
-//									$translate('ERROR_DATA_RETRIVE').then(
-//											function(message) {
-//												addAlert(message, response);
-//											});
-//									defer.reject();
-//								});
+				googleService.callScriptFunction("getCategories")
+						.then(
+								function(response) {
+									$rootScope.categories = [];
+
+									var data = response;
+									if (data != null) {
+										for (var i = 0; i < data.length; ++i) {
+											var newCategory = $rootScope
+													.createNewCategory(data[i]);
+											$rootScope.categories
+													.push(newCategory);
+										}
+										for (var i = 0; i < $rootScope.categories.length; ++i) {
+											$rootScope
+													.updateParentCategoryReference($rootScope.categories[i]);
+										}
+
+										defer.resolve();
+									}
+								},
+								function(response) {
+									$translate('ERROR_DATA_RETRIVE').then(
+											function(message) {
+												addAlert(message, response);
+											});
+									defer.reject();
+								});
 
 				return defer.promise;
 			};
