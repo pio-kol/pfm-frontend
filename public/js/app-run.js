@@ -31,22 +31,22 @@ app
 				}
 			}
 
-			$rootScope.refreshCategories = function() {
+			$rootScope.refreshCategories = function(categories) {
 				var defer = $q.defer();
 
-        $rootScope.categories = [];
+//        $rootScope.categories = [];
+//
+//        data={}
+//        data.id=1
+//        data.name='Car'
+//        data.parentCategoryId=null
+//
+//        var newCategory = $rootScope.createNewCategory(data);
+//        $rootScope.categories.push(newCategory);
+//
+//				defer.resolve();
 
-        data={}
-        data.id=1
-        data.name='Car'
-        data.parentCategoryId=null
-
-        var newCategory = $rootScope.createNewCategory(data);
-        $rootScope.categories.push(newCategory);
-
-				defer.resolve();
-
-				googleService.callScriptFunction("getCategories")
+				$http.get("http://localhost:8080/v1/categories/")
 						.then(
 								function(response) {
 									$rootScope.categories = [];
@@ -87,50 +87,47 @@ app
 				return newAccount;
 			}
 
-			$rootScope.refreshAccounts = function() {
+			$rootScope.refreshAccounts = function(accounts) {
 				var defer = $q.defer();
 
-        $rootScope.accounts = [];
-
-        data = {}
-        data.id=1
-        data.name='mBank'
-        data.value=127.16
-
-        var newAccount = $rootScope.createNewAccount(data);
-        $rootScope.accounts.push(newAccount);
-
-        defer.resolve();
-
-//				googleService.callScriptFunction("getAccounts")
-//				.then(
-//						function(response) {
-//							$rootScope.accounts = [];
+//        $rootScope.accounts = [];
 //
-//							var data = response;
+//        data = {}
+//        data.id=1
+//        data.name='mBank'
+//        data.value=127.16
 //
-//							if (data != null) {
-//								for (i = 0; i < data.length; ++i) {
-//									var newAccount = $rootScope
-//											.createNewAccount(data[i]);
-//									$rootScope.accounts.push(newAccount);
-//								}
-//							}
-//							defer.resolve();
-//						},
-//						function(response) {
-//							$translate('ERROR_DATA_RETRIVE').then(
-//									function(message) {
-//										addAlert(message, response);
-//									});
-//							defer.reject();
-//						});
+//        var newAccount = $rootScope.createNewAccount(data);
+//        $rootScope.accounts.push(newAccount);
+//
+//        defer.resolve();
+
+				$http.get("http://localhost:8080/v1/accounts/")
+				.then(
+						function(response) {
+							$rootScope.accounts = [];
+
+							var data = response;
+
+							if (data != null) {
+								for (i = 0; i < data.length; ++i) {
+									var newAccount = $rootScope
+											.createNewAccount(data[i]);
+									$rootScope.accounts.push(newAccount);
+								}
+							}
+							defer.resolve();
+						},
+						function(response) {
+							$translate('ERROR_DATA_RETRIVE').then(
+									function(message) {
+										addAlert(message, response);
+									});
+							defer.reject();
+						});
 
 				return defer.promise;
 			};
 
-		
-			
-			
 
 		})
