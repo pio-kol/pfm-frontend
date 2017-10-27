@@ -32,18 +32,30 @@ app
 									"description" : newTransaction.description,
 									"price" : newTransaction.price,
 									"comment" : newTransaction.comment,
-									"categoryId" : newTransaction.category.id,
-		        					"accountId" : newTransaction.account.id
+									"category" : newTransaction.category,
+		        					"account" : newTransaction.account
 								}
 								
-								googleService.callScriptFunction("addTransaction", transaction)
+                              	$http.post("http://localhost:8080/v1/transactions/", transaction)
 										.then(
 												function(response) {
 													//alert(JSON.stringify(response));
-													var newTransaction = createNewTransaction(response);
-													updateAccountAndCategoryReference(newTransaction, accounts, categories);
+                                                    $http.get("http://localhost:8080/v1/transactions/" + response.data)
+                                                    .then(
+                                                        function(response) {
+                                                            var newTransaction = createNewTransaction(response.data);
+                                                            updateAccountAndCategoryReference(newTransaction, accounts, categories);
 													
-													defer.resolve(newTransaction);
+                                                            defer.resolve(newTransaction);
+                                                        },
+                                                        function(response) {
+                                                            $translate('ERROR_TRANSACTION_ADD', {name : newTransaction.description})
+                                                            .then(function (message) {
+                                                                addAlert(message, response);
+                                                              });
+                                                            defer.reject();
+                                                    });
+													
 												},
 												function(response) {
 													$translate('ERROR_TRANSACTION_ADD', {name : newTransaction.description})

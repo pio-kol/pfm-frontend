@@ -31,7 +31,7 @@ app
 				}
 			}
 
-			$rootScope.refreshCategories = function(categories) {
+			$rootScope.refreshCategories = function() {
 				var defer = $q.defer();
 
 //        $rootScope.categories = [];
@@ -51,7 +51,7 @@ app
 								function(response) {
 									$rootScope.categories = [];
 
-									var data = response;
+									var data = response.data;
 									if (data != null) {
 										for (var i = 0; i < data.length; ++i) {
 											var newCategory = $rootScope
@@ -87,7 +87,7 @@ app
 				return newAccount;
 			}
 
-			$rootScope.refreshAccounts = function(accounts) {
+			$rootScope.refreshAccounts = function() {
 				var defer = $q.defer();
 
 //        $rootScope.accounts = [];
@@ -107,7 +107,7 @@ app
 						function(response) {
 							$rootScope.accounts = [];
 
-							var data = response;
+							var data = response.data;
 
 							if (data != null) {
 								for (i = 0; i < data.length; ++i) {
