@@ -34,18 +34,6 @@ app
 			$rootScope.refreshCategories = function() {
 				var defer = $q.defer();
 
-//        $rootScope.categories = [];
-//
-//        data={}
-//        data.id=1
-//        data.name='Car'
-//        data.parentCategoryId=null
-//
-//        var newCategory = $rootScope.createNewCategory(data);
-//        $rootScope.categories.push(newCategory);
-//
-//				defer.resolve();
-
 				$http.get("http://localhost:8080/v1/categories/")
 						.then(
 								function(response) {
@@ -89,18 +77,6 @@ app
 
 			$rootScope.refreshAccounts = function() {
 				var defer = $q.defer();
-
-//        $rootScope.accounts = [];
-//
-//        data = {}
-//        data.id=1
-//        data.name='mBank'
-//        data.value=127.16
-//
-//        var newAccount = $rootScope.createNewAccount(data);
-//        $rootScope.accounts.push(newAccount);
-//
-//        defer.resolve();
 
 				$http.get("http://localhost:8080/v1/accounts/")
 				.then(

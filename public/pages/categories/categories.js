@@ -1,6 +1,6 @@
 		app.controller(
 				'categoryController', 
-				function($scope, $rootScope, $http, $translate, googleService) {
+				function($scope, $rootScope, $http, $translate, googleService, categoriesService) {
 					$scope.orderByField = 'name';
 					$scope.reverseSort = false;
 					
@@ -84,31 +84,20 @@
 
 					$scope.saveNewCategory = function(newCategory) {
 
-						var category = {
-							"name" : newCategory.name
-						}
+						  var category = {
+							  "name" : newCategory.name
+						  }
 
-						if (newCategory.parentCategory != null && newCategory.parentCategory.id != null) {
-							category.parentCategoryId = newCategory.parentCategory.id;
-						}
+						  if (newCategory.parentCategory != null && newCategory.parentCategory.id != null) {
+							  category.parentCategoryId = newCategory.parentCategory.id;
+						  }
 
-						googleService.callScriptFunction("addCategory", category)
-								.then(
-										function(response) {
-											$scope.newCategory = new Category();
-											$scope.newCategory.parentCategory = new Category();
-											$scope.newCategoryForm.$setPristine();
-											
-											var newCategory = $rootScope.createNewCategory(response);
-											$rootScope.updateParentCategoryReference(newCategory);
-											
-											$rootScope.categories.push(newCategory);
-										},
-										function(response) {
-											$translate('ERROR_CATEGORY_ADD', {name : newCategory.name}).then(function (message) {
-											    addAlert(message, response);
-											  });
-										});
+              categoriesService.saveNewCategory(category)
+                .then(function(newCategory) {
+                      $rootScope.categories.push(newCategory);
+                      $scope.newCategory = new Category();
+              });
+
 
 					};
 

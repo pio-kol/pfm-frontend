@@ -1,7 +1,7 @@
 app
 		.controller(
 				'accountController',
-				function($scope, $rootScope, $http, $translate, googleService) {
+				function($scope, $rootScope, $http, $translate, googleService, accountsService) {
 					$scope.orderByField = 'name';
 					$scope.reverseSort = false;
 					
@@ -47,6 +47,20 @@ app
 											});
 								});
 					};
+
+					$scope.saveNewAccount = function(newAccount) {
+
+          						  var account = {
+          							  "name" : newAccount.name
+          							  "value" : newAccount.value
+          						  }
+
+                        accountsService.saveNewAccount(account)
+                          .then(function(newAccount) {
+                                $rootScope.accounts.push(newAccount);
+                                $scope.newAccount = new Account();
+                        });
+          };
 
 					$scope.removeAccount = function(accountToDelete) {
 						$translate('CONFIRM_REMOVE_ACCOUNT', {name : accountToDelete.name}).then(function (message) {

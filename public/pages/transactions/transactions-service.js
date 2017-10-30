@@ -1,8 +1,7 @@
 app
 		.factory(
 				'transactionsService',
-				[
-						"$q", "$translate", 'googleService', '$http',
+				["$q", "$translate", 'googleService', '$http',
 						function($q, $translate, googleService, $http) {
 							var service = {};
 							
@@ -33,28 +32,28 @@ app
 									"price" : newTransaction.price,
 									"comment" : newTransaction.comment,
 									"category" : newTransaction.category,
-		        					"account" : newTransaction.account
+		        			"account" : newTransaction.account
 								}
 								
-                              	$http.post("http://localhost:8080/v1/transactions/", transaction)
-										.then(
+                $http.post("http://localhost:8080/v1/transactions/", transaction)
+								  .then(
 												function(response) {
 													//alert(JSON.stringify(response));
-                                                    $http.get("http://localhost:8080/v1/transactions/" + response.data)
-                                                    .then(
-                                                        function(response) {
-                                                            var newTransaction = createNewTransaction(response.data);
-                                                            updateAccountAndCategoryReference(newTransaction, accounts, categories);
-													
-                                                            defer.resolve(newTransaction);
-                                                        },
-                                                        function(response) {
-                                                            $translate('ERROR_TRANSACTION_ADD', {name : newTransaction.description})
-                                                            .then(function (message) {
-                                                                addAlert(message, response);
-                                                              });
-                                                            defer.reject();
-                                                    });
+                          $http.get("http://localhost:8080/v1/transactions/" + response.data)
+                          .then(
+                              function(response) {
+                                  var newTransaction = createNewTransaction(response.data);
+                                  updateAccountAndCategoryReference(newTransaction, accounts, categories);
+
+                                  defer.resolve(newTransaction);
+                              },
+                              function(response) {
+                                  $translate('ERROR_TRANSACTION_ADD', {name : newTransaction.description})
+                                  .then(function (message) {
+                                      addAlert(message, response);
+                                    });
+                                  defer.reject();
+                          });
 													
 												},
 												function(response) {
@@ -63,7 +62,7 @@ app
 													    addAlert(message, response);
 													  });
 													defer.reject();
-												});
+									});
 								return defer.promise;
 							};
 							
@@ -79,7 +78,8 @@ app
 			        					"accountId" : editedTransaction.copyForEdit.account.id
 								}
 
-										googleService.callScriptFunction("updateTransaction", transaction)
+//										googleService.callScriptFunction("updateTransaction", transaction)
+                   $http.put("http://localhost:8080/v1/transactions/", transaction)
 										.then(
 												function(response) {
 													var updatedTransaction = createNewTransaction(response);
@@ -124,28 +124,6 @@ app
 							
 							service.refreshTransactions = function(accounts, categories, dateRange) {
 								var defer = $q.defer();
-
-//                var transactions = [];
-//
-//                data = {}
-//                data.id = 1
-//                data.date = "2017-10-08"
-//                data.description = "Description"
-//                data.comment = "Comment"
-//                data.categoryId = 1
-//                data.accountId = 1
-//                data.price = 123.42
-//
-//                var newTransaction = createNewTransaction(data);
-//                updateAccountAndCategoryReference(newTransaction, accounts, categories);
-//                transactions.push(newTransaction);
-//
-//                defer.resolve(transactions);
-
-//								var criteria = {
-//										"dateFrom" : dateRange.startDate,
-//										"dateTo" : dateRange.endDate,
-//								}
 
 								$http.get("http://localhost:8080/v1/transactions/")
 										.then(
