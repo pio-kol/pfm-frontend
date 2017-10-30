@@ -1,7 +1,7 @@
 app
 		.controller(
 				'accountController',
-				function($scope, $rootScope, $http, $translate, googleService, accountsService) {
+				function($scope, $rootScope, $http, $translate, googleService) {
 					$scope.orderByField = 'name';
 					$scope.reverseSort = false;
 					
@@ -47,20 +47,6 @@ app
 											});
 								});
 					};
-
-					$scope.saveNewAccount = function(newAccount) {
-
-          						  var account = {
-          							  "name" : newAccount.name
-          							  "value" : newAccount.value
-          						  }
-
-                        accountsService.saveNewAccount(account)
-                          .then(function(newAccount) {
-                                $rootScope.accounts.push(newAccount);
-                                $scope.newAccount = new Account();
-                        });
-          };
 
 					$scope.removeAccount = function(accountToDelete) {
 						$translate('CONFIRM_REMOVE_ACCOUNT', {name : accountToDelete.name}).then(function (message) {
@@ -112,7 +98,8 @@ app
 							"value" : newAccount.value,
 						}
 
-						googleService.callScriptFunction("addAccount", account)
+//						googleService.callScriptFunction("addAccount", account)
+						$http.post("http://localhost:8080/v1/accounts/", account)
 								.then(
 										function(response) {
 											$scope.newAccount = new Account();
@@ -121,12 +108,15 @@ app
 											
 											var newAccount = $rootScope.createNewAccount(response);
 											$scope.accounts.push(newAccount);
+											$scope.refreshAccounts();
 										},
 										function(response) {
 											$translate('ERROR_ACCOUNT_ADD', {name : newAccount.name}).then(function (message) {
 											    addAlert(message, response);
 											  });
 										});
+
+
 
 					};
 

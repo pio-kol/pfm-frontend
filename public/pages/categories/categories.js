@@ -1,6 +1,6 @@
 		app.controller(
 				'categoryController', 
-				function($scope, $rootScope, $http, $translate, googleService, categoriesService) {
+				function($scope, $rootScope, $http, $translate, googleService) {
 					$scope.orderByField = 'name';
 					$scope.reverseSort = false;
 					
@@ -82,24 +82,31 @@
 
 					};
 
-					$scope.saveNewCategory = function(newCategory) {
+          $scope.saveNewCategory = function(newCategory) {
+             var category = {
+                "name" : newCategory.name
+              }
+             if (newCategory.parentCategory != null && newCategory.parentCategory.id != null) {
+                  category.parentCategoryId = newCategory.parentCategory.id;
+             }
 
-						  var category = {
-							  "name" : newCategory.name
-						  }
-
-						  if (newCategory.parentCategory != null && newCategory.parentCategory.id != null) {
-							  category.parentCategoryId = newCategory.parentCategory.id;
-						  }
-
-              categoriesService.saveNewCategory(category)
-                .then(function(newCategory) {
-                      $rootScope.categories.push(newCategory);
+   				   $http.post("http://localhost:8080/v1/categories/", category)
+                  .then(
+                    function(response) {
                       $scope.newCategory = new Category();
+                      $scope.newCategoryForm
+                          .$setPristine();
+
+                      var newCategory = $rootScope.createNewCategory(response);
+                      $scope.categories.push(newCategory);
+                      $scope.refreshCategories();
+                    },
+                    function(response) {
+                      $translate('ERROR_ACCOUNT_ADD', {name : newAccount.name}).then(function (message) {
+                          addAlert(message, response);
+                        });
               });
-
-
-					};
+          };
 
 					$scope.saveCategory = function(editedCategory) {
 						var category = {
