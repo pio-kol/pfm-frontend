@@ -56,7 +56,8 @@ app
 											if (!result) {
 												return;
 											}
-											googleService.callScriptFunction("deleteAccount", accountToDelete.id)
+//											googleService.callScriptFunction("deleteAccount", accountToDelete.id)
+                      $http.delete("http://localhost:8080/v1/accounts/"+accountToDelete.id, accountToDelete.id)
 											.then(
 													function(response) {
 														$scope.accounts.splice($scope.accounts.indexOf(accountToDelete), 1);
@@ -77,13 +78,15 @@ app
 							"value" : editedAccount.copyForEdit.value
 						}
 
-						googleService.callScriptFunction("updateAccount", account)
-								.then(
+//						googleService.callScriptFunction("updateAccount", account)
+							$http.put("http://localhost:8080/v1/accounts/" + account.id, account)
+									.then(
 										function(response) {
 											editedAccount.readOnlyMode();
 
-											var updatedAccount = $rootScope.createNewAccount(response);
+											var updatedAccount = $rootScope.createNewAccount(response.data);
 											$scope.accounts[$scope.accounts.indexOf(editedAccount)] = updatedAccount;
+											$scope.refreshAccounts();
 										},
 										function(response) {
 											$translate('ERROR_ACCOUNT_MODIFY', {name : editedAccount.name}).then(function (message) {
@@ -115,9 +118,6 @@ app
 											    addAlert(message, response);
 											  });
 										});
-
-
-
 					};
 
 					//$(document).ready(function() {

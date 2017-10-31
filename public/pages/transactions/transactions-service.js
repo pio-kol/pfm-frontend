@@ -75,16 +75,16 @@ app
 										"price" : editedTransaction.copyForEdit.price,
 										"comment" : editedTransaction.copyForEdit.comment,
 										"categoryId" : editedTransaction.copyForEdit.category.id,
-			        					"accountId" : editedTransaction.copyForEdit.account.id
+			        			"accountId" : editedTransaction.copyForEdit.account.id
 								}
 
 //										googleService.callScriptFunction("updateTransaction", transaction)
-                   $http.put("http://localhost:8080/v1/transactions/", transaction)
+                   $http.put("http://localhost:8080/v1/transactions/"+ transaction.id, transaction)
 										.then(
 												function(response) {
-													var updatedTransaction = createNewTransaction(response);
+													var updatedTransaction = createNewTransaction(response.data);
 													updateAccountAndCategoryReference(updatedTransaction, accounts, categories);
-													
+
 													defer.resolve(updatedTransaction);
 												},
 												function(response) {
@@ -105,7 +105,7 @@ app
 													if (!result) {
 														return;
 													}
-													googleService.callScriptFunction("deleteTransaction", transactionToDelete.id)
+													$http.delete("http://localhost:8080/v1/transactions/"+transactionToDelete.id, transactionToDelete)
 													.then(
 															function(response) {
 																defer.resolve();

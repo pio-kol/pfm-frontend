@@ -66,7 +66,8 @@
 											if (!result) {
 												return;
 											}
-											googleService.callScriptFunction("deleteCategory", categoryToDelete.id)
+//											googleService.callScriptFunction("deleteCategory", categoryToDelete.id)
+											 $http.delete("http://localhost:8080/v1/categories/"+categoryToDelete.id, categoryToDelete.id)
 											.then(
 													function(response) {
 														$rootScope.categories.splice($rootScope.categories.indexOf(categoryToDelete), 1);
@@ -118,7 +119,8 @@
 							category.parentCategoryId = editedCategory.copyForEdit.parentCategory.id;
 						}
 
-						googleService.callScriptFunction("updateCategory", category)
+//						googleService.callScriptFunction("updateCategory", category)
+              $http.put("http://localhost:8080/v1/categories/"+category.id, category)
 								.then(
 										function(response) { // TODO should take category from response
 											editedCategory.name = editedCategory.copyForEdit.name;
@@ -128,6 +130,7 @@
 											}
 											editedCategory.readOnlyMode();
 											$rootScope.updateParentCategoryReference(editedCategory);
+											 $scope.refreshCategories();
 										},
 										function(response) {
 											$translate('ERROR_CATEGORY_MODIFY', {name : editedCategory.name}).then(function (message) {
@@ -136,7 +139,9 @@
 										});
 
 					};
-					
+
+
+
 					$(document).ready(function() {
 						$rootScope.refreshCategories();
 					});
