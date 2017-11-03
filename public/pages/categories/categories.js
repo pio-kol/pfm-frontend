@@ -88,7 +88,8 @@
                 "name" : newCategory.name
               }
              if (newCategory.parentCategory != null && newCategory.parentCategory.id != null) {
-                  category.parentCategoryId = newCategory.parentCategory.id;
+                  category.parentCategory = {}
+                  category.parentCategory.parentCategoryId = newCategory.parentCategory.id;
              }
 
    				   $http.post("http://localhost:8080/v1/categories/", category)
@@ -103,7 +104,7 @@
                       $scope.refreshCategories();
                     },
                     function(response) {
-                      $translate('ERROR_ACCOUNT_ADD', {name : newAccount.name}).then(function (message) {
+                      $translate('ERROR_ACCOUNT_ADD', {name : newCategory.name}).then(function (message) {
                           addAlert(message, response);
                         });
               });

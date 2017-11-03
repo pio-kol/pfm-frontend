@@ -61,9 +61,9 @@ function createNewTransaction(data){
 	newTransaction.date = new Date(data.date);
 	newTransaction.description = data.description;
 	newTransaction.comment = data.comment;
-	newTransaction.category.id = "" + data.category.categoryId;
+	newTransaction.category.id = "" + data.category.id;
 	newTransaction.category.name = "";
-	newTransaction.account.id = "" + data.account.accountId;
+	newTransaction.account.id = "" + data.account.id;
 	newTransaction.account.name = "";
 	newTransaction.price = parseFloat(data.price);
 	

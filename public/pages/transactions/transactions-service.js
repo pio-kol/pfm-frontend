@@ -69,30 +69,35 @@ app
 							service.saveTransaction = function(editedTransaction, accounts, categories) {
 								var defer = $q.defer();
 								var transaction = {
-										"id" : editedTransaction.id,
-										"date" : editedTransaction.copyForEdit.date,
-										"description" : editedTransaction.copyForEdit.description,
-										"price" : editedTransaction.copyForEdit.price,
-										"comment" : editedTransaction.copyForEdit.comment,
-										"categoryId" : editedTransaction.copyForEdit.category.id,
-			        			"accountId" : editedTransaction.copyForEdit.account.id
-								}
+                									"date" : editedTransaction.copyForEdit.date,
+                									"description" : editedTransaction.copyForEdit.description,
+                									"price" : editedTransaction.copyForEdit.price,
+                									"comment" : editedTransaction.copyForEdit.comment,
+                									"category" : editedTransaction.copyForEdit.category,
+                		        			"account" : editedTransaction.copyForEdit.account
+                								}
 
 //										googleService.callScriptFunction("updateTransaction", transaction)
-                   $http.put("http://localhost:8080/v1/transactions/"+ transaction.id, transaction)
+                   $http.put("http://localhost:8080/v1/transactions/" + editedTransaction.id, transaction)
 										.then(
-												function(response) {
-													var updatedTransaction = createNewTransaction(response.data);
-													updateAccountAndCategoryReference(updatedTransaction, accounts, categories);
+										function(response) {
+										$http.get("http://localhost:8080/v1/transactions/" + editedTransaction.id)
+                                                    .then(
+                                                        function(response) {
+                                                            var newTransaction = createNewTransaction(response.data);
+                                                            updateAccountAndCategoryReference(newTransaction, accounts, categories);
 
-													defer.resolve(updatedTransaction);
-												},
-												function(response) {
-													$translate('ERROR_TRANSACTION_MODIFY', {name : editedTransaction.description}).then(function (message) {
-													    addAlert(message, response);
-													  });
-													defer.reject();
-												});
+                                                            defer.resolve(newTransaction);
+                                                        },
+                                                        function(response) {
+                                                            $translate('ERROR_TRANSACTION_ADD', {name : editedTransaction.description})
+                                                            .then(function (message) {
+                                                                addAlert(message, response);
+                                                              });
+                                                            defer.reject();
+                                                    });
+                                                    });
+
 								return defer.promise;
 							};
 							
