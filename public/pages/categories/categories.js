@@ -66,7 +66,8 @@
 											if (!result) {
 												return;
 											}
-											googleService.callScriptFunction("deleteCategory", categoryToDelete.id)
+//											googleService.callScriptFunction("deleteCategory", categoryToDelete.id)
+											 $http.delete("http://localhost:8080/v1/categories/"+categoryToDelete.id, categoryToDelete.id)
 											.then(
 													function(response) {
 														$rootScope.categories.splice($rootScope.categories.indexOf(categoryToDelete), 1);
@@ -82,35 +83,32 @@
 
 					};
 
-					$scope.saveNewCategory = function(newCategory) {
+          $scope.saveNewCategory = function(newCategory) {
+             var category = {
+                "name" : newCategory.name
+              }
+             if (newCategory.parentCategory != null && newCategory.parentCategory.id != null) {
+                  category.parentCategory = {}
+                  category.parentCategory.parentCategoryId = newCategory.parentCategory.id;
+             }
 
-						var category = {
-							"name" : newCategory.name
-						}
+   				   $http.post("http://localhost:8080/v1/categories/", category)
+                  .then(
+                    function(response) {
+                      $scope.newCategory = new Category();
+                      $scope.newCategoryForm
+                          .$setPristine();
 
-						if (newCategory.parentCategory != null && newCategory.parentCategory.id != null) {
-							category.parentCategoryId = newCategory.parentCategory.id;
-						}
-
-						googleService.callScriptFunction("addCategory", category)
-								.then(
-										function(response) {
-											$scope.newCategory = new Category();
-											$scope.newCategory.parentCategory = new Category();
-											$scope.newCategoryForm.$setPristine();
-											
-											var newCategory = $rootScope.createNewCategory(response);
-											$rootScope.updateParentCategoryReference(newCategory);
-											
-											$rootScope.categories.push(newCategory);
-										},
-										function(response) {
-											$translate('ERROR_CATEGORY_ADD', {name : newCategory.name}).then(function (message) {
-											    addAlert(message, response);
-											  });
-										});
-
-					};
+                      var newCategory = $rootScope.createNewCategory(response);
+                      $scope.categories.push(newCategory);
+                      $scope.refreshCategories();
+                    },
+                    function(response) {
+                      $translate('ERROR_ACCOUNT_ADD', {name : newCategory.name}).then(function (message) {
+                          addAlert(message, response);
+                        });
+              });
+          };
 
 					$scope.saveCategory = function(editedCategory) {
 						var category = {
@@ -122,7 +120,8 @@
 							category.parentCategoryId = editedCategory.copyForEdit.parentCategory.id;
 						}
 
-						googleService.callScriptFunction("updateCategory", category)
+//						googleService.callScriptFunction("updateCategory", category)
+              $http.put("http://localhost:8080/v1/categories/"+category.id, category)
 								.then(
 										function(response) { // TODO should take category from response
 											editedCategory.name = editedCategory.copyForEdit.name;
@@ -132,6 +131,7 @@
 											}
 											editedCategory.readOnlyMode();
 											$rootScope.updateParentCategoryReference(editedCategory);
+											 $scope.refreshCategories();
 										},
 										function(response) {
 											$translate('ERROR_CATEGORY_MODIFY', {name : editedCategory.name}).then(function (message) {
@@ -140,7 +140,9 @@
 										});
 
 					};
-					
+
+
+
 					$(document).ready(function() {
 						$rootScope.refreshCategories();
 					});

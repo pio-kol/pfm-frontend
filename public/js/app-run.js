@@ -34,46 +34,34 @@ app
 			$rootScope.refreshCategories = function() {
 				var defer = $q.defer();
 
-        $rootScope.categories = [];
+				$http.get("http://localhost:8080/v1/categories/")
+						.then(
+								function(response) {
+									$rootScope.categories = [];
 
-        data={}
-        data.id=1
-        data.name='Car'
-        data.parentCategoryId=null
+									var data = response.data;
+									if (data != null) {
+										for (var i = 0; i < data.length; ++i) {
+											var newCategory = $rootScope
+													.createNewCategory(data[i]);
+											$rootScope.categories
+													.push(newCategory);
+										}
+										for (var i = 0; i < $rootScope.categories.length; ++i) {
+											$rootScope
+													.updateParentCategoryReference($rootScope.categories[i]);
+										}
 
-        var newCategory = $rootScope.createNewCategory(data);
-        $rootScope.categories.push(newCategory);
-
-				defer.resolve();
-
-//				googleService.callScriptFunction("getCategories")
-//						.then(
-//								function(response) {
-//									$rootScope.categories = [];
-//
-//									var data = response;
-//									if (data != null) {
-//										for (var i = 0; i < data.length; ++i) {
-//											var newCategory = $rootScope
-//													.createNewCategory(data[i]);
-//											$rootScope.categories
-//													.push(newCategory);
-//										}
-//										for (var i = 0; i < $rootScope.categories.length; ++i) {
-//											$rootScope
-//													.updateParentCategoryReference($rootScope.categories[i]);
-//										}
-//
-//										defer.resolve();
-//									}
-//								},
-//								function(response) {
-//									$translate('ERROR_DATA_RETRIVE').then(
-//											function(message) {
-//												addAlert(message, response);
-//											});
-//									defer.reject();
-//								});
+										defer.resolve();
+									}
+								},
+								function(response) {
+									$translate('ERROR_DATA_RETRIVE').then(
+											function(message) {
+												addAlert(message, response);
+											});
+									defer.reject();
+								});
 
 				return defer.promise;
 			};
@@ -90,47 +78,32 @@ app
 			$rootScope.refreshAccounts = function() {
 				var defer = $q.defer();
 
-        $rootScope.accounts = [];
+				$http.get("http://localhost:8080/v1/accounts/")
+				.then(
+						function(response) {
+							$rootScope.accounts = [];
 
-        data = {}
-        data.id=1
-        data.name='mBank'
-        data.value=127.16
+							var data = response.data;
 
-        var newAccount = $rootScope.createNewAccount(data);
-        $rootScope.accounts.push(newAccount);
-
-        defer.resolve();
-
-//				googleService.callScriptFunction("getAccounts")
-//				.then(
-//						function(response) {
-//							$rootScope.accounts = [];
-//
-//							var data = response;
-//
-//							if (data != null) {
-//								for (i = 0; i < data.length; ++i) {
-//									var newAccount = $rootScope
-//											.createNewAccount(data[i]);
-//									$rootScope.accounts.push(newAccount);
-//								}
-//							}
-//							defer.resolve();
-//						},
-//						function(response) {
-//							$translate('ERROR_DATA_RETRIVE').then(
-//									function(message) {
-//										addAlert(message, response);
-//									});
-//							defer.reject();
-//						});
+							if (data != null) {
+								for (i = 0; i < data.length; ++i) {
+									var newAccount = $rootScope
+											.createNewAccount(data[i]);
+									$rootScope.accounts.push(newAccount);
+								}
+							}
+							defer.resolve();
+						},
+						function(response) {
+							$translate('ERROR_DATA_RETRIVE').then(
+									function(message) {
+										addAlert(message, response);
+									});
+							defer.reject();
+						});
 
 				return defer.promise;
 			};
 
-		
-			
-			
 
 		})
