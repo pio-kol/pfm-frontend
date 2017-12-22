@@ -1,109 +1,111 @@
 app
-		.run(function($rootScope, $http, $translate, $q, googleService) {
-			$rootScope.categories = [];
-			$rootScope.accounts = [];
-			$rootScope.filters = [];
-			$rootScope.transactions = [];
-			
-			$rootScope.createNewCategory = function(data) {
-				var newCategory = new Category();
-				newCategory.id = "" + data.id;
-				newCategory.name = data.name;
-				newCategory.parentCategory = new Category();
-				newCategory.parentCategory.id = "" + data.parentCategoryId;
-				newCategory.parentCategory.name = "";
+    .run(function ($rootScope, $http, $translate, $q, googleService) {
+        $rootScope.categories = [];
+        $rootScope.accounts = [];
+        $rootScope.filters = [];
+        $rootScope.transactions = [];
 
-				return newCategory;
-			}
+        $rootScope.createNewCategory = function (data) {
+            var newCategory = new Category();
+            newCategory.id = "" + data.id;
+            newCategory.name = data.name;
+            newCategory.parentCategory = new Category();
+            if (data.parentCategory != null) {
+                newCategory.parentCategory.id = "" + data.parentCategory.id;
+            }
+            newCategory.parentCategory.name = "";
 
-			$rootScope.updateParentCategoryReference = function(category) {
-				if (category.parentCategory == null
-						|| category.parentCategory.id == null) {
-					return;
-				}
+            return newCategory;
+        }
 
-				for (var i = 0; i < $rootScope.categories.length; ++i) {
-					existingCategory = $rootScope.categories[i];
-					if (category.parentCategory.id === existingCategory.id) {
-						category.parentCategory = existingCategory;
-						return;
-					}
-				}
-			}
+        $rootScope.updateParentCategoryReference = function (category) {
+            if (category.parentCategory == null
+                || category.parentCategory.id == null) {
+                return;
+            }
 
-			$rootScope.refreshCategories = function() {
-				var defer = $q.defer();
+            for (var i = 0; i < $rootScope.categories.length; ++i) {
+                existingCategory = $rootScope.categories[i];
+                if (category.parentCategory.id === existingCategory.id) {
+                    category.parentCategory = existingCategory;
+                    return;
+                }
+            }
+        }
 
-				$http.get("http://localhost:8080/v1/categories/")
-						.then(
-								function(response) {
-									$rootScope.categories = [];
+        $rootScope.refreshCategories = function () {
+            var defer = $q.defer();
 
-									var data = response.data;
-									if (data != null) {
-										for (var i = 0; i < data.length; ++i) {
-											var newCategory = $rootScope
-													.createNewCategory(data[i]);
-											$rootScope.categories
-													.push(newCategory);
-										}
-										for (var i = 0; i < $rootScope.categories.length; ++i) {
-											$rootScope
-													.updateParentCategoryReference($rootScope.categories[i]);
-										}
+            $http.get("http://localhost:8080/v1/categories/")
+                .then(
+                    function (response) {
+                        $rootScope.categories = [];
 
-										defer.resolve();
-									}
-								},
-								function(response) {
-									$translate('ERROR_DATA_RETRIVE').then(
-											function(message) {
-												addAlert(message, response);
-											});
-									defer.reject();
-								});
+                        var data = response.data;
+                        if (data != null) {
+                            for (var i = 0; i < data.length; ++i) {
+                                var newCategory = $rootScope
+                                    .createNewCategory(data[i]);
+                                $rootScope.categories
+                                    .push(newCategory);
+                            }
+                            for (var i = 0; i < $rootScope.categories.length; ++i) {
+                                $rootScope
+                                    .updateParentCategoryReference($rootScope.categories[i]);
+                            }
 
-				return defer.promise;
-			};
+                            defer.resolve();
+                        }
+                    },
+                    function (response) {
+                        $translate('ERROR_DATA_RETRIVE').then(
+                            function (message) {
+                                addAlert(message, response);
+                            });
+                        defer.reject();
+                    });
 
-			$rootScope.createNewAccount = function(data) {
-				var newAccount = new Account();
-				newAccount.id = "" + data.id;
-				newAccount.name = data.name;
-				newAccount.value = data.value;
+            return defer.promise;
+        };
 
-				return newAccount;
-			}
+        $rootScope.createNewAccount = function (data) {
+            var newAccount = new Account();
+            newAccount.id = "" + data.id;
+            newAccount.name = data.name;
+            newAccount.value = data.value;
 
-			$rootScope.refreshAccounts = function() {
-				var defer = $q.defer();
+            return newAccount;
+        }
 
-				$http.get("http://localhost:8080/v1/accounts/")
-				.then(
-						function(response) {
-							$rootScope.accounts = [];
+        $rootScope.refreshAccounts = function () {
+            var defer = $q.defer();
 
-							var data = response.data;
+            $http.get("http://localhost:8080/v1/accounts/")
+                .then(
+                    function (response) {
+                        $rootScope.accounts = [];
 
-							if (data != null) {
-								for (i = 0; i < data.length; ++i) {
-									var newAccount = $rootScope
-											.createNewAccount(data[i]);
-									$rootScope.accounts.push(newAccount);
-								}
-							}
-							defer.resolve();
-						},
-						function(response) {
-							$translate('ERROR_DATA_RETRIVE').then(
-									function(message) {
-										addAlert(message, response);
-									});
-							defer.reject();
-						});
+                        var data = response.data;
 
-				return defer.promise;
-			};
+                        if (data != null) {
+                            for (i = 0; i < data.length; ++i) {
+                                var newAccount = $rootScope
+                                    .createNewAccount(data[i]);
+                                $rootScope.accounts.push(newAccount);
+                            }
+                        }
+                        defer.resolve();
+                    },
+                    function (response) {
+                        $translate('ERROR_DATA_RETRIVE').then(
+                            function (message) {
+                                addAlert(message, response);
+                            });
+                        defer.reject();
+                    });
+
+            return defer.promise;
+        };
 
 
-		})
+    })
