@@ -54,7 +54,7 @@ app.controller('filtersController', function($scope, $rootScope, $http,
 		filtersService.saveEditedFilter(editedFilter, $scope.accounts, $scope.categories)
 					.then(
 							function(filter) {
-								//alert(updatedFilter.name);
+								// alert(updatedFilter.name);
 								//filters[filters.indexOf(originalFilter)] = updatedFilter;
 								// FIXME add update of model
 								
