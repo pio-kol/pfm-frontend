@@ -32,7 +32,7 @@ app
                     filter.name = item.name;
                     if (item.categories != null) {
                         for (var i = 0; i < item.categories.length; ++i) {
-                            var category = findCategoryBasedOnId(item.categories[i], categories);
+                            var category = findCategoryBasedOnId(item.categories[i].id, categories);
                             if (category != null) {
                                 filter.categories.push(category);
                             }
@@ -40,7 +40,7 @@ app
                     }
                     if (item.accounts != null) {
                         for (var i = 0; i < item.accounts.length; ++i) {
-                            var account = findAccountBasedOnId(item.accounts[i], accounts);
+                            var account = findAccountBasedOnId(item.accounts[i].id, accounts);
                             if (account != null) {
                                 filter.accounts.push(account);
                             }
@@ -76,31 +76,50 @@ app
                         "comment": newFilter.comment
                     }
 
-                    for (var i = 0; i < newFilter.accounts.length; ++i) {
-                        filter.accounts.push(newFilter.accounts[i].id);
+                    for (var i = 0; i < editedFilter.accounts.length; ++i) {
+                        account = {}
+                        account.id = editedFilter.accounts[i].id
+                        filter.accounts.push(account);
                     }
 
-                    for (var i = 0; i < newFilter.categories.length; ++i) {
-                        filter.categories.push(newFilter.categories[i].id);
+                    for (var i = 0; i < editedFilter.categories.length; ++i) {
+                        category = {}
+                        category.id = editedFilter.categories[i].id
+                        filter.categories.push(category);
                     }
 
                     var defer = $q.defer();
 
-                    // googleService.callScriptFunction("addFilter", filter)
-                    //     .then(
-                    //         function (response) {
-                    //
-                    //             defer.resolve(createNewFilter(response, accounts, categories));
-                    //
-                    //         }, function (response) { // FIXME message
-                    //             $translate('ERROR_TRANSACTION_ADD', {
-                    //                 name: newFilter.description
-                    //             }).then(function (message) { // FIXME
-                    //                 // message
-                    //                 addAlert(message, response);
-                    //                 defer.reject();
-                    //             });
-                    //         });
+                    $http.post("http://localhost:8080/v1/filters/", filter)
+                        .then(
+                            function (response) {
+
+                                $http.get("http://localhost:8080/v1/filters/" + response.data)
+                                    .then(
+                                        function (response) {
+
+                                            newFilter = createNewFilter(response.data, accounts, categories)
+                                            defer.resolve(newFilter);
+
+                                        }, function (response) { // FIXME message
+                                            $translate('ERROR_TRANSACTION_ADD', {
+                                                name: newFilter.description
+                                            }).then(function (message) { // FIXME
+                                                // message
+                                                addAlert(message, response);
+                                                defer.reject();
+                                            });
+                                        });
+
+                            }, function (response) { // FIXME message
+                                $translate('ERROR_TRANSACTION_ADD', {
+                                    name: newFilter.description
+                                }).then(function (message) { // FIXME
+                                    // message
+                                    addAlert(message, response);
+                                    defer.reject();
+                                });
+                            });
 
                     return defer.promise;
                 };
@@ -158,18 +177,23 @@ app
                     }
 
                     for (var i = 0; i < editedFilter.accounts.length; ++i) {
-                        filter.accounts.push(editedFilter.accounts[i].id);
+                        account = {}
+                        account.id = editedFilter.accounts[i].id
+                        filter.accounts.push(account);
                     }
 
                     for (var i = 0; i < editedFilter.categories.length; ++i) {
-                        filter.categories.push(editedFilter.categories[i].id);
+                        category = {}
+                        category.id = editedFilter.categories[i].id
+                        filter.categories.push(category);
                     }
 
                     var defer = $q.defer();
-                    googleService.callScriptFunction("updateFilter", filter)
+                    $http.put("http://localhost:8080/v1/filters/" + filter.id, filter)
                         .then(
                             function (response) {
-                                defer.resolve(createNewFilter(response, accounts, categories));
+                                editedFilter = createNewFilter(response.data, accounts, categories)
+                                defer.resolve(editedFilter);
                             },
                             function (response) { // FIXME message
                                 $translate('ERROR_TRANSACTION_ADD', {name: filter.name}).then(function (message) {
@@ -185,7 +209,7 @@ app
                 service.deleteFilter = function (filterToDelete) {
                     var defer = $q.defer();
 
-                    googleService.callScriptFunction("deleteFilter", filterToDelete.id)
+                    $http.delete("http://localhost:8080/v1/filters/" + filterToDelete.id)
                         .then(
                             function (response) {
                                 defer.resolve();
